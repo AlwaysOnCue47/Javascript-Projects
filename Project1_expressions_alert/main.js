@@ -8,3 +8,9 @@ document.write(son);
 console.log(mom, son); // prints the message in the console log
 document.write(3+3);
 console.log(3+3);
+var sent1="This is the beginning of the string ", sent2="and this is the end of the string.";
+document.write(sent1 + sent2); // THis is concatenating 2 string varibles together
+
+function displayDate() {
+  document.getElementById("demo").innerHTML = Date();
+}
