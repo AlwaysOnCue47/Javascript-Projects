@@ -1,3 +1,7 @@
+function getRand() {
+  document.getElementById("Ran").innerHTML = Math.random()*10;
+
+}
 function Multiply(x, y) {
   result =  x * y;
   document.getElementById("multiply").innerHTML = "Answer is: " + result;
@@ -33,3 +37,16 @@ function Negation(x) {
   result = -x ;
   document.getElementById("negation").innerHTML = "Answer is: " + result;
 }
+
+function Increment(x) {
+  result = x ;
+  result++;
+  document.getElementById("increment").innerHTML = "Answer is: " + result;
+}
+
+function Decrement(x) {
+  result = x ;
+  result--;
+  document.getElementById("decrement").innerHTML = "Answer is: " + result;
+}
+
