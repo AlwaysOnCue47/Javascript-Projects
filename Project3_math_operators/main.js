@@ -20,7 +20,7 @@ function Division(x, y) {
   document.getElementById("division").innerHTML = "Answer is: " + result;
 }
 
-function Poly(x, y, z, a) {
+function Poly(x, y, z, a) { //poly short for polynomial - avoid using words like math and calc to assign to variables or objects
   result = (x - y)*(z + a);
   document.getElementById("poly").innerHTML = "Answer is: " + result;
 }
@@ -47,7 +47,15 @@ function Decrement(x) {
   document.getElementById("decrement").innerHTML = "Answer is: " + result;
 }
 
-function getRand() {
-  document.getElementById("Ran").innerHTML = Math.random()*10;
+function getRand() { // avoid using the word random as function or variable names
+  result = Math.random()*10
+  result = result.toFixed(2);
+  document.getElementById("Ran").innerHTML = result;
 
+}
+
+function PiRatio() { //avoid using the word pi as a function name
+  result = Math.PI;
+  result = result.toFixed(2);
+  document.getElementById("piRatio").innerHTML = result;
 }
