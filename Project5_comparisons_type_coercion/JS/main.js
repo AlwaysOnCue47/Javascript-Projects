@@ -9,7 +9,7 @@ function coerc() {
 }
 
 function isNaN1() {
-  result = isNaN("Tennetenba");
+  result = isNaN("Tnetennba");
   document.getElementById("IsNaN1").innerHTML = result;
 }
 
