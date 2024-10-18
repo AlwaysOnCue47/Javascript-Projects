@@ -1,7 +1,4 @@
-function getRand() {
-  document.getElementById("Ran").innerHTML = Math.random()*10;
 
-}
 function Multiply(x, y) {
   result =  x * y;
   document.getElementById("multiply").innerHTML = "Answer is: " + result;
@@ -23,9 +20,9 @@ function Division(x, y) {
   document.getElementById("division").innerHTML = "Answer is: " + result;
 }
 
-function Math(x, y, z, a) {
+function Poly(x, y, z, a) {
   result = (x - y)*(z + a);
-  document.getElementById("math").innerHTML = "Answer is: " + result;
+  document.getElementById("poly").innerHTML = "Answer is: " + result;
 }
 
 function Modulus(x, y) {
@@ -50,3 +47,7 @@ function Decrement(x) {
   document.getElementById("decrement").innerHTML = "Answer is: " + result;
 }
 
+function getRand() {
+  document.getElementById("Ran").innerHTML = Math.random()*10;
+
+}
