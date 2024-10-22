@@ -21,7 +21,7 @@ function searchMethod() {
   var searchSentence1 = "To explore strange new worlds and new civilizations";
   var searchResult1 = searchSentence1.search("worlds");
   document.getElementById("sentence2").innerHTML = searchSentence1;
-  document.getElementById("searchedSentence1").innerHTML = searchResult1;
+  document.getElementById("searchedSentence1").innerHTML = "'worlds' is located at position: " + searchResult1;
 }
 
 function numToString() {
@@ -29,4 +29,25 @@ function numToString() {
   var Y = X.toString();
   document.getElementById("num1").innerHTML = X;
   document.getElementById("num1ToString").innerHTML = Y;
+}
+
+function precisionMethod() {
+  var X = 3.14159265;
+  var Y = X.toPrecision(3);
+  document.getElementById("fullNumber").innerHTML = X;
+  document.getElementById("precisionNumber").innerHTML = Y;
+
+}
+
+function toFixedMethod() {
+  var X = 1.41421356;
+  var Y = X.toFixed(2);
+  document.getElementById("fullNumber2").innerHTML = X;
+  document.getElementById("fixedNumber").innerHTML = Y;
+}
+function valueOfMethod() {
+  X = "This is a line of text.";
+  Y = X.valueOf();
+  document.getElementById("stringValue").innerHTML = X;
+  document.getElementById("valueOfOutput").innerHTML = Y;
 }
