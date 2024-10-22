@@ -1,6 +1,6 @@
 function greeting() {
   hourOfDay = new Date().getHours(); // assigned the hour to a variable
-  if (hourOfDay > 18) {
+  if (hourOfDay < 18) {
     document.getElementById("Greeting").innerHTML = "Good day to you";
     console.log(hourOfDay); 
 
