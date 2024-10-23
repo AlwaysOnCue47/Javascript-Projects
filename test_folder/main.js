@@ -1,6 +1,6 @@
 // testinf stuff in this file
 
-var items = ["Cherry", "Lemon", "Lime", "Star", "$$$$"];
+var items = ["Cherry", "Lemon", "Lime", "Star", "Mushroom", "banana", "$$$$"];
 var slot1, slot2, slot3;
 var credits = 100;
 var X;
@@ -11,9 +11,9 @@ function spin() {
   }
   else {
     credits = credits - 25;
-    X = Math.floor(Math.random() * 5);
-    Y = Math.floor(Math.random() * 5);
-    Z = Math.floor(Math.random() * 5);
+    X = Math.floor(Math.random() * 7);
+    Y = Math.floor(Math.random() * 7);
+    Z = Math.floor(Math.random() * 7);
     slot1 = items[X];
     slot2 = items[Y];
     slot3 = items[Z];
@@ -27,6 +27,7 @@ function spin() {
     if ((slot1 == slot2) && (slot1 == slot3)){
       console.log("winner winner chicken dinner!")
       credits = credits + 300;
+      console.log(credits);
 
     }
     else if ((slot1 == slot2) || (slot2 == slot3) || (slot1 == slot3)) {
