@@ -1,14 +1,5 @@
 // testinf stuff in this file
 
-function countToTen() {
-  var digit = "";
-  var X = 1;
-  while (X < 11) {
-    digit += "<br>" + X;
-    X++;
-  }
-  document.getElementById("countToTen").innerHTML = digit;
-}
 var items = ["Cherry", "Lemon", "Lime", "Star", "$$$$"];
 var slot1, slot2, slot3;
 var credits = 100;
@@ -29,10 +20,21 @@ function spin() {
     document.getElementById("slot1").innerHTML = slot1;
     document.getElementById("slot2").innerHTML = slot2;
     document.getElementById("slot3").innerHTML = slot3;
-    document.getElementById("credits").innerHTML = credits;
+    
     console.log(X, Y, Z);
     console.log(slot1, slot2, slot3);
     console.log(items);
+    if ((slot1 == slot2) && (slot1 == slot3)){
+      console.log("winner winner chicken dinner!")
+      credits = credits + 300;
+
+    }
+    else if ((slot1 == slot2) || (slot2 == slot3) || (slot1 == slot3)) {
+      console.log("winner");
+      credits = credits + 50;
+      console.log(credits);
+    }
+    document.getElementById("credits").innerHTML = credits;
 
   }
 
