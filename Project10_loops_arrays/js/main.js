@@ -97,3 +97,25 @@ function breakLoop() { // break demo - this loop will break if i is divisable by
     console.log(text);
   }
 }
+function caseChoice() {
+  var crewMember = document.getElementById("caseChoice").value;
+  var caseChoiceOutput;
+  switch(crewMember) {
+    case "picard":
+      caseChoiceOutput = "He is the captain for the Enterprise";
+      break;
+    case "riker":
+      caseChoiceOutput = "He is the first officer of the Enterprise.";
+      break;
+    case "data":
+      caseChoiceOutput = "He is the science officer.";
+      break;
+    case "worf":
+      caseChoiceOutput = "He is the security chief.";
+      break;
+    default:
+      caseChoiceOutput = "My records don't include that person.";
+
+  }
+  document.getElementById("caseChoiceOutput").innerText = caseChoiceOutput; // using innerText and not innerHTML ecause this is user inputted data. Don't let users inject HTML code - security risk
+}
