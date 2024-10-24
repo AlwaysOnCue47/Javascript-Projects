@@ -113,6 +113,9 @@ function caseChoice() {
     case "worf":
       caseChoiceOutput = "He is the security chief.";
       break;
+    case "martin":
+      caseChoiceOutput = "Martin is the president of the Federation!!!"
+      break;
     default:
       caseChoiceOutput = "My records don't include that person.";
 
