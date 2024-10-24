@@ -14,7 +14,7 @@ function spin() {
     console.log("no more spins");
   }
   else {
-    credits = credits - 25;
+    credits -= 25;
     X = Math.floor(Math.random() * 7);
     Y = Math.floor(Math.random() * 7);
     Z = Math.floor(Math.random() * 7);
@@ -31,13 +31,13 @@ function spin() {
 
     if ((slot1 == slot2) && (slot1 == slot3)){
       console.log("winner winner chicken dinner!");
-      credits = credits + 300;
+      credits += 300;
       console.log(credits);
 
     }
     else if ((slot1 == slot2) || (slot2 == slot3) || (slot1 == slot3)) {
       console.log("winner");
-      credits = credits + 50;
+      credits += 50;
       console.log(credits);
     }
     document.getElementById("credits").innerHTML = credits;
