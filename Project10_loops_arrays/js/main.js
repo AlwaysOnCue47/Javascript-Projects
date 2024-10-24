@@ -43,3 +43,53 @@ function constantFunction() {
   document.getElementById("constantParagraph3").innerHTML = "New maximum speed is now: " + starshipProperties.maxSpeed;
 
 }
+
+function letKeyword() {
+  var X = "I'm VAR X 1";
+  let Y = "I'm LET Y 1";
+  console.log(X, Y);
+  {
+    var X = "I'm VAR X 2";
+    let Y = "I'm LET Y 2";
+    console.log(X, Y);
+  }
+  console.log(X, Y);
+}
+
+function returnFunction() {
+  X = document.getElementById("num1").value;
+  Y = document.getElementById("num2").value;
+  result = (X * Y);
+  return result;
+}
+
+
+function returnFunction2() {
+  document.getElementById("returnFunctionResult").innerHTML = returnFunction();
+  console.log(returnFunction());
+
+}
+  
+
+  
+  
+
+
+let starship = {
+  make: "Federation",
+  class: "Galaxy",
+  registryNumber: "NCC-1701-D",
+  name: "USS Enterprise",
+  description: function() {
+    return "This is a " + this.make + " starship. " + this.class + " class. Full name is: " + this.name + ": " + this.registryNumber;
+    
+  }
+ 
+}
+
+function showObjects() {
+  console.log(starship.description());
+  document.getElementById("starshipResult").innerHTML = starship.description();
+
+}
+
