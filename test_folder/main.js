@@ -1,9 +1,13 @@
-// testinf stuff in this file
+// testing stuff in this file
+
+
+// SLOT MACHINE GAME CREATED BY ME!!!
 
 var items = ["Cherry", "Lemon", "Lime", "Star", "Mushroom", "banana", "$$$$"];
 var slot1, slot2, slot3;
+var X, Y, Z;
 var credits = 100;
-var X;
+
  
 function spin() {
   if (credits == 0 ) {
@@ -25,7 +29,7 @@ function spin() {
     console.log(slot1, slot2, slot3);
     console.log(items);
     if ((slot1 == slot2) && (slot1 == slot3)){
-      console.log("winner winner chicken dinner!")
+      console.log("winner winner chicken dinner!");
       credits = credits + 300;
       console.log(credits);
 
