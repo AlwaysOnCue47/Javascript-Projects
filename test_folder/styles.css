@@ -6,9 +6,18 @@
   border-radius: 50%;
 }
 
+.gameWrapper {
+  display: flex;
+  /*justify-content: center;*/
+  align-items: center;
+  flex-direction: column;
+}
 .gameContainer {
   display: flex;
+  width: 500px;
+  height: 150px;
   justify-content: center;
+  align-items: center;
   background-color: aquamarine;
   column-gap: 20px;
   padding-top: 10px;
