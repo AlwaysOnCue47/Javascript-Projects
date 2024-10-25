@@ -8,6 +8,16 @@ var slot1, slot2, slot3;
 var X, Y, Z;
 var credits = 100;
 
+function updateImage(elemId, newSrc, timeout) {
+  const slot = document.getElementById(elemId);
+
+  slot.classList.add("fade-out");
+
+  setTimeout(() => {
+    slot.src ="./images/"+ newSrc; 
+    slot.classList.remove("fade-out"); 
+  }, timeout); 
+}
  
 function spin() {
   if (credits == 0 ) {
@@ -22,9 +32,9 @@ function spin() {
     slot1 = items[X];
     slot2 = items[Y];
     slot3 = items[Z];
-    document.getElementById("slot1").src = "./images/" + slot1;
-    document.getElementById("slot2").src = "./images/" + slot2;
-    document.getElementById("slot3").src = "./images/" + slot3;
+    updateImage("slot1", slot1, 200);
+    updateImage("slot2", slot2, 400);
+    updateImage("slot3", slot3, 600);
     
     if ((slot1 == slot2) && (slot1 == slot3)) {
       console.log("winner winner chicken dinner!");
