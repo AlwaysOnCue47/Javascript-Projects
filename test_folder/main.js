@@ -13,6 +13,7 @@ function spin() {
   if (credits == 0 ) {
     console.log("no more spins");
   }
+  
   else {
     credits -= 25;
     X = Math.floor(Math.random() * 7);
@@ -25,21 +26,21 @@ function spin() {
     document.getElementById("slot2").src = "./images/" + slot2;
     document.getElementById("slot3").src = "./images/" + slot3;
     
-    console.log(X, Y, Z);
-    console.log(slot1, slot2, slot3);
-    console.log(items);
-
-    if ((slot1 == slot2) && (slot1 == slot3)){
+    if ((slot1 == slot2) && (slot1 == slot3)) {
       console.log("winner winner chicken dinner!");
       credits += 300;
-      console.log(credits);
 
     }
+
     else if ((slot1 == slot2) || (slot2 == slot3) || (slot1 == slot3)) {
       console.log("winner");
       credits += 50;
-      console.log(credits);
     }
+
+    console.log(items);
+    console.log(X, Y, Z);
+    console.log(slot1, slot2, slot3);
+
     document.getElementById("credits").innerHTML = credits;
 
   }
