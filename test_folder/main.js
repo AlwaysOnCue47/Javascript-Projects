@@ -26,6 +26,7 @@ function spin() {
   
   else {
     credits -= 25;
+    document.getElementById("credits").innerHTML = credits;
     X = Math.floor(Math.random() * 7);
     Y = Math.floor(Math.random() * 7);
     Z = Math.floor(Math.random() * 7);
@@ -51,7 +52,12 @@ function spin() {
     console.log(X, Y, Z);
     console.log(slot1, slot2, slot3);
 
-    document.getElementById("credits").innerHTML = credits;
+    setTimeout(() => {
+      document.getElementById("credits").innerHTML = credits;
+
+    },1000);
+
+    
 
   }
 
