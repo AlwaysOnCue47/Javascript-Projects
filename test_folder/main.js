@@ -1,6 +1,3 @@
-// testing stuff in this file
-
-
 // SLOT MACHINE GAME CREATED BY ME!!!
 
 var items = ["cherry.jpg", "lemon.png", "lime.jpg", "star.jpg", "mushroom.jpg", "banana.jpg", "dollar.jpg"]
@@ -19,6 +16,16 @@ function updateImage(elemId, newSrc, timeout) {
   }, timeout); 
 }
  
+function restoreCredits() {
+  credits = 100;
+  updateImage("slot1", "insertcoin.jpg", 200);
+  updateImage("slot2", "insertcoin.jpg", 200);
+  updateImage("slot3", "insertcoin.jpg", 200);
+  document.getElementById("credits").innerHTML = credits;
+  document.getElementById("newGame").classList.add("hide");
+
+}
+
 function spin() {
   if (credits == 0 ) {
     console.log("no more spins");
@@ -54,10 +61,15 @@ function spin() {
 
     setTimeout(() => {
       document.getElementById("credits").innerHTML = credits;
+      if (credits == 0) {
+        alert("game over");
+        const newGame = document.getElementById("newGame");
+        newGame.classList.remove("hide");
 
+
+      }
+      
     },1000);
-
-    
 
   }
 
