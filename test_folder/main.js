@@ -66,7 +66,6 @@ function spin() {
         const newGame = document.getElementById("newGame");
         newGame.classList.remove("hide");
 
-
       }
       
     },1000);
