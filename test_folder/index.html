@@ -9,25 +9,24 @@
 <body>
   
   <div class="gameWrapper">
-    <h3>SLOT MACHINE GAME</h3>
+    <h3 id="title">SLOT MACHINE GAME</h3>
     <div class="gameContainer">
       <img class="slot" id="slot1" src="./images/insertcoin.jpg" >
       <img class="slot" id="slot2" src="./images/insertcoin.jpg" >
       <img class="slot" id="slot3" src="./images/insertcoin.jpg" >
     </div>
     <div id="gameControlsContainer">
-    <button id="spinButton" onclick="spin()">SPIN!</button>
-    <h4>Credits:</h4>
-    <h5 id="credits">100</h5>
-    <button class="hide" id="newGame" onclick="restoreCredits()">New Game</button>
-    <p>&#128514;</p>
-
+      <button id="spinButton" onclick="spin()">SPIN!</button>
+      <div id="creditsWrapper">
+        <h4>Credits:</h4>
+        <h5 id="credits">100</h5>
+      </div>
+      <button class="hide" id="newGame" onclick="restoreCredits()">New Game</button>
+      <p>&#128514;</p>
     </div>
-    
   </div>
   
   
-
   <script src="./main.js"></script>
 </body>
 </html>
