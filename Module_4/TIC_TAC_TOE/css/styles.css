@@ -1,0 +1,32 @@
+/* TIC TAC TOE STYLES */ 
+
+.centerContainer {
+  width: 608;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+table {
+  border-collapse: collapse;
+  border-style: hidden;
+
+}
+
+td {
+  cursor: pointer;
+  border: 4px solid rgba(3, 252, 127, .8);
+  padding: 0;
+  width: 200px;
+  height: 200px;
+  filter: contrast(3);
+}
+
+canvas {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+}
+
+h1 {
+  text-align: center;
+}
