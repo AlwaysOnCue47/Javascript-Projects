@@ -8,10 +8,10 @@ function placeXOr0(squareNumber) {
   if (!selectedSquares.some(element => element.includes(squareNumber))) {
     let select = document.getElementById(squareNumber);
     if (activePlayer === 'X') {
-      select.style.backgroundImage = 'url("images/x.jpg")';
+      select.style.backgroundImage = 'url("images/x.png")';
     }
     else {
-      select.style.backgroundImage = 'url("images/o.jpg")';
+      select.style.backgroundImage = 'url("images/o.png")';
     }
     selectedSquares.push(squareNumber + activePlayer);
 
@@ -23,7 +23,7 @@ function placeXOr0(squareNumber) {
     else {
       activePlayer = 'X'
     }
-    Audio("./media/place.mp3");
+    //Audio("./media/place.mp3");
 
     if (activePlayer === 'O') {
       disableClick();
@@ -65,7 +65,7 @@ function checkWinConditions() {
   else if (arrayIncludes('0O', '4O', '8O')) {drawWinLine(100, 100, 520, 508)}
   
   else if (selectedSquares.length >= 9) {
-    Audio("./media/tie.mpx");
+    //Audio("./media/tie.mp3");
     console.log("TIE");
     setTimeout(function () {resetGame(); }, 500);
   }
@@ -86,10 +86,10 @@ function resetGame() {
   selectedSquares = [];
 }
 
-function audio(audioURL) {
+/*function audio(audioURL) {
   let audio = new Audio(audioURL);
   audio.play();
-}
+}*/
 
 function drawWinLine(coordX1, coordY1, coordX2, coordY2) {
   const canvas = document.getElementById("winLines");
@@ -103,7 +103,7 @@ function drawWinLine(coordX1, coordY1, coordX2, coordY2) {
     c.moveTo(x1, y1);
     c.lineTo(x, y);
     c.lineWidth = 10;
-    c.strokeStyle = rgba(70, 255, 33, .8);
+    c.strokeStyle = 'rgba(70, 255, 33, .8)';
     c.stroke();
     if (x1 <= x2 && y1 <= y2) {
       if (x < x2) {x += 10;}
@@ -119,12 +119,12 @@ function drawWinLine(coordX1, coordY1, coordX2, coordY2) {
   }
 
   disableClick();
-  audio('./media/winGame.mp3');
+  //audio('./media/winGame.mp3');
   animateLineDrawing();
   setTimeout(function () {clear(); resetGame(); }, 1000);
 }
 
 function disableClick() {
-  ReportBody.style.pointerEvents = 'none';
-  setTimeout(function () {ReportBody.style.pointerEvents = 'auto';}, 1000);
+  body.style.pointerEvents = 'none';
+  setTimeout(function () {body.style.pointerEvents = 'auto';}, 1000);
 }
