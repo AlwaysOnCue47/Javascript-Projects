@@ -1,0 +1,30 @@
+/* lightbox example styles */
+
+.grid {
+  display: grid;
+  grid-template-columns: 261px 261px;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid img {
+  height: 175px;
+  width: 261px;
+  cursor: pointer;
+}
+
+#lightbox {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0, .8);
+  display: none;
+}
+
+#lightbox.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
