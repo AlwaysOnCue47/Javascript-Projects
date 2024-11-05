@@ -4,6 +4,7 @@ var items = ["cherry.jpg", "lemon.png", "lime.jpg", "star.jpg", "mushroom.jpg", 
 var slot1, slot2, slot3;
 var X, Y, Z;
 var credits = 100;
+const gameMessage = document.getElementById("gameMessage");
 
 function updateImage(elemId, newSrc, timeout) {
   const slot = document.getElementById(elemId);
@@ -23,10 +24,12 @@ function restoreCredits() {
   updateImage("slot3", "insertcoin.jpg", 200);
   document.getElementById("credits").innerHTML = credits;
   document.getElementById("newGame").classList.add("hide");
+  gameMessage.innerHTML = "&#128526"
 
 }
 
 function spin() {
+  gameMessage.innerHTML = "&#128565;"
   if (credits == 0 ) {
     console.log("no more spins");
   }
@@ -46,14 +49,32 @@ function spin() {
     
     if ((slot1 == slot2) && (slot1 == slot3)) {
       console.log("winner winner chicken dinner!");
+      setTimeout(() => {
+        gameMessage.innerHTML = "&#128514; winner winner chicken dinner!!"
+
+      },1000);
+      
       credits += 300;
 
     }
 
     else if ((slot1 == slot2) || (slot2 == slot3) || (slot1 == slot3)) {
       console.log("winner");
+      setTimeout(() => {
+        gameMessage.innerHTML = "&#128513; Winner!"
+
+      },1000);
+      
       credits += 50;
     }
+
+    else {
+      setTimeout(() => {
+        gameMessage.innerHTML = "&#128534"
+    
+      },1000);
+    }
+      
 
     console.log(items);
     console.log(X, Y, Z);
@@ -62,6 +83,7 @@ function spin() {
     setTimeout(() => {
       document.getElementById("credits").innerHTML = credits;
       if (credits == 0) {
+        gameMessage.innerHTML = "&#128550;"
         alert("game over");
         const newGame = document.getElementById("newGame");
         newGame.classList.remove("hide");
