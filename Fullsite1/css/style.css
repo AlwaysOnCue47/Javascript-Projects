@@ -85,6 +85,48 @@ nav {
   padding-left: 4rem;
   padding-right: 4rem;
 }
+/* Hero Section END */
+
+/* About Section Start */
+
+#aboutSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2.5rem;
+  background-color: lightgray;
+  width: 80%;
+  margin-left:  auto;
+  margin-right: auto;
+  
+}
+
+#aboutContainer {
+  background-color: lightpink;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  row-gap: 1.5rem;
+  
+}
+
+.aboutBox {
+  background-color: lightcyan;
+  justify-content: center;
+  
+}
+
+/* Gallery Section Start */
+/* Gallery Section End */
+
+/* Game section start */
+/* game section End */
+
+/* Contact form section start */
+/* Contact section end */
+
+/* Footer section start */
+/* Footer section end */
 
 /* Mobile styles */
 @media (max-width: 600px) {
