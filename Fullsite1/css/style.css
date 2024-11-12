@@ -1,0 +1,65 @@
+/* Full site cross device compatible */
+html {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: lightcyan;
+  box-sizing: border-box;
+  padding-bottom: 1000px;
+  padding-top: 3.5em;
+  margin-right: 0;
+  margin-left: 0;
+  
+}
+
+/* Navbar */
+nav {
+  display: flex;
+  justify-content: center;
+  background-color: grey;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 1.2em;
+  padding: 1em;
+  box-sizing: border-box;
+ 
+}
+
+.innerNav {
+  display: flex;
+  padding: 1em;
+}
+
+.navLink {
+  text-decoration: none;
+  margin: .5em;
+  color: darkblue;
+  padding: .3em;
+  transition: .3s;
+}
+
+.navLink:hover {
+  background-color: aliceblue;
+}
+
+/* Navbar End */
+
+/* Her Section */
+
+#heroSection {
+  background-color: lightcoral;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+  body {
+    padding-top: 5.0em;
+     
+  }
+}
