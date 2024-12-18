@@ -10,10 +10,12 @@
 <body>
 
 <div id="textBox">
-    <p><button onclick="ballMove(X)">Start Ball</button></p>
-    <button id="stopBtn">Stop Ball</button>
+    <div><button onclick="ballMove(X)">Start Ball</button> <button id="stopBtn">Stop Ball</button></div>
+    <button id="switch">Switch</button>
     <button id="fast">Faster</button>
     <button id="slow">Slower</button>
+    <button id="yAxis" onclick="ballMoveY(X)">Up/Down</button>
+    <button id="xAxis" onclick="ballMoveX(X)">Side to Side</button>
     <div id="container">
         <div id="animate"></div>
     </div>
