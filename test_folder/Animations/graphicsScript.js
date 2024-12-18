@@ -1,8 +1,9 @@
 //animation
 let id = null; 
-let posY = 0;
-let posX = 0; 
-let direction = 1;
+let posY = 1;
+let posX = 1; 
+let directionY = 1;
+let directionX = 1;
 let X = 20;
 let path = 3;
 const elem = document.getElementById("animate");
@@ -12,13 +13,17 @@ function ballMove(FR) {
     clearInterval(id);
     id = setInterval(frame, FR);
     function frame() {
-        if ((posY == 350) || (posX == 350)){
-            direction = -1; 
-        } else if ((posY == 0) || (posX == 0)){
-            direction = 1; 
+        if ((posY >= 350) || (posY <= 0)){
+            directionY = directionY * (-1); 
+        } else if (posX >= 350) {
+            posX = 350;
+            directionX = directionX * (-1); 
+        } else if (posX <= 0) {
+          posX = 0;
+          directionX = directionX * (-1);
         }
-        posY += direction; 
-        posX += direction;
+        posY += directionY; 
+        posX += directionX;
         elem.style.top = posY + "px";
         elem.style.left = posX + "px";
     }
@@ -30,11 +35,11 @@ function ballMoveY(FR) {
   id = setInterval(frame, FR);
   function frame() {
       if (posY == 350) {
-          direction = -1; 
+          directionY = -1; 
       } else if (posY == 0) {
-          direction = 1; 
+          directionY = 1; 
       }
-      posY += direction; 
+      posY += directionY; 
       elem.style.top = posY + "px";
   }
 }
@@ -45,11 +50,11 @@ function ballMoveX(FR) {
   id = setInterval(frame, FR);
   function frame() {
       if (posX == 350) {
-          direction = -1; 
+          directionX = -1; 
       } else if (posX == 0) {
-          direction = 1; 
+          directionX = 1; 
       }
-      posX += direction; 
+      posX += directionX; 
       elem.style.left = posX + "px";
   }
 }
@@ -127,6 +132,11 @@ document.getElementById("slow").addEventListener("click", () => {
   }
 });
 
-document.getElementById("switch").addEventListener("click", () => {
-  direction = (direction * (-1));
+function changeDirection() {
+  directionY = (directionY * (-1));
+  directionX = (directionX * (-1));
+}
+
+document.getElementById("container").addEventListener("click", () => {
+  changeDirection();
 });
