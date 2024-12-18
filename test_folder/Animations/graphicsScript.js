@@ -1,6 +1,7 @@
 //animation
 let id = null; 
-let pos = 0; 
+let posY = 0;
+let posX = 0; 
 let direction = 1;
 let X = 20;
 let path = 3;
@@ -11,14 +12,15 @@ function ballMove(FR) {
     clearInterval(id);
     id = setInterval(frame, FR);
     function frame() {
-        if (pos == 350) {
+        if ((posY == 350) || (posX == 350)){
             direction = -1; 
-        } else if (pos == 0) {
+        } else if ((posY == 0) || (posX == 0)){
             direction = 1; 
         }
-        pos += direction; 
-        elem.style.top = pos + "px";
-        elem.style.left = pos + "px";
+        posY += direction; 
+        posX += direction;
+        elem.style.top = posY + "px";
+        elem.style.left = posX + "px";
     }
 }
 
@@ -27,13 +29,13 @@ function ballMoveY(FR) {
   clearInterval(id);
   id = setInterval(frame, FR);
   function frame() {
-      if (pos == 350) {
+      if (posY == 350) {
           direction = -1; 
-      } else if (pos == 0) {
+      } else if (posY == 0) {
           direction = 1; 
       }
-      pos += direction; 
-      elem.style.top = pos + "px";
+      posY += direction; 
+      elem.style.top = posY + "px";
   }
 }
 
@@ -42,13 +44,13 @@ function ballMoveX(FR) {
   clearInterval(id);
   id = setInterval(frame, FR);
   function frame() {
-      if (pos == 350) {
+      if (posX == 350) {
           direction = -1; 
-      } else if (pos == 0) {
+      } else if (posX == 0) {
           direction = 1; 
       }
-      pos += direction; 
-      elem.style.left = pos + "px";
+      posX += direction; 
+      elem.style.left = posX + "px";
   }
 }
 
