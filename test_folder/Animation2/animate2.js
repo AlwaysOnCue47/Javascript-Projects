@@ -2,12 +2,11 @@
 
 const ball = document.getElementById("ball");
 let isAnimating = false;
-let speed = 10;
 let directionX = 1;
 let directionY = 1;
 let posX = 1;
 let posY = 1;
-let X = 25;
+let X = 25; // time interval
 
 const animate = () => {
   if (!isAnimating) return;
