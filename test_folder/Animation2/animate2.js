@@ -54,5 +54,26 @@ document.getElementById("faster").addEventListener('click', () => {
 });
 
 document.getElementById("slower").addEventListener('click', () => {
+  if (X >= 35) return;
   X = X + 5;
 });
+
+document.getElementById("leftNudge").addEventListener('click', () => {
+  if (posX >= 530) {
+    return;
+  }
+  else {
+    posX = posX + 20;
+  }  
+});
+
+document.getElementById("rightNudge").addEventListener('click', () => {
+  if (posX <= 20) {
+    return;
+  }
+  else {
+    posX = posX - 20;
+  }  
+});
+  
+  
