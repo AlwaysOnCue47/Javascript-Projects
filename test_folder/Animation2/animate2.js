@@ -8,7 +8,9 @@ let directionX = 1;
 let directionY = 1;
 let posX = 1;
 let posY = 1;
-let X = 25; // time interval
+let X = 15; // time interval
+let XC = 1; // determine which color
+let color = "darkred";
 
 
 // The logic
@@ -24,14 +26,21 @@ const animate = () => {
 
   if ((posY >= 350) || (posY <= 0)) {
     directionY = directionY * -1;
+    XC = XC * -1;
   }
 
   if ((posX >= 550) || (posX <= 0)){
     directionX = directionX * -1;
+    XC = XC * -1;
   }
+
+  if (XC == 1) {color = "darkred" }
+  if (XC == -1) {color = "darkblue"}
+  ball.style.backgroundColor = color;
 
   setTimeout(animate, X);
 };
+
 
 
 // Event listners
