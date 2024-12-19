@@ -27,16 +27,18 @@ const animate = () => {
   if ((posY >= 350) || (posY <= 0)) {
     directionY = directionY * -1;
     XC = XC * -1;
+    if (XC == 1) {color = "darkred" }
+    if (XC == -1) {color = "darkblue"}
+    ball.style.backgroundColor = color;
   }
 
   if ((posX >= 550) || (posX <= 0)){
     directionX = directionX * -1;
     XC = XC * -1;
+    if (XC == 1) {color = "darkred" }
+    if (XC == -1) {color = "darkblue"}
+    ball.style.backgroundColor = color;
   }
-
-  if (XC == 1) {color = "darkred" }
-  if (XC == -1) {color = "darkblue"}
-  ball.style.backgroundColor = color;
 
   setTimeout(animate, X);
 };
