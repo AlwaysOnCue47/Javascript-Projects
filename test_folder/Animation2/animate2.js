@@ -1,5 +1,7 @@
 // Animation 2 script
 
+// The variables
+
 const ball = document.getElementById("ball");
 let isAnimating = false;
 let directionX = 1;
@@ -7,6 +9,9 @@ let directionY = 1;
 let posX = 1;
 let posY = 1;
 let X = 25; // time interval
+
+
+// The logic
 
 const animate = () => {
   if (!isAnimating) return;
@@ -28,7 +33,8 @@ const animate = () => {
   setTimeout(animate, X);
 };
 
-animate();
+
+// Event listners
 
 document.getElementById("start").addEventListener('click', () => {
   if (!isAnimating) {
