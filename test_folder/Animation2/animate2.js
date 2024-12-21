@@ -44,7 +44,6 @@ const animate = () => {
 };
 
 
-
 // Event listners
 
 document.getElementById("start").addEventListener('click', () => {
