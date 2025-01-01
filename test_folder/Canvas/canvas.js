@@ -2,11 +2,12 @@
 
 // variables
 const canvas = document.getElementById('canvas1');
+canvas.height = document.documentElement.clientHeight;
+canvas.width = document.documentElement.clientWidth;
 let c = canvas.getContext('2d');
 
 // logic
-canvas.height = document.documentElement.clientHeight;
-canvas.width = document.documentElement.clientWidth;
+
 
 /*c.fillStyle = 'rgba(255, 255, 255, 0.5)';
 c.fillRect(100, 100, 100, 100);
@@ -50,8 +51,6 @@ function animate() {
 
 animate();
   
-
-
 /*for (i = 0; i < 50; i++) {
 Y = Math.random()* window.innerHeight;
 X = Math.random()* window.innerWidth;

@@ -1,10 +1,12 @@
 /* canvas styles */
+
 body, html {
   margin: 0;
   box-sizing: border-box;
   height: 100%;
   overflow: hidden;
 }
+
 #canvas1 {
   background-color: lightpink;
   margin: 0;
