@@ -6,50 +6,53 @@ canvas.height = document.documentElement.clientHeight; // canvas height
 canvas.width = document.documentElement.clientWidth; // canvas width
 let c = canvas.getContext('2d'); // canvas' "paint-brush"
 
-/*
-// Circle animation
-
-X = Math.random() * canvas.width;
-Y = Math.random() * canvas.height;
-DX = 4;
-DY = 4;
-circleRadius = 40;
-
-function animate() {
-  requestAnimationFrame(animate);
-  c.clearRect(0, 0, canvas.width, canvas.height);
-  c.beginPath();
-  c.arc(X, Y, circleRadius, Math.PI * 2, false);
-  c.strokeStyle = 'rgb(0, 100, 255)';
-  c.stroke();
-  
-  if (X + circleRadius >= innerWidth || X - circleRadius <=  0) {
-    DX = -DX;
-  }
-  
-  if (Y + circleRadius >= innerHeight || Y - circleRadius <= 0) {
-    DY = -DY;
-  }
-  X += DX;
-  Y += DY;
- 
+let mouse = {
+  x: undefined,
+  y: undefined
 };
-*/
+
+let maxRadius = 60;
+let minRadius = 10;
+
+let circleArray = [];
+
+let colorArray = [
+  '#ffaa34',
+  '#aff893',
+  '#00bbff',
+  '#4411aa',
+  '#ff1100',
+  '#e3fa2',
+  '#0abbc3',
+];
+
+window.addEventListener('resize', (event) => {
+  canvas.height = document.documentElement.clientHeight; 
+  canvas.width = document.documentElement.clientWidth; 
+  init();
+});
+
+window.addEventListener('mousemove', (event) => { // assign the values of mouse.x and mouse.y with the event information 
+  mouse.x = event.x;
+  mouse.y = event.y;
+
+});
 
 // circle object constructure
 
-function Circle(x, y, dx, dy, radius) {
+function Circle(x, y, dx, dy, radius) { //object constructor always begins with a capital letter
   this.x = x;
   this.y = y;
   this.dx = dx;
   this.dy = dy;
   this.radius = radius;
+  this.color = colorArray[Math.floor(Math.random()*colorArray.length)];
 
   this.draw = function() {
     c.beginPath();
     c.arc(this.x, this.y, this.radius, Math.PI * 2, false);
-    c.strokeStyle = 'blue';
-    c.stroke();
+    c.fillStyle = this.color;
+    c.fill();
   }
 
   this.update = function() {
@@ -63,27 +66,35 @@ function Circle(x, y, dx, dy, radius) {
 
     this.x += this.dx;
     this.y += this.dy;
+
+    if (mouse.x - this.x < 50 && mouse.x - this.x > -50 && mouse.y - this.y < 50 && mouse.y - this.y > -50
+      ){
+      if (this.radius < maxRadius) {
+        this.radius += 1;
+      }
+    }
+
+    else if (this.radius > minRadius) {
+      this.radius -= 1;
+    }
+      
     this.draw();
 
   }
 };
 
-var circle1 = new Circle(200, 200, 4, 4, 40);
-
-let circleArray = [];
-
-for (let  i = 0;  i < 50; i++) {
-  circleRadius = 40;
-  X = Math.floor(Math.random() * (canvas.width - circleRadius * 2) + circleRadius + 1);
-  Y = Math.floor(Math.random() * (canvas.height - circleRadius * 2) + circleRadius + 1);
-  DX = Math.random() * 6;
-  DY = Math.random() * 6;
-  
-  circleArray.push(new Circle(X, Y, DX, DY, circleRadius));
-  
-}
-
-console.log(circleArray);
+function init() {
+  circleArray = [];
+  for (let  i = 0;  i < 250; i++) {
+    circleRadius = minRadius;
+    X = Math.floor(Math.random() * (canvas.width - circleRadius * 2) + circleRadius + 1);
+    Y = Math.floor(Math.random() * (canvas.height - circleRadius * 2) + circleRadius + 1);
+    DX = Math.random() * 4;
+    DY = Math.random() * 4;
+    circleArray.push(new Circle(X, Y, DX, DY, circleRadius));
+    
+  }
+};
 
 function animate2() {
   requestAnimationFrame(animate2);
@@ -94,7 +105,10 @@ function animate2() {
   }
 };
 
+init();
 animate2();
+console.log(circleArray);
+
 
 
 
@@ -126,4 +140,32 @@ c.lineTo(160, 300);
 c.strokeStyle = "rgb(29, 26, 196)";
 c.stroke();*/
 
-// event listeners
+/*
+// Circle animation
+
+X = Math.random() * canvas.width;
+Y = Math.random() * canvas.height;
+DX = 4;
+DY = 4;
+circleRadius = 40;
+
+function animate() {
+  requestAnimationFrame(animate);
+  c.clearRect(0, 0, canvas.width, canvas.height);
+  c.beginPath();
+  c.arc(X, Y, circleRadius, Math.PI * 2, false);
+  c.strokeStyle = 'rgb(0, 100, 255)';
+  c.stroke();
+  
+  if (X + circleRadius >= innerWidth || X - circleRadius <=  0) {
+    DX = -DX;
+  }
+  
+  if (Y + circleRadius >= innerHeight || Y - circleRadius <= 0) {
+    DY = -DY;
+  }
+  X += DX;
+  Y += DY;
+ 
+};
+*/
