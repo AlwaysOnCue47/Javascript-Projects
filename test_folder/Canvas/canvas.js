@@ -109,9 +109,6 @@ init();
 animate2();
 console.log(circleArray);
 
-
-
-
 /* Random circle generator
 
 for (i = 0; i < 50; i++) {

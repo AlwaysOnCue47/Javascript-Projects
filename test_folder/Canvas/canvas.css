@@ -12,3 +12,8 @@ body, html {
   margin: 0;
 
 }
+
+#canvas2 {
+  background-color: lightblue;
+  margin: 0;
+}
