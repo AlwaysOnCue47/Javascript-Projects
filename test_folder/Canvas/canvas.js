@@ -46,6 +46,7 @@ function Circle(x, y, dx, dy, radius) { //object constructor always begins with 
   this.dx = dx;
   this.dy = dy;
   this.radius = radius;
+  this.minRadius = radius;
   this.color = colorArray[Math.floor(Math.random()*colorArray.length)];
 
   this.draw = function() {
@@ -74,7 +75,7 @@ function Circle(x, y, dx, dy, radius) { //object constructor always begins with 
       }
     }
 
-    else if (this.radius > minRadius) {
+    else if (this.radius > this.minRadius) {
       this.radius -= 1;
     }
       
@@ -85,8 +86,8 @@ function Circle(x, y, dx, dy, radius) { //object constructor always begins with 
 
 function init() {
   circleArray = [];
-  for (let  i = 0;  i < 250; i++) {
-    circleRadius = minRadius;
+  for (let  i = 0;  i < 300; i++) {
+    circleRadius = Math.floor(Math.random()*9) + 1;
     X = Math.floor(Math.random() * (canvas.width - circleRadius * 2) + circleRadius + 1);
     Y = Math.floor(Math.random() * (canvas.height - circleRadius * 2) + circleRadius + 1);
     DX = Math.random() * 4;

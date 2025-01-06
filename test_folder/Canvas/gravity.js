@@ -7,7 +7,7 @@ canvas.width = document.documentElement.clientWidth;
 let c = canvas.getContext('2d');
 let ballArray = [];
 
-let gravity = .6;
+let gravity = .8;
 let friction = 0.94;
 
 let colorArray = [
@@ -19,6 +19,12 @@ let colorArray = [
   '#e3fa2',
   '#0abbc3',
 ];
+
+window.addEventListener('resize', (event) => {
+  canvas.height = document.documentElement.clientHeight;
+  canvas.width = document.documentElement.clientWidth;
+  init();
+});
 
 // Objects
 
@@ -50,6 +56,7 @@ function Ball(x, y, dx, dy, radius, color) {
 };
 
 function init() {
+  ballArray = [];
   for (let i = 0; i < 50; i++) {
     x = 30 + (Math.random() * (canvas.width - 60));
     y = 30 + (Math.random() * (canvas.height - 100 ));
