@@ -109,6 +109,8 @@ function animate2() {
 init();
 animate2();
 console.log(circleArray);
+console.log(mouse.x);
+console.log(mouse.y);
 
 /* Random circle generator
 

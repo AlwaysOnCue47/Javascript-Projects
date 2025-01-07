@@ -17,3 +17,8 @@ body, html {
   background-color: lightblue;
   margin: 0;
 }
+
+#canvas3 {
+  background-color: lightgreen;
+  margin: 0;
+}
