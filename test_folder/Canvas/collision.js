@@ -7,6 +7,9 @@ canvas.height = document.documentElement.clientHeight;
 canvas.width = document.documentElement.clientWidth;
 let c = canvas.getContext('2d');
 
+let circle1;
+let circle2;
+
 let mouse = {
   x: 200,
   y: 200
@@ -48,14 +51,21 @@ function Circle(x, y, radius, color) {
   };
 };
 
-let circle1;
-let circle2;
+function getDistance(x1, y1, x2, y2){
+  let xDistance = x2 - x1;
+  let yDistance = y2 - y1;
+
+  return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+
+};
+
+
+
 function init() {
   c.clearRect(0,0,canvas.height, canvas.width);
   circle1 = new Circle(canvas.width / 2, canvas.height / 2, 35, 'darkgreen');
   circle2 = new Circle(undefined, undefined, 10, 'darkred');
   
-
 };
 
 function animate() {
@@ -66,8 +76,11 @@ function animate() {
   circle2.y = mouse.y;
   circle2.update();
 
-}
- console.log(mouse.x);
- console.log(mouse.y);
+  if ((getDistance(circle1.x, circle1.y, circle2.x, circle2.y)) < (circle1.radius + circle2.radius)){
+    circle1.color = 'darkred';
+  } else circle1.color = 'darkgreen';
+
+};
+
 init();
 animate();
