@@ -21,8 +21,6 @@ window.addEventListener('mousemove', (event) => {
   mouse.y = event.y;
 });
 
-
-
 window.addEventListener('resize', () => {
   canvas.height = document.documentElement.clientHeight;
   canvas.width = document.documentElement.clientWidth;
@@ -59,8 +57,6 @@ function getDistance(x1, y1, x2, y2){
 
 };
 
-
-
 function init() {
   c.clearRect(0,0,canvas.height, canvas.width);
   circle1 = new Circle(canvas.width / 2, canvas.height / 2, 35, 'darkgreen');
@@ -70,7 +66,7 @@ function init() {
 
 function animate() {
   requestAnimationFrame(animate);
-  c.clearRect(0, 0, canvas.width, canvas.height);
+  //c.clearRect(0, 0, canvas.width, canvas.height);
   circle1.update();
   circle2.x = mouse.x;
   circle2.y = mouse.y;
