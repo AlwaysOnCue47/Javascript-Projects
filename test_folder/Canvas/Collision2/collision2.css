@@ -1,0 +1,11 @@
+body, html {
+  margin: 0;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+}
+
+#mainCanvas {
+  background-color: azure;
+  margin: 0;
+}

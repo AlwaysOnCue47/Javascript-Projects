@@ -66,7 +66,7 @@ function init() {
 
 function animate() {
   requestAnimationFrame(animate);
-  //c.clearRect(0, 0, canvas.width, canvas.height);
+  c.clearRect(0, 0, canvas.width, canvas.height);
   circle1.update();
   circle2.x = mouse.x;
   circle2.y = mouse.y;

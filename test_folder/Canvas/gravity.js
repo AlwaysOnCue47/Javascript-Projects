@@ -20,7 +20,7 @@ let colorArray = [
   '#0abbc3',
 ];
 
-window.addEventListener('resize', (event) => {
+window.addEventListener('resize', () => {
   canvas.height = document.documentElement.clientHeight;
   canvas.width = document.documentElement.clientWidth;
   init();
