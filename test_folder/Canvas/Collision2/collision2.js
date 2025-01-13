@@ -26,10 +26,16 @@ window.addEventListener('mousemove', (event) => {
 });
 
 let circleArray = [];
-let dx = 1;
-let dy = 1;
 let radius = 20;
-let color = 'blue'
+
+const colorArray = [
+    'blue',
+    'red',
+    'green',
+    'purple'
+];
+
+
 
 function getDistance(x1, y1, x2, y2){
   let xDistance = x2 - x1;
@@ -39,17 +45,74 @@ function getDistance(x1, y1, x2, y2){
 
 };
 
-function CircleMaker(x, y, dx, dy, radius, color) {
+
+function rotate(velocity, angle) {
+  const rotatedVelocities = {
+      x: velocity.x * Math.cos(angle) - velocity.y * Math.sin(angle),
+      y: velocity.x * Math.sin(angle) + velocity.y * Math.cos(angle)
+  };
+
+  return rotatedVelocities;
+}
+
+function resolveCollision(particle, otherParticle) {
+  const xVelocityDiff = particle.velocity.x - otherParticle.velocity.x;
+  const yVelocityDiff = particle.velocity.y - otherParticle.velocity.y;
+
+  const xDist = otherParticle.x - particle.x;
+  const yDist = otherParticle.y - particle.y;
+
+  // Prevent accidental overlap of particles
+  if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
+
+      // Grab angle between the two colliding particles
+      const angle = -Math.atan2(otherParticle.y - particle.y, otherParticle.x - particle.x);
+
+      // Store mass in var for better readability in collision equation
+      const m1 = particle.mass;
+      const m2 = otherParticle.mass;
+
+      // Velocity before equation
+      const u1 = rotate(particle.velocity, angle);
+      const u2 = rotate(otherParticle.velocity, angle);
+
+      // Velocity after 1d collision equation
+      const v1 = { x: u1.x * (m1 - m2) / (m1 + m2) + u2.x * 2 * m2 / (m1 + m2), y: u1.y };
+      const v2 = { x: u2.x * (m1 - m2) / (m1 + m2) + u1.x * 2 * m2 / (m1 + m2), y: u2.y };
+
+      // Final velocity after rotating axis back to original location
+      const vFinal1 = rotate(v1, -angle);
+      const vFinal2 = rotate(v2, -angle);
+
+      // Swap particle velocities for realistic bounce effect
+      particle.velocity.x = vFinal1.x;
+      particle.velocity.y = vFinal1.y;
+
+      otherParticle.velocity.x = vFinal2.x;
+      otherParticle.velocity.y = vFinal2.y;
+  }
+};
+
+function CircleMaker(x, y, radius, color) {
   this.x = x;
   this.y = y;
   this.radius = radius;
   this.color = color;
-  this.dx = 2;
-  this.dy = 2;
+  this.velocity = {
+    x: Math.random(),
+    y: Math.random() 
+  };
+  this.mass = 1;
+  this.opacity = 0;
 
   this.draw = () => {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, Math.PI * 2, false);
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.restore();
     ctx.strokeStyle = this.color;
     ctx.stroke();
     ctx.closePath();
@@ -61,29 +124,34 @@ function CircleMaker(x, y, dx, dy, radius, color) {
     for (let i = 0; i < circleArray.length; i++) {
       if (this === circleArray[i]) continue;
       if (getDistance(this.x, this.y, circleArray[i].x, circleArray[i].y) - radius * 2 < 0) {
-        console.log('collisions detected');
+        console.log('HIT')
+        resolveCollision(this, circleArray[i]);
       
-    }}
+    }};
 
     if (this.x + this.radius >= canvas.width || this.x - this.radius <= 0){
-      this.dx = -this.dx
+      this.velocity.x = -this.velocity.x
     };
 
     if (this.y + this.radius >= canvas.height || this.y - this.radius <= 0) {
-      this.dy = -this.dy;
+      this.velocity.y = -this.velocity.y
     };
 
-    this.x += this.dx;
-    this.y += this.dy;
+    if (getDistance(this.x, this.y, mouse.x, mouse.y ) < 100 ) {
+      this.opacity = 0.2;
+
+    }else this.opacity = 0;
+
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
     this.draw();
     
+    };
   };
-  };
-
 
 function init() {
     circleArray = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 100; i++) {
     let x = (Math.random()* (canvas.width - 40)+20);
     let y = (Math.random()* (canvas.height - 40)+20);
 
@@ -97,9 +165,8 @@ function init() {
         
       }
     }
-
-
-    circleArray.push(new CircleMaker(x, y, dx, dy, radius, color));
+    let color = colorArray[Math.floor(Math.random()*4)];
+    circleArray.push(new CircleMaker(x, y, radius, color));
     circleArray[i].draw(); 
     
   }
