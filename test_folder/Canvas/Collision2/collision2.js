@@ -36,7 +36,6 @@ const colorArray = [
 ];
 
 
-
 function getDistance(x1, y1, x2, y2){
   let xDistance = x2 - x1;
   let yDistance = y2 - y1;
@@ -124,9 +123,16 @@ function CircleMaker(x, y, radius, color) {
     for (let i = 0; i < circleArray.length; i++) {
       if (this === circleArray[i]) continue;
       if (getDistance(this.x, this.y, circleArray[i].x, circleArray[i].y) - radius * 2 < 0) {
-        console.log('HIT')
+        console.log('HIT');
+        if (this.opacity == 0) {
+          this.opacity = 0.2
+        } else this.opacity = 0;
+        if (circleArray[i].opacity == 0) {
+          circleArray[i].opacity = 0.2;
+        } else circleArray[i].opacity = 0;
+        
         resolveCollision(this, circleArray[i]);
-      
+       
     }};
 
     if (this.x + this.radius >= canvas.width || this.x - this.radius <= 0){
@@ -137,10 +143,10 @@ function CircleMaker(x, y, radius, color) {
       this.velocity.y = -this.velocity.y
     };
 
-    if (getDistance(this.x, this.y, mouse.x, mouse.y ) < 100 ) {
+   /* if (getDistance(this.x, this.y, mouse.x, mouse.y ) < 100 ) {
       this.opacity = 0.2;
 
-    }else this.opacity = 0;
+    }else this.opacity = 0;*/
 
     this.x += this.velocity.x;
     this.y += this.velocity.y;
@@ -184,5 +190,3 @@ function animate() {
 
 init();
 animate();
-
-
