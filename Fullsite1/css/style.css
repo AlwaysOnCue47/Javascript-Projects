@@ -129,9 +129,23 @@ nav {
 /* Footer section end */
 
 /* Mobile styles */
-@media (max-width: 600px) {
+
+
+
+ 
+/*
+body {
+  font-size: 16px; /* Base mobile size 
+}
+
+@media (min-width: 601px) {
   body {
-    padding-top: 5.0rem;
-     
+      font-size: 18px; /* Larger font for tablets 
   }
 }
+
+@media (min-width: 1025px) {
+  body {
+      font-size: 20px; /* Even larger font for desktops 
+  }
+} */
