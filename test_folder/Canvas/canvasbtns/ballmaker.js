@@ -15,7 +15,6 @@ document.getElementById('popBtn').addEventListener('click', () => {
 document.getElementById('clearScr').addEventListener('click', ()=> {
   window.cancelAnimationFrame(reAnim);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ball1 = null;
 }
 );
 
