@@ -25,6 +25,20 @@ window.addEventListener('mousemove', (event) => {
 
 });
 
+let isAnimating = true;
+
+canvas.addEventListener('click', () => {
+  if (isAnimating) {
+    cancelAnimationFrame(reAnim);
+    isAnimating = false;
+
+  } else if (!isAnimating) {
+    animate();
+    isAnimating = true;
+  }
+  
+});
+
 let circleArray = [];
 let radius = 20;
 
@@ -179,7 +193,7 @@ function init() {
 };
 
 function animate() {
-  requestAnimationFrame(animate);
+  reAnim = requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   for (let i = 0; i < circleArray.length; i++) {

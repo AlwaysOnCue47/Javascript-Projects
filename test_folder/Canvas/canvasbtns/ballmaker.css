@@ -1,0 +1,19 @@
+body, html {
+  margin: 0;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+}
+
+#canvas {
+  margin: 0;
+  background-color: lightblue;
+}
+
+#buttonContainer {
+  position: absolute;
+}
+
+button {
+  position: relative;
+}
