@@ -9,15 +9,17 @@ const ctx = canvas.getContext('2d');
 // variables
 
 let isAnimating = false;
+let balls;
 
 let mouse = {x: 200, y: 200};
 canvas.addEventListener('click', (event)=> {
-  mouse.x = event.x;
-  mouse.y = event.y;
-});
+  if (!loaded){
+    mouse.x = event.x;
+    mouse.y = event.y;
 
-let blackBall = new Ball(200, 300, 30, 'black');
-let balls;
+  }
+  
+});
 
 // event listeners 
 
@@ -50,14 +52,16 @@ document.getElementById('break').addEventListener('click', () => {
 });
 
 document.getElementById('shoot').addEventListener('click', () => {
-  if (!fired){ 
+  if (!fired && loaded){ 
     fired = true;
+    loaded = false;
   }
   
 });
 
 document.getElementById('reload').addEventListener('click', () => {
   fired = false;
+  loaded = true;
   loadCannon();
 
 });
@@ -73,6 +77,7 @@ function Ball(x, y, radius, color, vx, vy) {
     x: vx,
     y: vy
   };
+
   this.mass = 1;
 
   this.update = () => {
@@ -120,6 +125,9 @@ function Cannon(x, y, vx, vy) {
 
   this.update = ()=> {
     this.velocity.y += this.gravity;
+    if (this.x + this.radius >= canvas.width){
+      this.velocity.x = -this.velocity.x;
+    }
     this.y += this.velocity.y;
     this.x += this.velocity.x;
     this.draw();
@@ -131,11 +139,12 @@ function Cannon(x, y, vx, vy) {
 // functions 
 let cannonBall;
 let cannonBase;
-let fired = false;
-let fire;
+let fired;
+let loaded = false;
 
 
 function loadCannon() {
+    cannonBase.color = 'darkred';
     cannonBall = new Cannon(cannonBase.x, cannonBase.y, 15, -15);
     cannonBall.draw();
     console.log(cannonBall);
@@ -143,7 +152,10 @@ function loadCannon() {
 };
 
 function shootCannon() {
-  cannonBall.update();
+    cannonBase.color = 'black';
+    cannonBall.update();
+  
+  
 };
 
 function getDistance(x1, y1, x2, y2) {
@@ -155,6 +167,8 @@ function getDistance(x1, y1, x2, y2) {
 };
 
 function init() {
+  cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
+  cannonBase.draw();
   balls = [];
   for (let i = 0; i < 10; i++) {
     let x = (Math.random()* (canvas.width - 60)) +30;
@@ -168,26 +182,34 @@ function init() {
 function animate() {
     reAnim = requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    cannonBase.x = mouse.x;
-    cannonBase.y = mouse.y;
+    if (!loaded) {
+      cannonBase.x = mouse.x;
+      cannonBase.y = mouse.y;
+
+    }
+    
     cannonBase.draw();
     if (fired) {
       shootCannon();
+      
     }
 
-    for (let i = 0; i < balls.length; i++) {
-      if (getDistance(cannonBall.x, cannonBall.y, balls[i].x, balls[i].y) - blackBall.radius * 2 < 0) {
-        balls[i].color = 'blue';
-      }
-      balls[i].update();
+    for (let i = 0; i < balls.length; i++) { 
+      if (fired) {
+        if (getDistance(cannonBall.x, cannonBall.y, balls[i].x, balls[i].y) - cannonBall.radius * 2 < 0) {
+          balls[i].color = 'blue';
+        }
 
+      }
+      
+      balls[i].update();
     };
+    
   } ;
 
 
 // Run when parsed 
-  cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
-  cannonBase.draw();
-  loadCannon();
+  
+  // loadCannon();
   //shootCannon();
   
