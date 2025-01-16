@@ -10,8 +10,8 @@ const ctx = canvas.getContext('2d');
 
 let isAnimating = false;
 
-let mouse = {x:undefined, y: undefined};
-document.addEventListener('mousemove', (event)=> {
+let mouse = {x: 200, y: 200};
+canvas.addEventListener('click', (event)=> {
   mouse.x = event.x;
   mouse.y = event.y;
 });
@@ -51,14 +51,13 @@ document.getElementById('break').addEventListener('click', () => {
 
 document.getElementById('shoot').addEventListener('click', () => {
   if (!fired){ 
-    shootCannon();
     fired = true;
   }
-  
   
 });
 
 document.getElementById('reload').addEventListener('click', () => {
+  fired = false;
   loadCannon();
 
 });
@@ -101,9 +100,9 @@ function Ball(x, y, radius, color, vx, vy) {
   };
 };
 
-function Cannon(vx, vy) {
-  this.x = 300 //canvas.width - 5;
-  this.y =  300 //canvas.height - 5;
+function Cannon(x, y, vx, vy) {
+  this.x = x;
+  this.y =  y;
   this.radius = 10;
   this.color = 'black';
   this.velocity = {x:vx, y:vy};
@@ -127,28 +126,23 @@ function Cannon(vx, vy) {
 
   }
 
-}
+};
 
 // functions 
 let cannonBall;
+let cannonBase;
 let fired = false;
 let fire;
 
+
 function loadCannon() {
-  if (fired) {
-    cancelAnimationFrame(fire);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    fired = false;
-  } 
-    cannonBall = new Cannon(15, -15);
+    cannonBall = new Cannon(cannonBase.x, cannonBase.y, 15, -15);
     cannonBall.draw();
     console.log(cannonBall);
-  
-}
+
+};
 
 function shootCannon() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  fire = requestAnimationFrame(shootCannon);
   cannonBall.update();
 };
 
@@ -174,12 +168,15 @@ function init() {
 function animate() {
     reAnim = requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    blackBall.x = mouse.x;
-    blackBall.y = mouse.y;
-    blackBall.draw();
+    cannonBase.x = mouse.x;
+    cannonBase.y = mouse.y;
+    cannonBase.draw();
+    if (fired) {
+      shootCannon();
+    }
 
     for (let i = 0; i < balls.length; i++) {
-      if (getDistance(blackBall.x, blackBall.y, balls[i].x, balls[i].y) - blackBall.radius * 2 < 0) {
+      if (getDistance(cannonBall.x, cannonBall.y, balls[i].x, balls[i].y) - blackBall.radius * 2 < 0) {
         balls[i].color = 'blue';
       }
       balls[i].update();
@@ -189,7 +186,8 @@ function animate() {
 
 
 // Run when parsed 
+  cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
+  cannonBase.draw();
   loadCannon();
   //shootCannon();
   
-  blackBall.draw();
