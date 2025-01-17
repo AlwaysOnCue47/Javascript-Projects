@@ -9,16 +9,17 @@ const ctx = canvas.getContext('2d');
 // variables
 
 let points = 0;
-
 let isAnimating = false;
 let balls;
-
+let cannonBall;
+let cannonBase;
+let fired;
+let loaded = false;
 let mouse = {x: 200, y: 200};
-
 
 // event listeners 
 
-canvas.addEventListener('click', (event)=> {
+canvas.addEventListener('click', (event) => {
   if (!loaded){
     mouse.x = event.x;
     mouse.y = event.y;
@@ -37,7 +38,7 @@ document.getElementById('popBtn').addEventListener('click', () => {
   }
 });
 
-document.getElementById('clearScr').addEventListener('click', ()=> {
+document.getElementById('clearScr').addEventListener('click', () => {
   if (isAnimating){
     window.cancelAnimationFrame(reAnim);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -46,12 +47,6 @@ document.getElementById('clearScr').addEventListener('click', ()=> {
     console.log(balls);
 
   }
-});
-
-document.getElementById('break').addEventListener('click', () => {
-  balls.splice(0, 1);
-  console.log(balls);
-
 });
 
 document.getElementById('shoot').addEventListener('click', () => {
@@ -139,11 +134,6 @@ function Cannon(x, y, vx, vy) {
 };
 
 // functions 
-let cannonBall;
-let cannonBase;
-let fired;
-let loaded = false;
-
 
 function loadCannon() {
     cannonBase.color = 'darkred';
@@ -156,7 +146,6 @@ function loadCannon() {
 function shootCannon() {
     cannonBase.color = 'black';
     cannonBall.update();
-  
   
 };
 
@@ -201,8 +190,6 @@ function animate() {
     if (balls[i].radius == 0) continue; 
     if (fired) {
       if (getDistance(cannonBall.x, cannonBall.y, balls[i].x, balls[i].y) - balls[i].radius * 2 < 0) {
-        // balls.splice(balls[i], 1);
-        // balls[i].color = 'blue';
         balls[i].radius = 0;
         points += 10;
         fired = false;
@@ -223,7 +210,3 @@ function animate() {
 
 
 // Run when parsed 
-  
-  // loadCannon();
-  // shootCannon();
-  

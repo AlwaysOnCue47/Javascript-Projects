@@ -11,9 +11,19 @@ body, html {
 }
 
 #buttonContainer {
+  display: flex;
+  flex-direction: column;
   position: absolute;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10%;
 }
 
 button {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 16px;
   position: relative;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
 }
