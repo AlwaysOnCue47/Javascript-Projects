@@ -8,20 +8,23 @@ const ctx = canvas.getContext('2d');
 
 // variables
 
+let points = 0;
+
 let isAnimating = false;
 let balls;
 
 let mouse = {x: 200, y: 200};
+
+
+// event listeners 
+
 canvas.addEventListener('click', (event)=> {
   if (!loaded){
     mouse.x = event.x;
     mouse.y = event.y;
 
-  }
-  
+  }  
 });
-
-// event listeners 
 
 document.getElementById('popBtn').addEventListener('click', () => {
   if (!isAnimating){
@@ -32,8 +35,7 @@ document.getElementById('popBtn').addEventListener('click', () => {
     console.log(balls);
 
   }
-} 
-);
+});
 
 document.getElementById('clearScr').addEventListener('click', ()=> {
   if (isAnimating){
@@ -42,13 +44,14 @@ document.getElementById('clearScr').addEventListener('click', ()=> {
     isAnimating = false;
     console.log(isAnimating);
     console.log(balls);
+
   }
-}
-);
+});
 
 document.getElementById('break').addEventListener('click', () => {
   balls.splice(0, 1);
   console.log(balls);
+
 });
 
 document.getElementById('shoot').addEventListener('click', () => {
@@ -133,7 +136,6 @@ function Cannon(x, y, vx, vy) {
     this.draw();
 
   }
-
 };
 
 // functions 
@@ -167,8 +169,7 @@ function getDistance(x1, y1, x2, y2) {
 };
 
 function init() {
-  cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
-  cannonBase.draw();
+  points = 0;
   balls = [];
   for (let i = 0; i < 10; i++) {
     let x = (Math.random()* (canvas.width - 60)) +30;
@@ -177,39 +178,52 @@ function init() {
     balls[i].draw();
 
   }
+  cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
+  cannonBase.draw();
 };
 
 function animate() {
-    reAnim = requestAnimationFrame(animate);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if (!loaded) {
-      cannonBase.x = mouse.x;
-      cannonBase.y = mouse.y;
+  reAnim = requestAnimationFrame(animate);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!loaded) {
+    cannonBase.x = mouse.x;
+    cannonBase.y = mouse.y;
 
-    }
+  };
+  
+  cannonBase.draw();
+  if (fired) {
+    shootCannon();
     
-    cannonBase.draw();
+  };
+
+  for (let i = 0; i < balls.length; i++) {
+    if (balls[i].radius == 0) continue; 
     if (fired) {
-      shootCannon();
-      
-    }
+      if (getDistance(cannonBall.x, cannonBall.y, balls[i].x, balls[i].y) - balls[i].radius * 2 < 0) {
+        // balls.splice(balls[i], 1);
+        // balls[i].color = 'blue';
+        balls[i].radius = 0;
+        points += 10;
+        fired = false;
+        console.log(points);
 
-    for (let i = 0; i < balls.length; i++) { 
-      if (fired) {
-        if (getDistance(cannonBall.x, cannonBall.y, balls[i].x, balls[i].y) - cannonBall.radius * 2 < 0) {
-          balls[i].color = 'blue';
-        }
-
-      }
-      
+      }};
       balls[i].update();
+
     };
     
-  } ;
+  if (points == 100) {
+    window.cancelAnimationFrame(reAnim);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    isAnimating = false;
+
+    };   
+  };
 
 
 // Run when parsed 
   
   // loadCannon();
-  //shootCannon();
+  // shootCannon();
   
