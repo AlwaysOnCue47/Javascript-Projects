@@ -10,6 +10,7 @@ const ctx = canvas.getContext('2d');
 
 let points = 0;
 let pointsTotal = 0;
+let playerScore = 0;
 let isAnimating = false;
 let balls;
 let cannonBall;
@@ -36,8 +37,6 @@ document.getElementById('popBtn').addEventListener('click', () => {
     init();
     animate();
     isAnimating = true;
-    console.log(isAnimating);
-    console.log(balls);
 
   }
 });
@@ -47,8 +46,6 @@ document.getElementById('clearScr').addEventListener('click', () => {
     window.cancelAnimationFrame(reAnim);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     isAnimating = false;
-    console.log(isAnimating);
-    console.log(balls);
 
   }
 });
@@ -58,14 +55,14 @@ document.getElementById('shoot').addEventListener('click', () => {
     fired = true;
     loaded = false;
   }
-  
 });
 
 document.getElementById('reload').addEventListener('click', () => {
-  fired = false;
-  loaded = true;
-  loadCannon();
+  if ((!fired) && (isAnimating)){
+    loaded = true;
+    loadCannon();
 
+  }
 });
 
 // object constructor 
@@ -141,8 +138,9 @@ function Cannon(x, y, vx, vy) {
     this.x += this.velocity.x;
     if (this.y >= missLine){
       misses += 1;
+      playerScore += -1;
       fired = false;
-      console.log(misses);
+      console.log(playerScore);
     }
     this.draw();
 
@@ -186,46 +184,61 @@ function init() {
     case 1:
       points = 0;
       balls = [];
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 5; i++) {
       let x = (Math.random()* (canvas.width - 450)) +380;
       let y = (Math.random()* (canvas.height - 60)) +30;
       balls.push(new Ball(x, y, 30, 'red', 1, 2, 0));
       balls[i].draw();
       cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
       cannonBase.draw();
+      console.log(balls);
       }
       break;
 
     case 2: 
       balls = [];
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 5; i++) {
       let x = (Math.random()* (canvas.width - 450)) +380;
       let y = (Math.random()* (canvas.height - 60)) +30;
       balls.push(new Ball(x, y, 30, 'green', 2, 4, 0));
       balls[i].draw();
+      console.log(balls);
       }
       break;
 
     case 3:
       balls = [];
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 5; i++) {
       let x = (Math.random()* (canvas.width - 450)) +380;
       let y = (Math.random()* (canvas.height - 60)) +30;
       balls.push(new Ball(x, y, 30, 'blue', 1, 2, 1));
       balls[i].draw();
+      console.log(balls);
       }
       break;
 
-      case 4:
-        balls = [];
-        for (let i = 0; i < 10; i++) {
-        let x = (Math.random()* (canvas.width - 450)) +380;
-        let y = (Math.random()* (canvas.height - 60)) +30;
-        balls.push(new Ball(x, y, 30, 'orange', 2, 4, 1));
-        balls[i].draw();
-        }
-        break;
-  };
+    case 4:
+      balls = [];
+      for (let i = 0; i < 5; i++) {
+      let x = (Math.random()* (canvas.width - 450)) +380;
+      let y = (Math.random()* (canvas.height - 60)) +30;
+      balls.push(new Ball(x, y, 30, 'orange', 2, 4, 1));
+      balls[i].draw();
+      console.log(balls);
+      }
+      break;
+
+    case 5:
+      balls = [];
+      for (let i = 0; i < 5; i++) {
+      let x = (Math.random()* (canvas.width - 450)) +380;
+      let y = (Math.random()* (canvas.height - 60)) +30;
+      balls.push(new Ball(x, y, 20, 'purple', 3, 6, 0));
+      balls[i].draw();
+      console.log(balls);
+      }
+      break;
+};
 };
 
 function animate() {
@@ -254,16 +267,31 @@ function animate() {
         balls[i].radius = 0;
         points += 10;
         pointsTotal += 10;
+        playerScore += 10;
         fired = false;
         console.log(points);
         console.log(pointsTotal);
+        console.log(misses);
+        console.log(playerScore);
 
       }};
       balls[i].update();
 
     };
+  
+  if (pointsTotal == 200 && points == 50) {
+    points = 0;
+    window.cancelAnimationFrame(reAnim);
+    isAnimating = false;
+    level = 5;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    init();
+    animate();
+    isAnimating = true;
 
-  if (pointsTotal == 300 && points == 100) {
+    };
+
+  if (pointsTotal == 150 && points == 50) {
     points = 0;
     window.cancelAnimationFrame(reAnim);
     isAnimating = false;
@@ -275,7 +303,7 @@ function animate() {
 
     };
 
-  if (pointsTotal == 200 && points == 100) {
+  if (pointsTotal == 100 && points == 50) {
     points = 0;
     window.cancelAnimationFrame(reAnim);
     isAnimating = false;
@@ -287,7 +315,7 @@ function animate() {
 
     };
     
-  if (pointsTotal == 100 && points == 100) {
+  if (pointsTotal == 50 && points == 50) {
     points = 0;
     window.cancelAnimationFrame(reAnim);
     isAnimating = false;
@@ -296,9 +324,17 @@ function animate() {
     init();
     animate();
     isAnimating = true;
+
     };
   
-  
+  if (pointsTotal >= 250) { // when game ends
+    window.cancelAnimationFrame(reAnim);
+    isAnimating = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawField();
+    console.log("Total misses: " + misses);
+    console.log("Player total score: " + playerScore);
+  }
   };
 
 
