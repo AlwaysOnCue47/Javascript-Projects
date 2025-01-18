@@ -9,6 +9,7 @@ const ctx = canvas.getContext('2d');
 // variables
 
 let points = 0;
+let pointsTotal = 0;
 let isAnimating = false;
 let balls;
 let cannonBall;
@@ -69,11 +70,11 @@ document.getElementById('reload').addEventListener('click', () => {
 
 // object constructor 
 
-function Ball(x, y, radius, color, vx, vy) {
+function Ball(x, y, radius, color, vx, vy, radiusMorph) {
   this.x = x;
   this.y = y;
   this.radius = radius;
-  this.radiusMorph = 1;
+  this.radiusMorph = radiusMorph;
   this.color = color;
   this.velocity = {
     x: vx,
@@ -181,17 +182,50 @@ function getDistance(x1, y1, x2, y2) {
 };
 
 function init() {
-  points = 0;
-  balls = [];
-  for (let i = 0; i < 10; i++) {
-    let x = (Math.random()* (canvas.width - 450)) +380;
-    let y = (Math.random()* (canvas.height - 60)) +30;
-    balls.push(new Ball(x, y, 30, 'red', 1, 2));
-    balls[i].draw();
+  switch (level) {
+    case 1:
+      points = 0;
+      balls = [];
+      for (let i = 0; i < 10; i++) {
+      let x = (Math.random()* (canvas.width - 450)) +380;
+      let y = (Math.random()* (canvas.height - 60)) +30;
+      balls.push(new Ball(x, y, 30, 'red', 1, 2, 0));
+      balls[i].draw();
+      cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
+      cannonBase.draw();
+      }
+      break;
 
-  }
-  cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
-  cannonBase.draw();
+    case 2: 
+      balls = [];
+      for (let i = 0; i < 10; i++) {
+      let x = (Math.random()* (canvas.width - 450)) +380;
+      let y = (Math.random()* (canvas.height - 60)) +30;
+      balls.push(new Ball(x, y, 30, 'green', 2, 4, 0));
+      balls[i].draw();
+      }
+      break;
+
+    case 3:
+      balls = [];
+      for (let i = 0; i < 10; i++) {
+      let x = (Math.random()* (canvas.width - 450)) +380;
+      let y = (Math.random()* (canvas.height - 60)) +30;
+      balls.push(new Ball(x, y, 30, 'blue', 1, 2, 1));
+      balls[i].draw();
+      }
+      break;
+
+      case 4:
+        balls = [];
+        for (let i = 0; i < 10; i++) {
+        let x = (Math.random()* (canvas.width - 450)) +380;
+        let y = (Math.random()* (canvas.height - 60)) +30;
+        balls.push(new Ball(x, y, 30, 'orange', 2, 4, 1));
+        balls[i].draw();
+        }
+        break;
+  };
 };
 
 function animate() {
@@ -219,20 +253,52 @@ function animate() {
         balls[i].radiusMorph = 0;
         balls[i].radius = 0;
         points += 10;
+        pointsTotal += 10;
         fired = false;
         console.log(points);
+        console.log(pointsTotal);
 
       }};
       balls[i].update();
 
     };
-    
-  if (points == 100) {
-    window.cancelAnimationFrame(reAnim);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    isAnimating = false;
 
-    };   
+  if (pointsTotal == 300 && points == 100) {
+    points = 0;
+    window.cancelAnimationFrame(reAnim);
+    isAnimating = false;
+    level = 4;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    init();
+    animate();
+    isAnimating = true;
+
+    };
+
+  if (pointsTotal == 200 && points == 100) {
+    points = 0;
+    window.cancelAnimationFrame(reAnim);
+    isAnimating = false;
+    level = 3;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    init();
+    animate();
+    isAnimating = true;
+
+    };
+    
+  if (pointsTotal == 100 && points == 100) {
+    points = 0;
+    window.cancelAnimationFrame(reAnim);
+    isAnimating = false;
+    level = 2;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    init();
+    animate();
+    isAnimating = true;
+    };
+  
+  
   };
 
 
