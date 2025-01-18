@@ -16,6 +16,9 @@ let cannonBase;
 let fired;
 let loaded = false;
 let mouse = {x: 200, y: 200};
+let misses = 0;
+let missLine = canvas.height + 10;
+let level = 1;
 
 // event listeners 
 
@@ -70,6 +73,7 @@ function Ball(x, y, radius, color, vx, vy) {
   this.x = x;
   this.y = y;
   this.radius = radius;
+  this.radiusMorph = 1;
   this.color = color;
   this.velocity = {
     x: vx,
@@ -77,21 +81,6 @@ function Ball(x, y, radius, color, vx, vy) {
   };
 
   this.mass = 1;
-
-  this.update = () => {
-    if (this.x - this.radius <= 0 || this.x + this.radius >= canvas.width) {
-      this.velocity.x = -this.velocity.x;
-    }
-
-    if (this.y - this.radius <= 0 || this.y + this.radius >= canvas.height) {
-      this.velocity.y = -this.velocity.y;
-    }
-
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
-    this.draw();
-
-  };
 
   this.draw = () => {
     ctx.beginPath();
@@ -101,6 +90,27 @@ function Ball(x, y, radius, color, vx, vy) {
     ctx.closePath();
 
   };
+
+  this.update = () => {
+    if (this.x - this.radius <= 350 || this.x + this.radius >= canvas.width) {
+      this.velocity.x = -this.velocity.x;
+    }
+
+    if (this.y - this.radius <= 0 || this.y + this.radius >= canvas.height) {
+      this.velocity.y = -this.velocity.y;
+    }
+
+    if (this.radius >= 30 || (this.radius <= 5 && this.radius >> 1)){
+      this.radiusMorph = -this.radiusMorph;
+    } 
+
+    this.radius += this.radiusMorph;
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
+    this.draw();
+
+  };
+  
 };
 
 function Cannon(x, y, vx, vy) {
@@ -128,12 +138,25 @@ function Cannon(x, y, vx, vy) {
     }
     this.y += this.velocity.y;
     this.x += this.velocity.x;
+    if (this.y >= missLine){
+      misses += 1;
+      fired = false;
+      console.log(misses);
+    }
     this.draw();
 
   }
 };
 
 // functions 
+
+function drawField() {
+  ctx.beginPath();
+  ctx.fillStyle = 'lightgreen'
+  ctx.fillRect(0, 0, 350, canvas.height)
+  ctx.closePath();
+
+};
 
 function loadCannon() {
     cannonBase.color = 'darkred';
@@ -161,7 +184,7 @@ function init() {
   points = 0;
   balls = [];
   for (let i = 0; i < 10; i++) {
-    let x = (Math.random()* (canvas.width - 60)) +30;
+    let x = (Math.random()* (canvas.width - 450)) +380;
     let y = (Math.random()* (canvas.height - 60)) +30;
     balls.push(new Ball(x, y, 30, 'red', 1, 2));
     balls[i].draw();
@@ -174,13 +197,16 @@ function init() {
 function animate() {
   reAnim = requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawField();
   if (!loaded) {
     cannonBase.x = mouse.x;
     cannonBase.y = mouse.y;
-
+    if (cannonBase.x >= 350) {
+      cannonBase.x = 340;
+    }
   };
-  
   cannonBase.draw();
+
   if (fired) {
     shootCannon();
     
@@ -190,6 +216,7 @@ function animate() {
     if (balls[i].radius == 0) continue; 
     if (fired) {
       if (getDistance(cannonBall.x, cannonBall.y, balls[i].x, balls[i].y) - balls[i].radius * 2 < 0) {
+        balls[i].radiusMorph = 0;
         balls[i].radius = 0;
         points += 10;
         fired = false;
@@ -210,3 +237,4 @@ function animate() {
 
 
 // Run when parsed 
+drawField();
