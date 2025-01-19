@@ -3,7 +3,6 @@ body, html {
   box-sizing: border-box;
   height: 100%;
   overflow: hidden;
-  justify-content: center;
 }
 
 #canvas {
@@ -25,7 +24,6 @@ body, html {
   width: 350px;
   justify-content: space-evenly;
 }
-
 
 p {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
