@@ -8,6 +8,10 @@ const ctx = canvas.getContext('2d');
 
 // variables
 
+const levelBox = document.getElementById('level');
+const scoreBox = document.getElementById('score');
+const missBox = document.getElementById('misses');
+
 let points = 0;
 let pointsTotal = 0;
 let playerScore = 0;
@@ -139,6 +143,8 @@ function Cannon(x, y, vx, vy) {
     if (this.y >= missLine){
       misses += 1;
       playerScore += -1;
+      missBox.innerHTML = misses;
+      scoreBox.innerHTML = playerScore;
       fired = false;
       console.log(playerScore);
     }
@@ -180,6 +186,9 @@ function getDistance(x1, y1, x2, y2) {
 };
 
 function init() {
+  levelBox.innerHTML = level;
+  scoreBox.innerHTML = playerScore;
+  missBox.innerHTML = misses;
   switch (level) {
     case 1:
       points = 0;
@@ -269,6 +278,8 @@ function animate() {
         pointsTotal += 10;
         playerScore += 10;
         fired = false;
+        scoreBox.innerHTML = playerScore;
+        missBox.innerHTML = misses;
         console.log(points);
         console.log(pointsTotal);
         console.log(misses);
@@ -334,7 +345,13 @@ function animate() {
     drawField();
     console.log("Total misses: " + misses);
     console.log("Player total score: " + playerScore);
-  }
+    console.log("Click 'Start' to play again!");
+    points = 0;
+    pointsTotal = 0; 
+    playerScore = 0; 
+    misses = 0;
+    level = 1;
+    };
   };
 
 

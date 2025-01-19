@@ -19,6 +19,18 @@ body, html {
   margin-top: 10%;
 }
 
+#stats {
+  display: flex;
+  position: absolute;
+  width: 350px;
+  justify-content: space-evenly;
+}
+
+p {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: x-large;
+}
+
 button {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-size: 16px;
