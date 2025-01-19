@@ -263,7 +263,7 @@ function respawnBalls(radius, color, vx, vy, morph) {
     if (i != 0) {
       for (let j = 0; j < balls.length; j++) {
         if (getDistance(x, y, balls[j].x, balls[j].y) - balls[j].radius * 2 < 0) {
-          x = (Math.random()* (canvas.width - 40)+20);
+          x = (Math.random()* (canvas.width - 450)+20);
           y = (Math.random()* (canvas.height - 40)+20);
           j = -1;
         };
