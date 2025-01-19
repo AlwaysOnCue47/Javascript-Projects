@@ -1,8 +1,8 @@
 // the canvas 
 const canvas = document.getElementById('canvas');
 
-canvas.height = document.documentElement.clientHeight;
-canvas.width = document.documentElement.clientWidth;
+canvas.height = 680;
+canvas.width = 1400;
 
 const ctx = canvas.getContext('2d');
 
@@ -247,6 +247,17 @@ function init() {
       console.log(balls);
       }
       break;
+
+    case 6:
+      balls = [];
+      for (let i = 0; i < 5; i++) {
+      let x = (Math.random()* (canvas.width - 450)) +380;
+      let y = (Math.random()* (canvas.height - 60)) +30;
+      balls.push(new Ball(x, y, 15, 'darkblue', 4, 8, 1));
+      balls[i].draw();
+      console.log(balls);
+      }
+      break;
 };
 };
 
@@ -287,6 +298,18 @@ function animate() {
 
       }};
       balls[i].update();
+
+    };
+
+  if (pointsTotal == 250 && points == 50) {
+    points = 0;
+    window.cancelAnimationFrame(reAnim);
+    isAnimating = false;
+    level = 6;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    init();
+    animate();
+    isAnimating = true;
 
     };
   
@@ -338,7 +361,7 @@ function animate() {
 
     };
   
-  if (pointsTotal >= 250) { // when game ends
+  if (pointsTotal >= 300) { // when game ends
     window.cancelAnimationFrame(reAnim);
     isAnimating = false;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
