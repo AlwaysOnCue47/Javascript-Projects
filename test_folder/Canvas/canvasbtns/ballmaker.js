@@ -75,6 +75,7 @@ function Ball(x, y, radius, color, vx, vy, radiusMorph) {
   this.x = x;
   this.y = y;
   this.radius = radius;
+  this.maxRadius = radius;
   this.radiusMorph = radiusMorph;
   this.color = color;
   this.velocity = {
@@ -102,7 +103,7 @@ function Ball(x, y, radius, color, vx, vy, radiusMorph) {
       this.velocity.y = -this.velocity.y;
     }
 
-    if (this.radius >= 30 || (this.radius <= 5 && this.radius >> 1)){
+    if (this.radius >= this.maxRadius || (this.radius <= 5 && this.radius >> 1)){
       this.radiusMorph = -this.radiusMorph;
     } 
 
@@ -209,7 +210,7 @@ function init() {
       for (let i = 0; i < 5; i++) {
       let x = (Math.random()* (canvas.width - 450)) +380;
       let y = (Math.random()* (canvas.height - 60)) +30;
-      balls.push(new Ball(x, y, 30, 'green', 2, 4, 0));
+      balls.push(new Ball(x, y, 25, 'green', 2, 4, 0));
       balls[i].draw();
       console.log(balls);
       }
