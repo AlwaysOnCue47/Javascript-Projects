@@ -16,7 +16,7 @@ let points = 0;
 let pointsTotal = 0;
 let playerScore = 0;
 let isAnimating = false;
-let balls;
+let balls = [];
 let cannonBall;
 let cannonBase;
 let fired;
@@ -25,6 +25,7 @@ let mouse = {x: 200, y: 200};
 let misses = 0;
 let missLine = canvas.height + 10;
 let level = 1;
+let type;
 
 // event listeners 
 
@@ -39,8 +40,8 @@ canvas.addEventListener('click', (event) => {
 document.getElementById('popBtn').addEventListener('click', () => {
   if (!isAnimating){
     init();
-    animate();
-    isAnimating = true;
+    // animate();
+    // isAnimating = true;
 
   }
 });
@@ -108,6 +109,31 @@ function Ball(x, y, radius, color, vx, vy, radiusMorph) {
     } 
 
     this.radius += this.radiusMorph;
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
+    this.draw();
+
+  };
+
+  this.update2 = (balls) => {
+    for (let i = 0; i < balls.length; i++) {
+      if (this === balls[i]) continue;
+      if (balls[i].radius <= 0) continue;
+      if (getDistance(this.x, this.y, balls[i].x, balls[i].y) - radius * 2 < 0) {
+        console.log('HIT');
+        
+        resolveCollision(this, balls[i]);
+       
+    }};
+
+    if (this.x - this.radius <= 350 || this.x + this.radius >= canvas.width) {
+      this.velocity.x = -this.velocity.x;
+    }
+
+    if (this.y - this.radius <= 0 || this.y + this.radius >= canvas.height) {
+      this.velocity.y = -this.velocity.y;
+    }
+
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     this.draw();
@@ -181,9 +207,73 @@ function shootCannon() {
 function getDistance(x1, y1, x2, y2) {
   let xDistance = x2 - x1;
   let yDistance = y2 - y1;
-
   return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
 
+};
+
+function rotate(velocity, angle) {
+  const rotatedVelocities = {
+      x: velocity.x * Math.cos(angle) - velocity.y * Math.sin(angle),
+      y: velocity.x * Math.sin(angle) + velocity.y * Math.cos(angle)
+  };
+
+  return rotatedVelocities;
+};
+
+function resolveCollision(ball, otherBall) {
+  const xVelocityDiff = ball.velocity.x - otherBall.velocity.x;
+  const yVelocityDiff = ball.velocity.y - otherBall.velocity.y;
+
+  const xDist = otherBall.x - ball.x;
+  const yDist = otherBall.y - ball.y;
+
+  if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
+
+      // Grab angle between the two colliding particles
+      const angle = -Math.atan2(otherBall.y - ball.y, otherBall.x - ball.x);
+
+      const m1 = ball.mass;
+      const m2 = otherBall.mass;
+
+      // Velocity before equation
+      const u1 = rotate(ball.velocity, angle);
+      const u2 = rotate(otherBall.velocity, angle);
+
+      // Velocity after 1d collision equation
+      const v1 = { x: u1.x * (m1 - m2) / (m1 + m2) + u2.x * 2 * m2 / (m1 + m2), y: u1.y };
+      const v2 = { x: u2.x * (m1 - m2) / (m1 + m2) + u1.x * 2 * m2 / (m1 + m2), y: u2.y };
+
+      // Final velocity after rotating axis back to original location
+      const vFinal1 = rotate(v1, -angle);
+      const vFinal2 = rotate(v2, -angle);
+
+      // Swap ball velocities for realistic bounce effect
+      ball.velocity.x = vFinal1.x;
+      ball.velocity.y = vFinal1.y;
+
+      otherBall.velocity.x = vFinal2.x;
+      otherBall.velocity.y = vFinal2.y;
+  }
+};
+
+function respawnBalls(radius, color, vx, vy, morph) {
+  for (let i = 0; i < 5; i++) {
+    let x = (Math.random()* (canvas.width - 450)) +380;
+    let y = (Math.random()* (canvas.height - 60)) +30;
+    if (i != 0) {
+      for (let j = 0; j < balls.length; j++) {
+        if (getDistance(x, y, balls[j].x, balls[j].y) - balls[j].radius * 2 < 0) {
+          x = (Math.random()* (canvas.width - 40)+20);
+          y = (Math.random()* (canvas.height - 40)+20);
+          j = -1;
+        };
+        
+      }
+    }
+    balls.push(new Ball(x, y, radius, color, vx, vy, morph));
+    balls[i].draw();
+    
+  }
 };
 
 function init() {
@@ -194,70 +284,53 @@ function init() {
     case 1:
       points = 0;
       balls = [];
-      for (let i = 0; i < 5; i++) {
-      let x = (Math.random()* (canvas.width - 450)) +380;
-      let y = (Math.random()* (canvas.height - 60)) +30;
-      balls.push(new Ball(x, y, 30, 'red', 1, 2, 0));
-      balls[i].draw();
+      respawnBalls(30, 'red', 1, 2, 0);
       cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
       cannonBase.draw();
       console.log(balls);
-      }
+      type = 2;
+      animate();
+      isAnimating = true;
       break;
 
     case 2: 
       balls = [];
-      for (let i = 0; i < 5; i++) {
-      let x = (Math.random()* (canvas.width - 450)) +380;
-      let y = (Math.random()* (canvas.height - 60)) +30;
-      balls.push(new Ball(x, y, 25, 'green', 2, 4, 0));
-      balls[i].draw();
+      type = 2;
+      respawnBalls(25, 'green', 2, 4, 0);
       console.log(balls);
-      }
+      
       break;
 
     case 3:
       balls = [];
-      for (let i = 0; i < 5; i++) {
-      let x = (Math.random()* (canvas.width - 450)) +380;
-      let y = (Math.random()* (canvas.height - 60)) +30;
-      balls.push(new Ball(x, y, 30, 'blue', 1, 2, 1));
-      balls[i].draw();
+      type = 1;
+      respawnBalls(30, 'blue', 1, 2, 1);
       console.log(balls);
-      }
+      
       break;
 
     case 4:
       balls = [];
-      for (let i = 0; i < 5; i++) {
-      let x = (Math.random()* (canvas.width - 450)) +380;
-      let y = (Math.random()* (canvas.height - 60)) +30;
-      balls.push(new Ball(x, y, 30, 'orange', 2, 4, 1));
-      balls[i].draw();
+      type = 1;
+      respawnBalls(25, 'orange', 2, 4, 1);
       console.log(balls);
-      }
+     
       break;
 
     case 5:
       balls = [];
-      for (let i = 0; i < 5; i++) {
-      let x = (Math.random()* (canvas.width - 450)) +380;
-      let y = (Math.random()* (canvas.height - 60)) +30;
-      balls.push(new Ball(x, y, 20, 'purple', 3, 6, 0));
-      balls[i].draw();
+      type = 2;
+      respawnBalls(20, 'purple', 3, 6, 0);
       console.log(balls);
-      }
+      
       break;
 
     case 6:
       balls = [];
-      for (let i = 0; i < 5; i++) {
-      let x = (Math.random()* (canvas.width - 450)) +380;
-      let y = (Math.random()* (canvas.height - 60)) +30;
-      balls.push(new Ball(x, y, 15, 'darkblue', 4, 8, 1));
-      balls[i].draw();
+      type = 1;
+      respawnBalls(15, 'darkblue', 4, 8, 1);
       console.log(balls);
-      }
+      
       break;
 };
 };
@@ -298,9 +371,18 @@ function animate() {
         console.log(playerScore);
 
       }};
-      balls[i].update();
+      
+      if (type == 2) {
+        balls[i].update2(balls);
 
+      }
+       if (type == 1) {
+        balls[i].update();
+       }
+    
     };
+
+    
 
   if (pointsTotal == 250 && points == 50) {
     points = 0;
