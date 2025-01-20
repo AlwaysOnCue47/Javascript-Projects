@@ -40,8 +40,6 @@ canvas.addEventListener('click', (event) => {
 document.getElementById('popBtn').addEventListener('click', () => {
   if (!isAnimating){
     init();
-    // animate();
-    // isAnimating = true;
 
   }
 });
@@ -79,12 +77,11 @@ function Ball(x, y, radius, color, vx, vy, radiusMorph) {
   this.maxRadius = radius;
   this.radiusMorph = radiusMorph;
   this.color = color;
+  this.mass = 1;
   this.velocity = {
     x: vx,
     y: vy
   };
-
-  this.mass = 1;
 
   this.draw = () => {
     ctx.beginPath();
@@ -120,8 +117,6 @@ function Ball(x, y, radius, color, vx, vy, radiusMorph) {
       if (this === balls[i]) continue;
       if (balls[i].radius <= 0) continue;
       if (getDistance(this.x, this.y, balls[i].x, balls[i].y) - radius * 2 < 0) {
-        console.log('HIT');
-        
         resolveCollision(this, balls[i]);
        
     }};
@@ -139,7 +134,6 @@ function Ball(x, y, radius, color, vx, vy, radiusMorph) {
     this.draw();
 
   };
-  
 };
 
 function Cannon(x, y, vx, vy) {
@@ -160,7 +154,7 @@ function Cannon(x, y, vx, vy) {
 
   };
 
-  this.update = ()=> {
+  this.update = () => {
     this.velocity.y += this.gravity;
     if (this.x + this.radius >= canvas.width){
       this.velocity.x = -this.velocity.x;
@@ -194,7 +188,6 @@ function loadCannon() {
     cannonBase.color = 'darkred';
     cannonBall = new Cannon(cannonBase.x, cannonBase.y, 15, -15);
     cannonBall.draw();
-    console.log(cannonBall);
 
 };
 
@@ -229,7 +222,7 @@ function resolveCollision(ball, otherBall) {
 
   if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
 
-      // Grab angle between the two colliding particles
+      // Get angle between the two colliding objects
       const angle = -Math.atan2(otherBall.y - ball.y, otherBall.x - ball.x);
 
       const m1 = ball.mass;
@@ -247,7 +240,7 @@ function resolveCollision(ball, otherBall) {
       const vFinal1 = rotate(v1, -angle);
       const vFinal2 = rotate(v2, -angle);
 
-      // Swap ball velocities for realistic bounce effect
+      // Swap object velocities for realistic bounce effect
       ball.velocity.x = vFinal1.x;
       ball.velocity.y = vFinal1.y;
 
@@ -257,14 +250,15 @@ function resolveCollision(ball, otherBall) {
 };
 
 function respawnBalls(radius, color, vx, vy, morph) {
+  balls = [];
   for (let i = 0; i < 5; i++) {
     let x = (Math.random()* (canvas.width - 450)) +380;
     let y = (Math.random()* (canvas.height - 60)) +30;
     if (i != 0) {
       for (let j = 0; j < balls.length; j++) {
         if (getDistance(x, y, balls[j].x, balls[j].y) - balls[j].radius * 2 < 0) {
-          x = (Math.random()* (canvas.width - 450)+20);
-          y = (Math.random()* (canvas.height - 40)+20);
+          x = (Math.random()* (canvas.width - 450) +380);
+          y = (Math.random()* (canvas.height - 60) +30);
           j = -1;
         };
         
@@ -273,7 +267,19 @@ function respawnBalls(radius, color, vx, vy, morph) {
     balls.push(new Ball(x, y, radius, color, vx, vy, morph));
     balls[i].draw();
     
-  }
+  };
+};
+
+function nextLevel(L) {
+  points = 0;
+  window.cancelAnimationFrame(reAnim);
+  isAnimating = false;
+  level = L;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  init();
+  animate();
+  isAnimating = true;
+
 };
 
 function init() {
@@ -282,57 +288,39 @@ function init() {
   missBox.innerHTML = misses;
   switch (level) {
     case 1:
-      points = 0;
-      balls = [];
       respawnBalls(30, 'red', 1, 2, 0);
       cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
       cannonBase.draw();
-      console.log(balls);
       type = 2;
       animate();
       isAnimating = true;
       break;
 
     case 2: 
-      balls = [];
       type = 2;
       respawnBalls(25, 'green', 2, 4, 0);
-      console.log(balls);
-      
       break;
 
     case 3:
-      balls = [];
       type = 1;
       respawnBalls(30, 'blue', 1, 2, 1);
-      console.log(balls);
-      
       break;
 
     case 4:
-      balls = [];
       type = 1;
       respawnBalls(25, 'orange', 2, 4, 1);
-      console.log(balls);
-     
       break;
 
     case 5:
-      balls = [];
       type = 2;
       respawnBalls(20, 'purple', 3, 6, 0);
-      console.log(balls);
-      
       break;
 
     case 6:
-      balls = [];
       type = 1;
       respawnBalls(15, 'darkblue', 4, 8, 1);
-      console.log(balls);
-      
       break;
-};
+  };
 };
 
 function animate() {
@@ -367,81 +355,37 @@ function animate() {
         missBox.innerHTML = misses;
         console.log(points);
         console.log(pointsTotal);
-        console.log(misses);
-        console.log(playerScore);
 
       }};
       
       if (type == 2) {
         balls[i].update2(balls);
-
       }
-       if (type == 1) {
-        balls[i].update();
-       }
+
+      if (type == 1) {
+      balls[i].update();
+      }
     
     };
 
-    
-
   if (pointsTotal == 250 && points == 50) {
-    points = 0;
-    window.cancelAnimationFrame(reAnim);
-    isAnimating = false;
-    level = 6;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    init();
-    animate();
-    isAnimating = true;
-
+    nextLevel(6);
     };
   
   if (pointsTotal == 200 && points == 50) {
-    points = 0;
-    window.cancelAnimationFrame(reAnim);
-    isAnimating = false;
-    level = 5;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    init();
-    animate();
-    isAnimating = true;
-
+    nextLevel(5);
     };
-
+    
   if (pointsTotal == 150 && points == 50) {
-    points = 0;
-    window.cancelAnimationFrame(reAnim);
-    isAnimating = false;
-    level = 4;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    init();
-    animate();
-    isAnimating = true;
-
+    nextLevel(4);
     };
 
   if (pointsTotal == 100 && points == 50) {
-    points = 0;
-    window.cancelAnimationFrame(reAnim);
-    isAnimating = false;
-    level = 3;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    init();
-    animate();
-    isAnimating = true;
-
+    nextLevel(3);
     };
     
   if (pointsTotal == 50 && points == 50) {
-    points = 0;
-    window.cancelAnimationFrame(reAnim);
-    isAnimating = false;
-    level = 2;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    init();
-    animate();
-    isAnimating = true;
-
+    nextLevel(2);
     };
   
   if (pointsTotal >= 300) { // when game ends
