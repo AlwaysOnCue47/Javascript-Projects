@@ -129,6 +129,12 @@ function Ball(x, y, radius, color, vx, vy, radiusMorph) {
       this.velocity.y = -this.velocity.y;
     }
 
+    if (this.radius >= this.maxRadius || (this.radius <= 5 && this.radius >> 1)){
+      this.radiusMorph = -this.radiusMorph;
+    } 
+
+    this.radius += this.radiusMorph;
+
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     this.draw();
@@ -288,7 +294,7 @@ function init() {
   missBox.innerHTML = misses;
   switch (level) {
     case 1:
-      respawnBalls(30, 'red', 1, 2, 0);
+      respawnBalls(30, 'red', 1, -2, 0);
       cannonBase = new Cannon(mouse.x, mouse.y, 0, 0);
       cannonBase.draw();
       type = 2;
@@ -303,7 +309,7 @@ function init() {
 
     case 3:
       type = 1;
-      respawnBalls(30, 'blue', 1, 2, 1);
+      respawnBalls(30, 'blue', -1, 2, 1);
       break;
 
     case 4:
@@ -313,13 +319,23 @@ function init() {
 
     case 5:
       type = 2;
-      respawnBalls(20, 'purple', 3, 6, 0);
+      respawnBalls(20, 'purple', 3, -6, 0);
       break;
 
     case 6:
       type = 1;
-      respawnBalls(15, 'darkblue', 4, 8, 1);
+      respawnBalls(15, 'darkblue', -4, -8, 1);
       break;
+    
+    case 7:
+      type = 2;
+      balls = [];
+      balls.push(new Ball(450, 200, 15, 'red', 3, -4, 0));
+      balls.push(new Ball(450, 400, 15, 'orange', -3, 4, 1));
+      balls.push(new Ball(450, 420, 10, 'purple', 6, -8, 0));
+      balls.push(new Ball(500, 445, 10, 'green', -4, 6, 1));
+      balls.push(new Ball(550, 100, 5, 'darkblue', 8, -4, 0));
+
   };
 };
 
@@ -367,6 +383,10 @@ function animate() {
       }
     
     };
+  
+  if (pointsTotal == 300 && points == 50) {
+    nextLevel(7);
+  };
 
   if (pointsTotal == 250 && points == 50) {
     nextLevel(6);
@@ -388,7 +408,7 @@ function animate() {
     nextLevel(2);
     };
   
-  if (pointsTotal >= 300) { // when game ends
+  if (pointsTotal >= 350) { // when game ends
     window.cancelAnimationFrame(reAnim);
     isAnimating = false;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -407,3 +427,7 @@ function animate() {
 
 // Run when parsed 
 drawField();
+  
+  // init();
+  // isAnimating = true;
+  // nextLevel(7);
