@@ -427,7 +427,8 @@ function animate() {
 
 // Run when parsed 
 drawField();
-  
-  // init();
-  // isAnimating = true;
-  // nextLevel(7);
+
+  // for testing purposes:  
+  //init();  
+  //isAnimating = true;
+  //nextLevel(7);
