@@ -13,7 +13,6 @@
 
 #canvas {
   background-color: darkgray;
-  height: 420px;
-  width: 680px;
+  display: block;
   
 }
