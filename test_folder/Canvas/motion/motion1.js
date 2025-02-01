@@ -59,6 +59,18 @@ class Sprite {
     ctx.closePath(); 
   }
 
+  germUpdate() {
+    if (this.x + this.radius >= canvas.width || this.x - this.radius <= 0){
+      this.vx = -this.vx;
+    }
+    if (this.y + this.radius >= canvas.height || this.y - this.radius <= 0) {
+      this.vy = - this.vy;
+    }
+    this.x += this.vx;
+    this.y += this.vy;
+    this.draw();
+  }
+
   update() {
     if (this.x - spriteRadius <= 0) {
       this.x = spriteRadius;
@@ -81,18 +93,31 @@ class Sprite {
 };
 
 const sprite1 = new Sprite(60, 60, spriteRadius, 'black', 0, 0);
+
 // functions
 
-let pillArray = []
+let pillArray = [];
 
 function initPills() {
   for (let i = 0; i < 8; i++) {
-    let x = (Math.random()*canvas.width - 20) + 20;
-    let y = (Math.random()*canvas.height - 20) + 20;
+    let x = (Math.random()*(canvas.width - 40)) + 20;
+    let y = (Math.random()*(canvas.height - 40)) + 20;
     let pillRadius = 6;
     pillArray.push(new Sprite(x, y, pillRadius, 'red', 0, 0));
     pillArray[i].draw();
     
+  }
+};
+
+let germsArray = [];
+
+function initGerms() {
+  for (let i = 0; i < 10; i++) {
+    let x = (Math.random()*(canvas.width - 40)) + 20;
+    let y = (Math.random()*(canvas.height - 40)) + 20;
+    let germRadius = 12;
+    germsArray.push(new Sprite(x, y, germRadius, 'green', 2, 1));
+    germsArray[i].draw();
   }
 };
 
@@ -103,13 +128,19 @@ function animate(){
   for (let i = 0; i < pillArray.length; i++) {
     pillArray[i].update();
     
-  }
+  };
+
+  for (let j = 0; j < germsArray.length; j++) {
+    germsArray[j].germUpdate();
+    
+  };
 };
 
 // run when parsed
 sprite1.draw();
 initPills();
- animate();
+initGerms();
+// animate();
 console.log(sprite1);
 console.log(canvas.width);
 console.log(canvas.height);
