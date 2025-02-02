@@ -64,6 +64,7 @@ class Sprite {
   };
 
   germUpdate() {
+    // this.velocity.x = germXSpeed;
     if (this.x + this.radius >= canvas.width || this.x - this.radius <= 0){
       this.velocity.x = -this.velocity.x;
     }
@@ -73,6 +74,7 @@ class Sprite {
 
     for (let i = 0; i < germsArray.length; i++) {
       if (this === germsArray[i]) continue;
+      if (germsArray[i].radius == 0) continue;
       if (getDistance(this.x, this.y, germsArray[i].x, germsArray[i].y) - this.radius * 2 < 0){
         resolveCollision(this, germsArray[i])
       }
@@ -83,6 +85,20 @@ class Sprite {
   };
 
   ammoUpdate() {
+    for (let j = 0; j < germsArray.length; j++) {
+      if (germsArray[j].radius == 0) continue;
+      if (getDistance(this.x, this.y, germsArray[j].x, germsArray[j].y) - germsArray[j].radius * 2 < 0){
+        germsArray[j].radius = 0;
+        boomHit(this.x, this.y);
+        kaBoom = true;
+        ammo = false;
+        for (let k = 0; k < germsArray.length; k++){
+          if (germsArray[k].radius == 0 ) continue;
+          germsArray[k].velocity.x += Math.sign(germsArray[k].velocity.x)
+        }        
+      }
+      
+    }
     if (this.y <= 0){
       ammo = false;
     }
@@ -155,24 +171,24 @@ class Explosion {
   }
 };
 
+// functions
+
 function boomHit(x, y) {
   for (let i = 0; i < 2; i++) {
     boom1.push(new Explosion(x, y, 2, 2, 'purple'))
     boom1[i].draw();
     x += 10;
   }
+  x += -10;
   for (let j = 0; j < 2; j++) {
-    y += -10;
     boom1.push(new Explosion(x, y, 2, 2, 'white'))
     boom1[j].draw();
-    x += -10;
+    y += -10;
     
   };
 };
 
 const sprite1 = new Sprite(60, 60, spriteRadius, 'black', 0, 0);
-
-// functions
 
 let ammoSprite;
 let ammo = false;
@@ -196,13 +212,14 @@ function initPills() {
 };
 
 let germsArray = [];
+let germXSpeed = 2;
 
 function initGerms() {
   for (let i = 0; i < 10; i++) {
     let x = (Math.random()*(canvas.width - 40)) + 20;
     let y = (Math.random()*(canvas.height - 40)) + 20;
     let germRadius = 12;
-    germsArray.push(new Sprite(x, y, germRadius, 'green', 2, 1));
+    germsArray.push(new Sprite(x, y, germRadius, 'green', germXSpeed, 1));
     germsArray[i].draw();
   }
 };
