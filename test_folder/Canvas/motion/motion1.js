@@ -15,6 +15,10 @@ const spriteRadius = 12;
   if (event.key == ' ' && !ammo) {
     newAmmo();
   }
+  if (event.key == 'a') {
+    boomHit();
+    kaBoom = true;
+  }
   switch (event.key) {
     case 'ArrowUp':
       sprite1.velocity.y = -4;
@@ -36,9 +40,7 @@ const spriteRadius = 12;
       sprite1.velocity.x = 0;
       sprite1.velocity.y = 0;
       break;
-
   };
-     
  });
 
 // Constructors
@@ -74,7 +76,6 @@ class Sprite {
       if (getDistance(this.x, this.y, germsArray[i].x, germsArray[i].y) - this.radius * 2 < 0){
         resolveCollision(this, germsArray[i])
       }
-      
     };
     this.x += this.velocity.x;
     this.y += this.velocity.y;
@@ -108,6 +109,50 @@ class Sprite {
     this.draw();
 
   };
+};
+
+class Explosion {
+  constructor(x, y, radius, radiusMorph, color) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.radiusMorph = radiusMorph;
+    this.color = color;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.arc(this.x, this.y, this.radius, Math.PI*2, false);
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  update() {
+    if (this.radius <= 14 && this.radius >= 6) {
+      this.color = 'white';
+    }
+    if (this.radius >= 15) {
+      this.color = 'red';
+    }
+    
+    this.radius += this.radiusMorph;
+    this.draw();
+    
+    if (this.radius >= 26){
+      kaBoom = false;
+      this.radius = 0;
+    }
+  }
+};
+
+let kaBoom = false;
+let boom1;
+
+function boomHit() {
+  boom1 = new Explosion(75, 75, 2, 2, 'purple');
+  boom1.draw();
+  
 };
 
 const sprite1 = new Sprite(60, 60, spriteRadius, 'black', 0, 0);
@@ -153,6 +198,10 @@ function animate(){
 
   sprite1.update();
 
+  if (kaBoom){
+    boom1.update();
+  }
+  
   for (let i = 0; i < pillArray.length; i++) {
     pillArray[i].update();
     
@@ -166,7 +215,6 @@ function animate(){
   if (ammo){
     ammoSprite.ammoUpdate();
   };
-
 };
 
 // Collision detection and collision resolution functions
@@ -228,7 +276,7 @@ sprite1.draw();
 initPills();
 initGerms();
  // newAmmo();
-  animate();
+ animate();
 console.log(sprite1);
 console.log(canvas.width);
 console.log(canvas.height);
