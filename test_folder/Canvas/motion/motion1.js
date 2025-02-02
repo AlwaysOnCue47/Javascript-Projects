@@ -16,7 +16,7 @@ const spriteRadius = 12;
     newAmmo();
   }
   if (event.key == 'a') {
-    boomHit();
+    boomHit(100, 100);
     kaBoom = true;
   }
   switch (event.key) {
@@ -110,6 +110,9 @@ class Sprite {
 
   };
 };
+let count = 0;
+let kaBoom = false;
+let boom1 =[];
 
 class Explosion {
   constructor(x, y, radius, radiusMorph, color) {
@@ -118,6 +121,7 @@ class Explosion {
     this.radius = radius;
     this.radiusMorph = radiusMorph;
     this.color = color;
+    
   }
 
   draw() {
@@ -132,27 +136,38 @@ class Explosion {
     if (this.radius <= 14 && this.radius >= 6) {
       this.color = 'white';
     }
-    if (this.radius >= 15) {
+    if (this.radius >= 19) {
       this.color = 'red';
     }
-    
+
     this.radius += this.radiusMorph;
     this.draw();
     
     if (this.radius >= 26){
-      kaBoom = false;
+      count += 1;
       this.radius = 0;
+    }
+    if (count == 4){
+      kaBoom = false;
+      count = 0;
+      boom1 = [];
     }
   }
 };
 
-let kaBoom = false;
-let boom1;
-
-function boomHit() {
-  boom1 = new Explosion(75, 75, 2, 2, 'purple');
-  boom1.draw();
-  
+function boomHit(x, y) {
+  for (let i = 0; i < 2; i++) {
+    boom1.push(new Explosion(x, y, 2, 2, 'purple'))
+    boom1[i].draw();
+    x += 10;
+  }
+  for (let j = 0; j < 2; j++) {
+    y += -10;
+    boom1.push(new Explosion(x, y, 2, 2, 'white'))
+    boom1[j].draw();
+    x += -10;
+    
+  };
 };
 
 const sprite1 = new Sprite(60, 60, spriteRadius, 'black', 0, 0);
@@ -199,7 +214,10 @@ function animate(){
   sprite1.update();
 
   if (kaBoom){
-    boom1.update();
+    for (let i = 0; i < boom1.length; i++){
+      boom1[i].update();
+    
+    }
   }
   
   for (let i = 0; i < pillArray.length; i++) {
