@@ -12,26 +12,29 @@ const spriteRadius = 12;
 
 // event listeners
  addEventListener('keydown', (event)=> {
+  if (event.key == ' ' && !ammo) {
+    newAmmo();
+  }
   switch (event.key) {
     case 'ArrowUp':
-      sprite1.vy = -4;
-      sprite1.vx = 0;
+      sprite1.velocity.y = -4;
+      sprite1.velocity.x = 0;
       break;
     case 'ArrowDown':
-      sprite1.vy = 4;
-      sprite1.vx = 0;
+      sprite1.velocity.y = 4;
+      sprite1.velocity.x = 0;
       break;
     case 'ArrowLeft':
-      sprite1.vx = -4;
-      sprite1.vy = 0;
+      sprite1.velocity.x = -4;
+      sprite1.velocity.y= 0;
       break;
     case 'ArrowRight':
-      sprite1.vx = 4;
-      sprite1.vy = 0;
+      sprite1.velocity.x = 4;
+      sprite1.velocity.y = 0;
       break;
-    case ' ':
-      sprite1.vx = 0;
-      sprite1.vy = 0;
+    case 'v':
+      sprite1.velocity.x = 0;
+      sprite1.velocity.y = 0;
       break;
 
   };
@@ -46,10 +49,9 @@ class Sprite {
     this.y = y;
     this.radius = radius;
     this.color = color;
-    this.vx = vx;
-    this.vy = vy;
-
-  }
+    this.velocity = {x: vx, y: vy};
+    this.mass = 1;
+  };
 
   draw() {
     ctx.beginPath();
@@ -57,19 +59,35 @@ class Sprite {
     ctx.arc(this.x, this.y, this.radius, Math.PI * 2, false);
     ctx.fill();
     ctx.closePath(); 
-  }
+  };
 
   germUpdate() {
     if (this.x + this.radius >= canvas.width || this.x - this.radius <= 0){
-      this.vx = -this.vx;
+      this.velocity.x = -this.velocity.x;
     }
     if (this.y + this.radius >= canvas.height || this.y - this.radius <= 0) {
-      this.vy = - this.vy;
+      this.velocity.y = - this.velocity.y;
     }
-    this.x += this.vx;
-    this.y += this.vy;
+
+    for (let i = 0; i < germsArray.length; i++) {
+      if (this === germsArray[i]) continue;
+      if (getDistance(this.x, this.y, germsArray[i].x, germsArray[i].y) - this.radius * 2 < 0){
+        resolveCollision(this, germsArray[i])
+      }
+      
+    };
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
     this.draw();
-  }
+  };
+
+  ammoUpdate() {
+    if (this.y <= 0){
+      ammo = false;
+    }
+    this.y += this.velocity.y;
+    this.draw();
+  };
 
   update() {
     if (this.x - spriteRadius <= 0) {
@@ -85,16 +103,24 @@ class Sprite {
     if (this.y + spriteRadius >= canvas.height){
       this.y = canvas.height - spriteRadius;
     }
-    this.x += this.vx;
-    this.y += this.vy;
+    this.x += this.velocity.x;
+    this.y += this.velocity.y;
     this.draw();
 
-  }
+  };
 };
 
 const sprite1 = new Sprite(60, 60, spriteRadius, 'black', 0, 0);
 
 // functions
+
+let ammoSprite;
+let ammo = false;
+
+function newAmmo(){
+  ammo = true;
+  ammoSprite = new Sprite(sprite1.x, sprite1.y, 6, "darkred", 0, -8);
+};
 
 let pillArray = [];
 
@@ -124,7 +150,9 @@ function initGerms() {
 function animate(){
   runAnim = requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
   sprite1.update();
+
   for (let i = 0; i < pillArray.length; i++) {
     pillArray[i].update();
     
@@ -134,13 +162,73 @@ function animate(){
     germsArray[j].germUpdate();
     
   };
+
+  if (ammo){
+    ammoSprite.ammoUpdate();
+  };
+
+};
+
+// Collision detection and collision resolution functions
+
+function getDistance(x1, y1, x2, y2) {
+  let xDistance = x2 - x1;
+  let yDistance = y2 - y1;
+  return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+
+};
+
+function rotate(velocity, angle) {
+  const rotatedVelocities = {
+      x: velocity.x * Math.cos(angle) - velocity.y * Math.sin(angle),
+      y: velocity.x * Math.sin(angle) + velocity.y * Math.cos(angle)
+  };
+
+  return rotatedVelocities;
+};
+
+function resolveCollision(ball, otherBall) {
+  const xVelocityDiff = ball.velocity.x - otherBall.velocity.x;
+  const yVelocityDiff = ball.velocity.y - otherBall.velocity.y;
+
+  const xDist = otherBall.x - ball.x;
+  const yDist = otherBall.y - ball.y;
+
+  if (xVelocityDiff * xDist + yVelocityDiff * yDist >= 0) {
+
+      // Get angle between the two colliding objects
+      const angle = -Math.atan2(otherBall.y - ball.y, otherBall.x - ball.x);
+
+      const m1 = ball.mass;
+      const m2 = otherBall.mass;
+
+      // Velocity before equation
+      const u1 = rotate(ball.velocity, angle);
+      const u2 = rotate(otherBall.velocity, angle);
+
+      // Velocity after 1d collision equation
+      const v1 = { x: u1.x * (m1 - m2) / (m1 + m2) + u2.x * 2 * m2 / (m1 + m2), y: u1.y };
+      const v2 = { x: u2.x * (m1 - m2) / (m1 + m2) + u1.x * 2 * m2 / (m1 + m2), y: u2.y };
+
+      // Final velocity after rotating axis back to original location
+      const vFinal1 = rotate(v1, -angle);
+      const vFinal2 = rotate(v2, -angle);
+
+      // Swap object velocities for realistic bounce effect
+      ball.velocity.x = vFinal1.x;
+      ball.velocity.y = vFinal1.y;
+
+      otherBall.velocity.x = vFinal2.x;
+      otherBall.velocity.y = vFinal2.y;
+  }
 };
 
 // run when parsed
 sprite1.draw();
 initPills();
 initGerms();
-// animate();
+ // newAmmo();
+  animate();
 console.log(sprite1);
 console.log(canvas.width);
 console.log(canvas.height);
