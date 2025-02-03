@@ -8,7 +8,7 @@ const ctx = canvas.getContext('2d');
 
 
 // variables
-const spriteRadius = 12;
+
 
 // event listeners
  addEventListener('keydown', (event)=> {
@@ -23,18 +23,26 @@ const spriteRadius = 12;
     case 'ArrowUp':
       sprite1.velocity.y = -4;
       sprite1.velocity.x = 0;
+      shotDirectionY = -8;
+      shotDirectionX = 0;
       break;
     case 'ArrowDown':
       sprite1.velocity.y = 4;
       sprite1.velocity.x = 0;
+      shotDirectionY = 8;
+      shotDirectionX = 0;
       break;
     case 'ArrowLeft':
       sprite1.velocity.x = -4;
       sprite1.velocity.y= 0;
+      shotDirectionY = 0;
+      shotDirectionX = -8;
       break;
     case 'ArrowRight':
       sprite1.velocity.x = 4;
       sprite1.velocity.y = 0;
+      shotDirectionY = 0;
+      shotDirectionX = 8;
       break;
     case 'v':
       sprite1.velocity.x = 0;
@@ -86,23 +94,22 @@ class Sprite {
 
   ammoUpdate() {
     for (let j = 0; j < germsArray.length; j++) {
-      if (germsArray[j].radius == 0) continue;
       if (getDistance(this.x, this.y, germsArray[j].x, germsArray[j].y) - germsArray[j].radius * 2 < 0){
-        germsArray[j].radius = 0;
+        germsArray.splice(j, 1);
         boomHit(this.x, this.y);
         kaBoom = true;
         ammo = false;
         for (let k = 0; k < germsArray.length; k++){
-          if (germsArray[k].radius == 0 ) continue;
           germsArray[k].velocity.x += Math.sign(germsArray[k].velocity.x)
         }        
       }
       
     }
-    if (this.y <= 0){
+    if (this.y <= 0 || this.y >= canvas.height || this.x <= 0 || this.x >= canvas.width){
       ammo = false;
     }
     this.y += this.velocity.y;
+    this.x += this.velocity.x;
     this.draw();
   };
 
@@ -126,6 +133,7 @@ class Sprite {
 
   };
 };
+
 let count = 0;
 let kaBoom = false;
 let boom1 =[];
@@ -137,7 +145,6 @@ class Explosion {
     this.radius = radius;
     this.radiusMorph = radiusMorph;
     this.color = color;
-    
   }
 
   draw() {
@@ -149,11 +156,11 @@ class Explosion {
   }
 
   update() {
-    if (this.radius <= 14 && this.radius >= 6) {
-      this.color = 'white';
-    }
-    if (this.radius >= 19) {
+    if (this.radius <= 18 && this.radius >= 8) {
       this.color = 'red';
+    }
+    if (this.radius >= 18) {
+      this.color = 'orange';
     }
 
     this.radius += this.radiusMorph;
@@ -175,27 +182,34 @@ class Explosion {
 
 function boomHit(x, y) {
   for (let i = 0; i < 2; i++) {
-    boom1.push(new Explosion(x, y, 2, 2, 'purple'))
+    x += -5;
+    boom1.push(new Explosion(x, y, 2, 2, 'white'))
     boom1[i].draw();
-    x += 10;
+    x += 15;
   }
-  x += -10;
+  x += -20;
   for (let j = 0; j < 2; j++) {
+    y += -5;
     boom1.push(new Explosion(x, y, 2, 2, 'white'))
     boom1[j].draw();
-    y += -10;
+    y += 15;
     
   };
+  console.log(boom1);
 };
 
+const spriteRadius = 12;
 const sprite1 = new Sprite(60, 60, spriteRadius, 'black', 0, 0);
 
 let ammoSprite;
 let ammo = false;
+let shotDirectionY = -8;
+let shotDirectionX = 0;
+let ammoCount = 0;
 
 function newAmmo(){
   ammo = true;
-  ammoSprite = new Sprite(sprite1.x, sprite1.y, 6, "darkred", 0, -8);
+  ammoSprite = new Sprite(sprite1.x, sprite1.y, 6, "darkred", shotDirectionX, shotDirectionY);
 };
 
 let pillArray = [];
@@ -233,23 +247,21 @@ function animate(){
   if (kaBoom){
     for (let i = 0; i < boom1.length; i++){
       boom1[i].update();
-    
     }
   }
   
   for (let i = 0; i < pillArray.length; i++) {
     pillArray[i].update();
-    
   };
 
   for (let j = 0; j < germsArray.length; j++) {
     germsArray[j].germUpdate();
-    
   };
 
   if (ammo){
     ammoSprite.ammoUpdate();
   };
+
 };
 
 // Collision detection and collision resolution functions
@@ -310,7 +322,6 @@ function resolveCollision(ball, otherBall) {
 sprite1.draw();
 initPills();
 initGerms();
- // newAmmo();
  animate();
 console.log(sprite1);
 console.log(canvas.width);
