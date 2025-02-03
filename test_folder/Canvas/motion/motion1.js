@@ -72,7 +72,6 @@ class Sprite {
   };
 
   germUpdate() {
-    // this.velocity.x = germXSpeed;
     if (this.x + this.radius >= canvas.width || this.x - this.radius <= 0){
       this.velocity.x = -this.velocity.x;
     }
@@ -103,8 +102,8 @@ class Sprite {
           germsArray[k].velocity.x += Math.sign(germsArray[k].velocity.x)
         }        
       }
-      
     }
+
     if (this.y <= 0 || this.y >= canvas.height || this.x <= 0 || this.x >= canvas.width){
       ammo = false;
     }
@@ -116,7 +115,6 @@ class Sprite {
   update() {
     if (this.x - spriteRadius <= 0) {
       this.x = spriteRadius;
-      
     }
     if (this.x + spriteRadius >= canvas.width) {
       this.x = canvas.width - spriteRadius;
@@ -261,7 +259,6 @@ function animate(){
   if (ammo){
     ammoSprite.ammoUpdate();
   };
-
 };
 
 // Collision detection and collision resolution functions
