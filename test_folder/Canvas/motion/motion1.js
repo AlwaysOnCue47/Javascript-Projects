@@ -81,7 +81,7 @@ class Sprite {
 
     for (let i = 0; i < germsArray.length; i++) {
       if (this === germsArray[i]) continue;
-      if (germsArray[i].radius == 0) continue;
+      // if (germsArray[i].radius == 0) continue;
       if (getDistance(this.x, this.y, germsArray[i].x, germsArray[i].y) - this.radius * 2 < 0){
         resolveCollision(this, germsArray[i])
       }
@@ -317,7 +317,7 @@ function resolveCollision(ball, otherBall) {
 
 // run when parsed
 sprite1.draw();
-initPills();
+//initPills();
 initGerms();
  animate();
 console.log(sprite1);
