@@ -126,7 +126,7 @@ class Sprite {
       console.log("change direction");
     };
     this.counter += 1;
-    if (this.counter >= 600){
+    if (this.counter >= 400){
       initEnemyAmmo(this.x, this.y);
       this.counter = 0;
       console.log("Enemy fire!")
@@ -138,6 +138,14 @@ class Sprite {
     this.y += this.velocity.y;
     this.draw();
   };
+
+  enemy2Update() {
+    this.x += this.velocity.x;
+    if (this.x > canvas.width){
+      this.x = 0;
+    }
+    this.draw();
+  }
 }
 
 // functions
@@ -151,7 +159,7 @@ function initPlayer(){
 let playerAmmo = [];
 function initAmmo(x, y, vx, vy){
   if (playerAmmo.length < 3){
-    playerAmmo.push(new Sprite(x, y, 6, "white", vx, vy));
+    playerAmmo.push(new Sprite(x, y, 4, "white", vx, vy));
   };
 };
 
@@ -169,11 +177,24 @@ function initEnemySprites() {
     x2 = Math.floor(Math.random()*canvas.width);
     y2 = Math.floor(Math.random()*((canvas.height - 60)))
     let location = {x: x2, y: y2};
-    let timer = Math.floor(Math.random()*400);
-    enemySprites.push(new Sprite(x1, y1, 20, "red", 0, 0, location, timer));
+    let timer = Math.floor(Math.random()*300);
+    enemySprites.push(new Sprite(x1, y1, 16, "red", 0, 0, location, timer));
     enemySprites[i].draw();
   }
 }
+
+let enemySprites2 = [];
+function initEnemySprites2() {
+    x = 20;
+    y = 20;
+  for (let i = 0; i < 6; i++) {
+    enemySprites2.push(new Sprite(x, y, 12, "purple", 2, 0));
+    x += 60;
+    y += 20;
+    enemySprites2[i].draw();
+    
+  }
+} 
 
 
 // animation function
@@ -201,10 +222,16 @@ function animate(){
       enemyAmmo.splice(k, 1);
     }
   }
+
+  for (let l = 0; l < enemySprites2.length; l++) {
+    enemySprites2[l].enemy2Update();
+    
+  }
 };
 
 // run when parsed
 
 initPlayer();
 initEnemySprites()
+initEnemySprites2();
 animate();
