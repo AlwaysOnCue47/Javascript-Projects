@@ -2,17 +2,73 @@
 
 *, *::before, *::after {
   box-sizing: border-box;
-
 }
-
 
 html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
 }
 
 #masterContainer {
-  display: flex;
+  display: grid;
+  border-style: dashed;
+  background-color: lightgreen;
+  border-color: red;
 }
+
+#subContainer {
+  min-width: 1080px;
+  margin: auto;
+  display: grid;
+  justify-content: space-evenly;
+  grid-template-columns: minmax(200px, 400px) min-content minmax(200px, 400px);
+  gap: 10px;
+}
+
+#leftContainer {
+  background-color: lightblue;
+}
+
+#gameContainer {
+  display: grid;
+  border-style: dashed;
+}
+
+#gameTitle {
+  background-color: aliceblue;
+  margin: 0 auto;
+}
+
+#rightContainer {
+  background-color: lightpink;
+}
+
+#bottomContainer {
+  background-color: aqua;
+  display: grid;
+}
+
+#bottomText {
+  background-color: aliceblue;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  margin: 0 auto;
+}
+
+/* xs */
+/* @media (min-width: 475px) {} */
+
+/* sm */
+/* @media (min-width: 640px) {} */
+
+/* md */
+/* @media (min-width: 768px) {} */
+
+/* lg */
+/* @media (min-width: 1024px) {} */
+
+/* xl */
+/* @media (min-width: 1280px) {} */
+
+/* 2xl */
+/* @media (min-width: 1536px) {} */
