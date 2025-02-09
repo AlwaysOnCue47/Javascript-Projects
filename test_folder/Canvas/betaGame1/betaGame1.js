@@ -146,7 +146,15 @@ class Sprite {
     }
     this.draw();
   }
-}
+
+  kaboom1Update() {
+    this.radius += 3;
+    if (this.radius > 16) {
+      this.color = "red";
+    }
+    this.draw();
+  }
+};
 
 // functions
 let playerSprite;
@@ -196,6 +204,22 @@ function initEnemySprites2() {
   }
 } 
 
+let boomSprite = [];
+function kaboom1(x, y) {
+  x += -5;
+  boomSprite.push(new Sprite(x, y, 5, "orange"));
+  x += 10;
+  boomSprite.push(new Sprite(x, y, 5, "orange"));
+  x += -5;
+  y += 5;
+  boomSprite.push(new Sprite(x, y, 5, "orange"));
+  for (let i = 0; i < boomSprite.length; i++) {
+    boomSprite[i].draw();
+    
+  };
+
+};
+
 
 // animation function
 function animate(){
@@ -227,6 +251,13 @@ function animate(){
     enemySprites2[l].enemy2Update();
     
   }
+
+  for (let m = 0; m < boomSprite.length; m++) {
+    boomSprite[m].kaboom1Update();
+    if (boomSprite[m].radius >= 26) {
+      boomSprite.splice(m, 1);
+    }
+  }
 };
 
 // run when parsed
@@ -234,4 +265,5 @@ function animate(){
 initPlayer();
 initEnemySprites()
 initEnemySprites2();
-animate();
+kaboom1(100, 100);
+ animate();
