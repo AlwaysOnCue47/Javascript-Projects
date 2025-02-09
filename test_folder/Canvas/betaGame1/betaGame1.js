@@ -15,21 +15,29 @@ const ctx = canvas.getContext('2d');
 document.addEventListener("keydown", (event)=> {
   switch (event.key){
 
-    case "ArrowUp": initAmmo(playerSprite.x, playerSprite.y, 0, -8);
-    break;
+    case "ArrowUp":
+      initAmmo(playerSprite.x, playerSprite.y, 0, -8);
+      break;
 
     case "ArrowLeft": 
-    playerSprite.velocity.x = -4;
-    break;
+      playerSprite.velocity.x = -4;
+      break;
 
     case "ArrowRight": 
-    playerSprite.velocity.x = 4;
-    break;
+      playerSprite.velocity.x = 4;
+      break;
 
-    case "ArrowDown": playerSprite.velocity.x = 0; playerSprite.velocity.y = 0;
-    break;
+    case "ArrowDown":
+      playerSprite.velocity.x = 0; playerSprite.velocity.y = 0;
+      break;
   }
 });
+
+// images 
+
+let alien1 = document.getElementById('alien1');
+ctx.drawImage(alien1, 0, 0, 40, 40);
+
 
 // class constructors
 
@@ -191,6 +199,7 @@ function initEnemySprites() {
     let timer = Math.floor(Math.random()*300);
     enemySprites.push(new Sprite(x1, y1, 16, "red", 0, 0, location, timer));
     enemySprites[i].draw();
+    ctx.drawImage(alien1, enemySprites[i].x - 22, enemySprites[i].y -22, 45, 45);
   }
 }
 
@@ -237,6 +246,7 @@ function animate(){
 
   for (let j = 0; j < enemySprites.length; j++) {
     enemySprites[j].enemyUpdate();
+    ctx.drawImage(alien1, enemySprites[j].x - 22, enemySprites[j].y -22, 45, 45);
   }
 
   for (let k = 0; k < enemyAmmo.length; k++) {
