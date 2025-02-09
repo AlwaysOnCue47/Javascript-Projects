@@ -15,7 +15,7 @@ const ctx = canvas.getContext('2d');
 document.addEventListener("keydown", (event)=> {
   switch (event.key){
 
-    case " ": initAmmo(playerSprite.x, playerSprite.y, 0, -8);
+    case "ArrowUp": initAmmo(playerSprite.x, playerSprite.y, 0, -8);
     break;
 
     case "ArrowLeft": 
@@ -62,24 +62,27 @@ class Sprite {
       this.x = canvas.width - 1;
     }
 
-    if (this.x >= 0 && this.x <= 180 && this.velocity.x == -4){
+    if (this.x >= 0 && this.x <= 100 && this.velocity.x == -4){
       this.velocity.y = -4;
     }
 
-    if (this.x >= 0 && this.x <= 180 && this.velocity.x == 4){
+    if (this.x >= 0 && this.x <= 100 && this.velocity.x == 4){
       this.velocity.y = 4;
     }
     
-    if (this.x <= canvas.width && this.x >= canvas.width - 180 && this.velocity.x == 4){
+    if (this.x <= canvas.width && this.x >= canvas.width - 100 && this.velocity.x == 4){
       this.velocity.y = -4;
     }
 
-    if (this.x <= canvas.width && this.x >= canvas.width - 180 && this.velocity.x == -4){
+    if (this.x <= canvas.width && this.x >= canvas.width - 100 && this.velocity.x == -4){
       this.velocity.y = 4;
     }
-    if (this.x >= 181 && this.x <= canvas.width - 181){
+    if (this.x >= 101 && this.x <= canvas.width - 101){
       this.velocity.y = 0;
-      this.y = canvas.height - 15;
+      this.y = canvas.height - 45;
+    }
+    if (this.y <= 270){
+      this.y = 271;
     }
    
     this.x += this.velocity.x;
@@ -88,17 +91,18 @@ class Sprite {
   }
 
   ammoUpdate() {
-    if (this.x <= canvas.width && this.x >= canvas.width - 180){
-      this.velocity.x = -6;
+    if (this.x <= canvas.width && this.x >= canvas.width - 100){
+      this.velocity.x = -8;
+      this.velocity.y = -6;
     }
-    if (this.x >= 0 && this.x <= 180){
-      this.velocity.x = 6;
+    if (this.x >= 0 && this.x <= 100){
+      this.velocity.x = 8;
+      this.velocity.y = -6;
     }
 
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     this.draw();
-
   }
 
   enemyUpdate() {
@@ -149,7 +153,7 @@ class Sprite {
 
   kaboom1Update() {
     this.radius += 3;
-    if (this.radius > 16) {
+    if (this.radius > 18) {
       this.color = "red";
     }
     this.draw();
@@ -157,11 +161,11 @@ class Sprite {
 };
 
 // functions
+
 let playerSprite;
 function initPlayer(){
-  playerSprite = new Sprite(canvas.width/2, canvas.height-15, 10, "green");
+  playerSprite = new Sprite(canvas.width/2, canvas.height-45, 10, "green");
   playerSprite.draw();
-
 };
 
 let playerAmmo = [];
@@ -174,7 +178,6 @@ function initAmmo(x, y, vx, vy){
 let enemyAmmo = [];
 function initEnemyAmmo(x, y){
   enemyAmmo.push(new Sprite(x, y, 8, "darkorange", 0, 1));
-
 }
 
 let enemySprites = [];
@@ -200,7 +203,6 @@ function initEnemySprites2() {
     x += 60;
     y += 20;
     enemySprites2[i].draw();
-    
   }
 } 
 
@@ -215,9 +217,7 @@ function kaboom1(x, y) {
   boomSprite.push(new Sprite(x, y, 5, "orange"));
   for (let i = 0; i < boomSprite.length; i++) {
     boomSprite[i].draw();
-    
   };
-
 };
 
 
@@ -237,19 +237,19 @@ function animate(){
 
   for (let j = 0; j < enemySprites.length; j++) {
     enemySprites[j].enemyUpdate();
-    
   }
 
   for (let k = 0; k < enemyAmmo.length; k++) {
     enemyAmmo[k].enemyAmmoUpdate();
-    if (enemyAmmo[k].y <= 0){
+    if (enemyAmmo[k].y >= canvas.height){
+      console.log("boom!")
+      kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
       enemyAmmo.splice(k, 1);
-    }
+    };
   }
 
   for (let l = 0; l < enemySprites2.length; l++) {
     enemySprites2[l].enemy2Update();
-    
   }
 
   for (let m = 0; m < boomSprite.length; m++) {
@@ -265,5 +265,4 @@ function animate(){
 initPlayer();
 initEnemySprites()
 initEnemySprites2();
-kaboom1(100, 100);
- animate();
+animate();

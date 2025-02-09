@@ -10,6 +10,11 @@ html, body {
   box-sizing: border-box;
 }
 
+img {
+  width: 100px;
+  height: 100px;
+}
+
 #masterContainer {
   display: grid;
   border-style: dashed;
