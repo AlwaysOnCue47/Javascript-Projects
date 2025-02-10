@@ -7,7 +7,7 @@ canvas.height = 420;
 canvas.width = 680;
 canvas.style.width = 680;
 canvas.style.height = 420;
-canvas.style.backgroundColor = "black";
+canvas.style.backgroundColor = "rgb(3, 0, 30)";
 const ctx = canvas.getContext('2d');
 
 // event listeners
@@ -47,8 +47,9 @@ document.addEventListener("keydown", (event)=> {
 
 let alien1 = document.getElementById('alien1');
 let alien2 = document.getElementById('alien2');
-//ctx.drawImage(alien1, 0, 0, 40, 40);
-
+let playerShip = document.getElementById('playerShip');
+let playerShipRight = document.getElementById('playerShipRightTurn');
+let playerShipLeft = document.getElementById('playerShipLeftTurn');
 
 // class constructors
 
@@ -172,11 +173,11 @@ class Sprite {
   }
 };
 
-// functions
+// functions with related variables
 
 let playerSprite;
 function initPlayer(){
-  playerSprite = new Sprite(canvas.width/2, canvas.height-45, 10, "green");
+  playerSprite = new Sprite(canvas.width/2, canvas.height-45, 10, "rgb(3, 0, 30)");
   playerSprite.draw();
 };
 
@@ -233,13 +234,32 @@ function kaboom1(x, y) {
   };
 };
 
+function animatePlayer() {
+  playerSprite.playerUpdate();
+    if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
+      ctx.drawImage(playerShipLeft, playerSprite.x-24, playerSprite.y-24, 50, 50)
+    }
+    if (playerSprite.x >= 0 && playerSprite.x <= 100){
+      ctx.drawImage(playerShipRight, playerSprite.x-24, playerSprite.y-24, 50, 50)
+    }
+    if (playerSprite.x > 100 && playerSprite.x < canvas.width -100){
+      ctx.drawImage(playerShip, playerSprite.x-24, playerSprite.y-24, 50, 50);
+    }
+};
 
 // animation function
+
+let clearScreen = true;
 function animate(){
   animRe = requestAnimationFrame(animate);
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
   
-  playerSprite.playerUpdate();
+  if (clearScreen){
+    ctx.fillStyle = "rgba(3,0,30,0.8)";
+    ctx.fillRect(0, 0,canvas.width, canvas.height)
+  } else clearScreen = !clearScreen;
+  
+  
+  animatePlayer();
 
   for (let i = 0; i < playerAmmo.length; i++) {
     playerAmmo[i].ammoUpdate();
