@@ -16,7 +16,17 @@ document.addEventListener("keydown", (event)=> {
   switch (event.key){
 
     case "ArrowUp":
-      initAmmo(playerSprite.x, playerSprite.y, 0, -8);
+      let x = 0;
+      let y = -8;
+        if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
+          x = -8;
+          y = -6;
+        }
+        if (playerSprite.x >= 0 && playerSprite.x <= 100){
+          x = 8;
+          y = -6;
+        }
+      initAmmo(playerSprite.x, playerSprite.y, x, y);
       break;
 
     case "ArrowLeft": 
@@ -36,7 +46,8 @@ document.addEventListener("keydown", (event)=> {
 // images 
 
 let alien1 = document.getElementById('alien1');
-ctx.drawImage(alien1, 0, 0, 40, 40);
+let alien2 = document.getElementById('alien2');
+//ctx.drawImage(alien1, 0, 0, 40, 40);
 
 
 // class constructors
@@ -99,14 +110,7 @@ class Sprite {
   }
 
   ammoUpdate() {
-    if (this.x <= canvas.width && this.x >= canvas.width - 100){
-      this.velocity.x = -8;
-      this.velocity.y = -6;
-    }
-    if (this.x >= 0 && this.x <= 100){
-      this.velocity.x = 8;
-      this.velocity.y = -6;
-    }
+    
 
     this.x += this.velocity.x;
     this.y += this.velocity.y;
@@ -153,8 +157,8 @@ class Sprite {
 
   enemy2Update() {
     this.x += this.velocity.x;
-    if (this.x > canvas.width){
-      this.x = 0;
+    if (this.x > canvas.width + 14){
+      this.x = -14;
     }
     this.draw();
   }
@@ -208,7 +212,7 @@ function initEnemySprites2() {
     x = 20;
     y = 20;
   for (let i = 0; i < 6; i++) {
-    enemySprites2.push(new Sprite(x, y, 12, "purple", 2, 0));
+    enemySprites2.push(new Sprite(x, y, 12, "orange", 2, 0));
     x += 60;
     y += 20;
     enemySprites2[i].draw();
@@ -244,9 +248,14 @@ function animate(){
     }
   }
 
+  for (let l = 0; l < enemySprites2.length; l++) {
+    enemySprites2[l].enemy2Update();
+    ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
+  }
+
   for (let j = 0; j < enemySprites.length; j++) {
     enemySprites[j].enemyUpdate();
-    ctx.drawImage(alien1, enemySprites[j].x - 22, enemySprites[j].y -22, 45, 45);
+    ctx.drawImage(alien1, enemySprites[j].x - 23, enemySprites[j].y -23, 45, 45);
   }
 
   for (let k = 0; k < enemyAmmo.length; k++) {
@@ -256,10 +265,6 @@ function animate(){
       kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
       enemyAmmo.splice(k, 1);
     };
-  }
-
-  for (let l = 0; l < enemySprites2.length; l++) {
-    enemySprites2[l].enemy2Update();
   }
 
   for (let m = 0; m < boomSprite.length; m++) {
