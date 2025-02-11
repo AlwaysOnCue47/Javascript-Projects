@@ -40,6 +40,17 @@ document.addEventListener("keydown", (event)=> {
     case "ArrowDown":
       playerSprite.velocity.x = 0; playerSprite.velocity.y = 0;
       break;
+    case "a":
+      if (playerShields.shields.strength > 0){
+        playerShields.shields.hit = true;
+        playerShields.shields.upCount = 100;
+        playerShields.shields.strength -= 1;
+      }
+      if (playerShields.shields.strength == 0) {
+        playerShields.shields.upCount = 20;
+      }
+     
+      console.log(playerShields);
   }
 });
 
@@ -65,6 +76,7 @@ class Sprite {
     this.velocity = {x: vx, y: vy};
     this.location = location;
     this.counter = counter;
+    this.shields = {strength: 0, hit: false, upCount: 0};
 
   };
 
@@ -113,6 +125,27 @@ class Sprite {
     this.draw();
   }
 
+  playerShieldsUpdate() {
+    this.x = playerSprite.x;
+    this.y = playerSprite.y;
+    if (this.shields.hit){
+      this.color = "rgba(0, 194, 0, 0.5)"
+      this.shields.upCount -= 1;
+      if (this.shields.upCount <= 0){
+        this.shields.hit = false;
+      }
+    } 
+    else{
+      this.color = "rgba(0,0,0,0)"
+    }
+
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.arc(this.x, this.y, this.radius, Math.PI*2, false);
+    ctx.fill();
+    ctx.closePath();
+  }
+
   ammoUpdate() {    
     this.x += this.velocity.x;
     this.y += this.velocity.y;
@@ -152,6 +185,20 @@ class Sprite {
   }
 
   enemyAmmoUpdate() {
+    switch (this.counter){
+      case 0, 1, 2, 3, 4, 5: 
+        this.color = "red"
+        break;
+      
+      case 6, 7, 8, 9, 10:
+        this.color ="darkorange"
+        break;
+      
+      case 11:
+        this.counter = 0;
+        break;
+    }
+    this.counter += 1;
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     this.draw();
@@ -186,10 +233,16 @@ class Sprite {
 // functions with related variables
 
 let playerSprite;
+let playerShields;
 function initPlayer(){
-  playerSprite = new Sprite(canvas.width/2, canvas.height-45, 10, "rgb(3, 0, 30)");
+  playerShields = new Sprite(canvas.width/2, canvas.height-45, 28, "rgba(0, 0, 0, 0)", 0, 0, [], 10);
+  playerShields.shields.strength = 10;
+  console.log(playerShields);
+  playerSprite = new Sprite(canvas.width/2, canvas.height-45, 15, "rgb(3, 0, 30)");
   playerSprite.draw();
 };
+
+
 
 let playerAmmo = [];
 function initAmmo(x, y, vx, vy){
@@ -200,7 +253,7 @@ function initAmmo(x, y, vx, vy){
 
 let enemyAmmo = [];
 function initEnemyAmmo(x, y){
-  enemyAmmo.push(new Sprite(x, y, 8, "darkorange", 0, 1));
+  enemyAmmo.push(new Sprite(x, y, 8, "darkorange", 0, 1,[], 1));
 }
 
 let enemySprites = [];
@@ -255,6 +308,7 @@ function animatePlayer() {
     if (playerSprite.x > 100 && playerSprite.x < canvas.width -100){
       ctx.drawImage(playerShip, playerSprite.x-24, playerSprite.y-24, 50, 50);
     }
+    
 };
 
 let starField = [];
@@ -268,7 +322,7 @@ function initStarField() {
   for (let i = 0; i < 75; i++) {
     x = Math.random()* canvas.width;
     y = Math.random()* canvas.height;
-    vy = Math.random()* 1.5;
+    vy = Math.random()* 1.4;
     radius = Math.random()*3;
     thisColor = color[Math.floor(Math.random()*3)];
     starField.push(new Sprite(x, y, radius, thisColor, 0, vy ));
@@ -278,24 +332,19 @@ function initStarField() {
 
 // animation function
 
-// let clearScreen = true;
+
 function animate(){
   animRe = requestAnimationFrame(animate);
-
   ctx.fillStyle = "rgba(3,0,30,0.8)";
-    ctx.fillRect(0, 0,canvas.width, canvas.height)
-  
-  // if (clearScreen){
-  //   ctx.fillStyle = "rgba(3,0,30,0.8)";
-  //   ctx.fillRect(0, 0,canvas.width, canvas.height)
-  // }  clearScreen = !clearScreen;
-  
+  ctx.fillRect(0, 0,canvas.width, canvas.height)
+
   for (let n = 0; n < starField.length; n++) {
     starField[n].starFieldUpdate();
   }
-  ctx.drawImage(background, 0, canvas.height - 80, canvas.width, 200);
+  ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
   
   animatePlayer();
+  playerShields.playerShieldsUpdate();
 
   for (let i = 0; i < playerAmmo.length; i++) {
     playerAmmo[i].ammoUpdate();
