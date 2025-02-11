@@ -50,6 +50,9 @@ let alien2 = document.getElementById('alien2');
 let playerShip = document.getElementById('playerShip');
 let playerShipRight = document.getElementById('playerShipRightTurn');
 let playerShipLeft = document.getElementById('playerShipLeftTurn');
+let background = document.getElementById('backgroundShip');
+
+
 
 // class constructors
 
@@ -110,9 +113,7 @@ class Sprite {
     this.draw();
   }
 
-  ammoUpdate() {
-    
-
+  ammoUpdate() {    
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     this.draw();
@@ -168,6 +169,15 @@ class Sprite {
     this.radius += 3;
     if (this.radius > 18) {
       this.color = "red";
+    }
+    this.draw();
+  }
+
+  starFieldUpdate() {
+    this.y += this.velocity.y;
+    if (this.y > canvas.height + 5){
+      this.y = -5;
+      this.x = Math.random()* canvas.width;
     }
     this.draw();
   }
@@ -247,17 +257,43 @@ function animatePlayer() {
     }
 };
 
+let starField = [];
+function initStarField() {
+  let x;
+  let y;
+  let vy;
+  let radius;
+  let color = ["rgba(119, 128, 0, 0.7)", "rgba(119, 128, 0, 0.5)", "rgba(119, 128, 0, 0.25)"];
+  let thisColor;
+  for (let i = 0; i < 75; i++) {
+    x = Math.random()* canvas.width;
+    y = Math.random()* canvas.height;
+    vy = Math.random()* 1.5;
+    radius = Math.random()*3;
+    thisColor = color[Math.floor(Math.random()*3)];
+    starField.push(new Sprite(x, y, radius, thisColor, 0, vy ));
+    starField[i].draw();
+  }
+};
+
 // animation function
 
-let clearScreen = true;
+// let clearScreen = true;
 function animate(){
   animRe = requestAnimationFrame(animate);
-  
-  if (clearScreen){
-    ctx.fillStyle = "rgba(3,0,30,0.8)";
+
+  ctx.fillStyle = "rgba(3,0,30,0.8)";
     ctx.fillRect(0, 0,canvas.width, canvas.height)
-  } else clearScreen = !clearScreen;
   
+  // if (clearScreen){
+  //   ctx.fillStyle = "rgba(3,0,30,0.8)";
+  //   ctx.fillRect(0, 0,canvas.width, canvas.height)
+  // }  clearScreen = !clearScreen;
+  
+  for (let n = 0; n < starField.length; n++) {
+    starField[n].starFieldUpdate();
+  }
+  ctx.drawImage(background, 0, canvas.height - 80, canvas.width, 200);
   
   animatePlayer();
 
@@ -293,11 +329,15 @@ function animate(){
       boomSprite.splice(m, 1);
     }
   }
+
+  
 };
 
 // run when parsed
-
+initStarField();
 initPlayer();
 initEnemySprites()
 initEnemySprites2();
+
+//ctx.drawImage(alien1, 0, 0);
 animate();
