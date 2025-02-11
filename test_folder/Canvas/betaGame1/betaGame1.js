@@ -30,12 +30,34 @@ document.addEventListener("keydown", (event)=> {
       break;
 
     case "ArrowLeft": 
-      playerSprite.velocity.x = -4;
+    
+        switch (playerSprite.velocity.x) {
+          case -2: 
+          playerSprite.velocity.x = -3;
+          break;
+          case -3: 
+          playerSprite.velocity.x = -4;
+          break;
+          case -4: 
+          break;
+          default: playerSprite.velocity.x = -2;
+        }
       break;
 
     case "ArrowRight": 
-      playerSprite.velocity.x = 4;
-      break;
+      switch (playerSprite.velocity.x) {
+        case 2: 
+        playerSprite.velocity.x = 3;
+        break;
+        case 3: 
+        playerSprite.velocity.x = 4;
+        break;
+        case 4: 
+        break;
+        default: 
+        playerSprite.velocity.x = 2;
+      }
+    break;
 
     case "ArrowDown":
       playerSprite.velocity.x = 0; playerSprite.velocity.y = 0;
@@ -95,20 +117,16 @@ class Sprite {
       this.x = canvas.width - 1;
     }
 
-    if (this.x >= 0 && this.x <= 100 && this.velocity.x == -4){
-      this.velocity.y = -4;
-    }
-
-    if (this.x >= 0 && this.x <= 100 && this.velocity.x == 4){
-      this.velocity.y = 4;
+    if (this.x >= 0 && this.x <= 100) {
+      this.velocity.y = this.velocity.x;
     }
     
-    if (this.x <= canvas.width && this.x >= canvas.width - 100 && this.velocity.x == 4){
-      this.velocity.y = -4;
+    if (this.x <= canvas.width && this.x >= canvas.width - 100){
+      this.velocity.y = -this.velocity.x;
     }
 
-    if (this.x <= canvas.width && this.x >= canvas.width - 100 && this.velocity.x == -4){
-      this.velocity.y = 4;
+    if (this.x <= canvas.width && this.x >= canvas.width - 100){
+      this.velocity.y = -this.velocity.x;
     }
     if (this.x >= 101 && this.x <= canvas.width - 101){
       this.velocity.y = 0;
@@ -155,8 +173,11 @@ class Sprite {
       if (getDistance(this.x, this.y, enemySprites[i].x, enemySprites[i].y) - enemySprites[i].radius * 2 < 0){
         kaboom1(this.x, this.y);
         playerAmmo.splice(this, 1);
+        enemySprites[i].y += -10;
+        enemySprites[i].location.y += -5;
       }
     }
+
     for (let j = 0; j < enemyAmmo.length; j++) {
       if (getDistance(this.x, this.y, enemyAmmo[j].x, enemyAmmo[j].y) - enemyAmmo[j].radius * 2 < 0){
         kaboom1(this.x, this.y);
