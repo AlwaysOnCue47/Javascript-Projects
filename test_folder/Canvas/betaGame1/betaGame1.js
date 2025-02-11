@@ -49,8 +49,8 @@ document.addEventListener("keydown", (event)=> {
       if (playerShields.shields.strength == 0) {
         playerShields.shields.upCount = 20;
       }
-     
       console.log(playerShields);
+      break;
   }
 });
 
@@ -62,8 +62,6 @@ let playerShip = document.getElementById('playerShip');
 let playerShipRight = document.getElementById('playerShipRightTurn');
 let playerShipLeft = document.getElementById('playerShipLeftTurn');
 let background = document.getElementById('backgroundShip');
-
-
 
 // class constructors
 
@@ -146,10 +144,26 @@ class Sprite {
     ctx.closePath();
   }
 
-  ammoUpdate() {    
+  ammoUpdate() {
     this.x += this.velocity.x;
     this.y += this.velocity.y;
+    if (this.y <= 0){
+      playerAmmo.splice(this, 1);
+    }
     this.draw();
+    for (let i = 0; i < enemySprites.length; i++) {
+      if (getDistance(this.x, this.y, enemySprites[i].x, enemySprites[i].y) - enemySprites[i].radius * 2 < 0){
+        kaboom1(this.x, this.y);
+        playerAmmo.splice(this, 1);
+      }
+    }
+    for (let j = 0; j < enemyAmmo.length; j++) {
+      if (getDistance(this.x, this.y, enemyAmmo[j].x, enemyAmmo[j].y) - enemyAmmo[j].radius * 2 < 0){
+        kaboom1(this.x, this.y);
+        enemyAmmo.splice(j, 1);
+        playerAmmo.splice(this, 1);
+      }
+    }
   }
 
   enemyUpdate() {
@@ -177,9 +191,9 @@ class Sprite {
       console.log("change direction");
     };
     this.counter += 1;
-    if (this.counter >= 400){
+    if (this.counter >= 300){
       initEnemyAmmo(this.x, this.y);
-      this.counter = 0;
+      this.counter = Math.floor(Math.random()*50);
       console.log("Enemy fire!")
     };
   }
@@ -233,28 +247,31 @@ class Sprite {
 // functions with related variables
 
 let playerSprite;
-let playerShields;
+
 function initPlayer(){
-  playerShields = new Sprite(canvas.width/2, canvas.height-45, 28, "rgba(0, 0, 0, 0)", 0, 0, [], 10);
-  playerShields.shields.strength = 10;
-  console.log(playerShields);
-  playerSprite = new Sprite(canvas.width/2, canvas.height-45, 15, "rgb(3, 0, 30)");
+  playerSprite = new Sprite(canvas.width/2, canvas.height-45, 15, "rgba(0, 0, 0, 0)");
   playerSprite.draw();
 };
 
-
+let playerShields;
+function initPlayerShields(){
+  playerShields = new Sprite(canvas.width/2, canvas.height-45, 28, "rgba(0, 0, 0, 0)", 0, 0, [], 10);
+  playerShields.shields.strength = 10;
+  console.log(playerShields);
+};
 
 let playerAmmo = [];
 function initAmmo(x, y, vx, vy){
+  y += -15;
   if (playerAmmo.length < 3){
-    playerAmmo.push(new Sprite(x, y, 4, "white", vx, vy));
+    playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
   };
 };
 
 let enemyAmmo = [];
 function initEnemyAmmo(x, y){
   enemyAmmo.push(new Sprite(x, y, 8, "darkorange", 0, 1,[], 1));
-}
+};
 
 let enemySprites = [];
 function initEnemySprites() {
@@ -264,12 +281,12 @@ function initEnemySprites() {
     x2 = Math.floor(Math.random()*canvas.width);
     y2 = Math.floor(Math.random()*((canvas.height - 60)))
     let location = {x: x2, y: y2};
-    let timer = Math.floor(Math.random()*300);
+    let timer = Math.floor(Math.random()*200);
     enemySprites.push(new Sprite(x1, y1, 16, "red", 0, 0, location, timer));
     enemySprites[i].draw();
     ctx.drawImage(alien1, enemySprites[i].x - 22, enemySprites[i].y -22, 45, 45);
   }
-}
+};
 
 let enemySprites2 = [];
 function initEnemySprites2() {
@@ -281,7 +298,7 @@ function initEnemySprites2() {
     y += 20;
     enemySprites2[i].draw();
   }
-} 
+};
 
 let boomSprite = [];
 function kaboom1(x, y) {
@@ -308,7 +325,6 @@ function animatePlayer() {
     if (playerSprite.x > 100 && playerSprite.x < canvas.width -100){
       ctx.drawImage(playerShip, playerSprite.x-24, playerSprite.y-24, 50, 50);
     }
-    
 };
 
 let starField = [];
@@ -330,8 +346,14 @@ function initStarField() {
   }
 };
 
-// animation function
+function getDistance(x1, y1, x2, y2) {
+  let xDistance = x2 - x1;
+  let yDistance = y2 - y1;
+  return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
 
+};
+
+// animation function
 
 function animate(){
   animRe = requestAnimationFrame(animate);
@@ -348,9 +370,7 @@ function animate(){
 
   for (let i = 0; i < playerAmmo.length; i++) {
     playerAmmo[i].ammoUpdate();
-    if (playerAmmo[i].y <= 0){
-      playerAmmo.splice(i, 1);
-    }
+    
   }
 
   for (let l = 0; l < enemySprites2.length; l++) {
@@ -378,15 +398,12 @@ function animate(){
       boomSprite.splice(m, 1);
     }
   }
-
-  
 };
 
 // run when parsed
 initStarField();
 initPlayer();
+initPlayerShields();
 initEnemySprites()
 initEnemySprites2();
-
-//ctx.drawImage(alien1, 0, 0);
 animate();
