@@ -31,30 +31,30 @@ document.addEventListener("keydown", (event)=> {
 
     case "ArrowLeft": 
         switch (playerSprite.velocity.x) {
-          case -3: 
-          playerSprite.velocity.x = -4;
-          break;
           case -4: 
           playerSprite.velocity.x = -5;
           break;
           case -5: 
+          playerSprite.velocity.x = -6;
           break;
-          default: playerSprite.velocity.x = -3;
+          case -6: 
+          break;
+          default: playerSprite.velocity.x = -4;
         }
       break;
 
     case "ArrowRight": 
       switch (playerSprite.velocity.x) {
-        case 3: 
-        playerSprite.velocity.x = 4;
-        break;
         case 4: 
         playerSprite.velocity.x = 5;
         break;
         case 5: 
+        playerSprite.velocity.x = 6;
+        break;
+        case 6:
         break;
         default: 
-        playerSprite.velocity.x = 3;
+        playerSprite.velocity.x = 4;
       }
     break;
 
@@ -157,10 +157,15 @@ class Sprite {
     this.draw();
     for (let i = 0; i < enemySprites.length; i++) {
       if (getDistance(this.x, this.y, enemySprites[i].x, enemySprites[i].y) - enemySprites[i].radius * 2 < 0){
-        kaboom1(this.x, this.y);
         playerAmmo.splice(this, 1);
-        enemySprites[i].y += -10;
-        enemySprites[i].location.y += -5;
+        if (enemyShields){
+          kaboom2(this.x, this.y);
+          enemySprites[i].y += -10;
+          enemySprites[i].location.x -= 10;
+        }
+        if (!enemyShields){
+          kaboom1(this.x, this.y);
+        }
       }
     }
 
@@ -178,7 +183,6 @@ class Sprite {
         playerAmmo.splice(this, 1);
       }
     }
-
   }
 
   enemyUpdate() {
@@ -234,6 +238,10 @@ class Sprite {
     this.draw();
   };
 
+  enemyShieldsUpdate(){
+    this.draw();
+  }
+
   enemy2Update() {
     this.x += this.velocity.x;
     if (this.x > canvas.width + 14){
@@ -276,6 +284,7 @@ let playerSprite;
 function initPlayer(){
   playerSprite = new Sprite(canvas.width/2, canvas.height-45, 15, "rgba(0, 0, 0, 0)");
   playerSprite.draw();
+  initPlayerShields();
 };
 
 let playerShields;
@@ -284,6 +293,16 @@ function initPlayerShields(){
   playerShields.shields.strength = 10;
   console.log(playerShields);
 };
+
+let enemyShields = []
+let enemyShieldsStatus = false;
+function initEnemyShields(){
+  enemyShieldsStatus = true;
+  for (let i = 0; i < enemySprites.length; i++) {
+    enemyShields.push(new Sprite(enemySprites[i].x, enemySprites[i].y, 28, "rgba(109, 17, 133, 0.5)"))
+    
+  }
+}
 
 let playerAmmo = [];
 function initAmmo(x, y, vx, vy){
@@ -311,6 +330,7 @@ function initEnemySprites() {
     enemySprites[i].draw();
     ctx.drawImage(alien1, enemySprites[i].x - 22, enemySprites[i].y -22, 45, 45);
   }
+  initEnemyShields();
 };
 
 let enemySprites2 = [];
@@ -408,6 +428,14 @@ function animate(){
     ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
   }
 
+  if (enemyShields){
+    for (let es = 0; es < enemySprites.length; es++) {
+      enemyShields[es].x = enemySprites[es].x;
+      enemyShields[es].y = enemySprites[es].y;
+      enemyShields[es].enemyShieldsUpdate();
+    }
+  }
+
   for (let j = 0; j < enemySprites.length; j++) {
     enemySprites[j].enemyUpdate();
     ctx.drawImage(alien1, enemySprites[j].x - 23, enemySprites[j].y -23, 45, 45);
@@ -454,7 +482,7 @@ function animate(){
 // run when parsed
 initStarField();
 initPlayer();
-initPlayerShields();
+
 initEnemySprites()
 initEnemySprites2();
 animate();
