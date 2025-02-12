@@ -30,48 +30,36 @@ document.addEventListener("keydown", (event)=> {
       break;
 
     case "ArrowLeft": 
-    
         switch (playerSprite.velocity.x) {
-          case -2: 
-          playerSprite.velocity.x = -3;
-          break;
           case -3: 
           playerSprite.velocity.x = -4;
           break;
           case -4: 
+          playerSprite.velocity.x = -5;
           break;
-          default: playerSprite.velocity.x = -2;
+          case -5: 
+          break;
+          default: playerSprite.velocity.x = -3;
         }
       break;
 
     case "ArrowRight": 
       switch (playerSprite.velocity.x) {
-        case 2: 
-        playerSprite.velocity.x = 3;
-        break;
         case 3: 
         playerSprite.velocity.x = 4;
         break;
         case 4: 
+        playerSprite.velocity.x = 5;
+        break;
+        case 5: 
         break;
         default: 
-        playerSprite.velocity.x = 2;
+        playerSprite.velocity.x = 3;
       }
     break;
 
     case "ArrowDown":
       playerSprite.velocity.x = 0; playerSprite.velocity.y = 0;
-      break;
-    case "a":
-      if (playerShields.shields.strength > 0){
-        playerShields.shields.hit = true;
-        playerShields.shields.upCount = 100;
-        playerShields.shields.strength -= 1;
-      }
-      if (playerShields.shields.strength == 0) {
-        playerShields.shields.upCount = 20;
-      }
-      console.log(playerShields);
       break;
   }
 });
@@ -125,9 +113,6 @@ class Sprite {
       this.velocity.y = -this.velocity.x;
     }
 
-    if (this.x <= canvas.width && this.x >= canvas.width - 100){
-      this.velocity.y = -this.velocity.x;
-    }
     if (this.x >= 101 && this.x <= canvas.width - 101){
       this.velocity.y = 0;
       this.y = canvas.height - 45;
@@ -147,6 +132,7 @@ class Sprite {
     if (this.shields.hit){
       this.color = "rgba(0, 194, 0, 0.5)"
       this.shields.upCount -= 1;
+      if (this.shields.strength <= 3){ this.color = "rgba(95, 16, 16, 0.73)"}
       if (this.shields.upCount <= 0){
         this.shields.hit = false;
       }
@@ -185,6 +171,14 @@ class Sprite {
         playerAmmo.splice(this, 1);
       }
     }
+
+    for (let k = 0; k < enemySprites2.length; k++ ){
+      if (getDistance(this.x, this.y, enemySprites2[k].x, enemySprites2[k].y)- enemySprites2[k].radius * 2 < 0){
+        kaboom1(this.x, this.y);
+        playerAmmo.splice(this, 1);
+      }
+    }
+
   }
 
   enemyUpdate() {
@@ -234,6 +228,7 @@ class Sprite {
         break;
     }
     this.counter += 1;
+
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     this.draw();
@@ -267,8 +262,17 @@ class Sprite {
 
 // functions with related variables
 
-let playerSprite;
+function shieldHit() {
+  playerShields.shields.hit = true;
+  playerShields.shields.upCount = 60;
+  playerShields.shields.strength -= 1;
+  if (playerShields.shields.strength <= 3) {
+    playerShields.shields.upCount = 20;
+  }
+  console.log(playerShields.shields.strength);
+};
 
+let playerSprite;
 function initPlayer(){
   playerSprite = new Sprite(canvas.width/2, canvas.height-45, 15, "rgba(0, 0, 0, 0)");
   playerSprite.draw();
@@ -335,6 +339,12 @@ function kaboom1(x, y) {
   };
 };
 
+let smallBoomSprite = []
+function kaboom2(x, y) {
+  smallBoomSprite.push(new Sprite(x, y, 5, "lightblue"));
+  console.log("small boom");
+}
+
 function animatePlayer() {
   playerSprite.playerUpdate();
     if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
@@ -371,7 +381,6 @@ function getDistance(x1, y1, x2, y2) {
   let xDistance = x2 - x1;
   let yDistance = y2 - y1;
   return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
-
 };
 
 // animation function
@@ -405,18 +414,39 @@ function animate(){
   }
 
   for (let k = 0; k < enemyAmmo.length; k++) {
+    spliceThis = false;
     enemyAmmo[k].enemyAmmoUpdate();
+    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *2 < 0) && (playerShields.shields.strength > 0)){
+      shieldHit();
+      kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+      spliceThis = true;
+    }
     if (enemyAmmo[k].y >= canvas.height){
       console.log("boom!")
       kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
-      enemyAmmo.splice(k, 1);
+      spliceThis = true;
     };
+
+    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
+      kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+      spliceThis = true;
+    }
+    if (spliceThis){
+      enemyAmmo.splice(k, 1);
+    }
   }
 
   for (let m = 0; m < boomSprite.length; m++) {
     boomSprite[m].kaboom1Update();
     if (boomSprite[m].radius >= 26) {
       boomSprite.splice(m, 1);
+    }
+  }
+
+  for (let sb = 0; sb < smallBoomSprite.length; sb++) {
+    smallBoomSprite[sb].kaboom1Update();
+    if (smallBoomSprite[sb].radius >= 20) {
+      smallBoomSprite.splice(sb, 1);
     }
   }
 };
