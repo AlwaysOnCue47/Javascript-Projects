@@ -61,6 +61,9 @@ document.addEventListener("keydown", (event)=> {
     case "ArrowDown":
       playerSprite.velocity.x = 0; playerSprite.velocity.y = 0;
       break;
+    
+    case 'a':
+      enemyShieldsStatus = !enemyShieldsStatus;      
   }
 });
 
@@ -158,12 +161,12 @@ class Sprite {
     for (let i = 0; i < enemySprites.length; i++) {
       if (getDistance(this.x, this.y, enemySprites[i].x, enemySprites[i].y) - enemySprites[i].radius * 2 < 0){
         playerAmmo.splice(this, 1);
-        if (enemyShields){
+        if (enemyShieldsStatus){
           kaboom2(this.x, this.y);
           enemySprites[i].y += -10;
           enemySprites[i].location.x -= 10;
         }
-        if (!enemyShields){
+        if (!enemyShieldsStatus){
           kaboom1(this.x, this.y);
         }
       }
@@ -428,7 +431,7 @@ function animate(){
     ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
   }
 
-  if (enemyShields){
+  if (enemyShieldsStatus){
     for (let es = 0; es < enemySprites.length; es++) {
       enemyShields[es].x = enemySprites[es].x;
       enemyShields[es].y = enemySprites[es].y;
