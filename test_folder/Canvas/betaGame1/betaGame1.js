@@ -177,6 +177,11 @@ class Sprite {
         }
         if (!enemyShieldsStatus){
           kaboom1(this.x, this.y);
+          enemySprites[i].hitPoints += -1
+          if (enemySprites[i].hitPoints <= -3){
+            initExplosion(enemySprites[i].x, enemySprites[i].y);
+            enemySprites.splice(i, 1);
+          }
         }
       }
     }
@@ -351,7 +356,7 @@ function initEnemySprites() {
   enemySprites = [];
   for (let i = 0; i < 3; i++) {
     x1 = Math.floor(Math.random()*canvas.width);
-    y1 = Math.floor(Math.random()*((canvas.height - 60)))
+    y1 = -15;
     x2 = Math.floor(Math.random()*canvas.width);
     y2 = Math.floor(Math.random()*((canvas.height - 60)))
     let location = {x: x2, y: y2};
@@ -553,11 +558,7 @@ function animate(){
     if (explosionSprite[exp].radius >= 24){
       explosionSprite.splice(exp, 1);
     }
-  }
-
-  }
-
-  
+  }}
 };
 
 
