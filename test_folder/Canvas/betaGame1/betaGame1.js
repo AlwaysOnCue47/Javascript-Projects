@@ -11,6 +11,8 @@ canvas.style.backgroundColor = "rgb(3, 0, 30)";
 const ctx = canvas.getContext('2d');
 
 // event listeners
+let gameRunning = false;
+document.getElementById('newGameBtn').addEventListener('click', () => newGame());
 
 document.addEventListener("keydown", (event)=> {
   switch (event.key){
@@ -88,6 +90,7 @@ class Sprite {
     this.location = location;
     this.counter = counter;
     this.shields = {strength: 0, hit: false, upCount: 0};
+    this.hitPoints = 3;
 
   };
 
@@ -183,6 +186,10 @@ class Sprite {
     for (let k = 0; k < enemySprites2.length; k++ ){
       if (getDistance(this.x, this.y, enemySprites2[k].x, enemySprites2[k].y)- enemySprites2[k].radius * 2 < 0){
         kaboom1(this.x, this.y);
+        enemySprites2[k].hitPoints += -1;
+        if (enemySprites2[k].hitPoints == 0){
+          enemySprites2.splice(k, 1);
+        }
         playerAmmo.splice(this, 1);
       }
     }
@@ -213,9 +220,9 @@ class Sprite {
       console.log("change direction");
     };
     this.counter += 1;
-    if (this.counter >= 300){
+    if (this.counter >= 350){
       initEnemyAmmo(this.x, this.y);
-      this.counter = Math.floor(Math.random()*50);
+      this.counter = 0;
       console.log("Enemy fire!")
     };
   }
@@ -259,6 +266,14 @@ class Sprite {
       this.color = "red";
     }
     this.draw();
+  }
+
+  smokePuffUpdate(){
+    this.radius += 1;
+    this.draw()
+    if (this.radius = 15){
+      smokePuff.splice(this, 1);
+    }
   }
 
   starFieldUpdate() {
@@ -322,6 +337,7 @@ function initEnemyAmmo(x, y){
 
 let enemySprites = [];
 function initEnemySprites() {
+  enemySprites = [];
   for (let i = 0; i < 3; i++) {
     x1 = Math.floor(Math.random()*canvas.width);
     y1 = Math.floor(Math.random()*((canvas.height - 60)))
@@ -338,6 +354,7 @@ function initEnemySprites() {
 
 let enemySprites2 = [];
 function initEnemySprites2() {
+  enemySprites2 = [];
     x = 20;
     y = 20;
   for (let i = 0; i < 6; i++) {
@@ -416,7 +433,9 @@ function animate(){
   for (let n = 0; n < starField.length; n++) {
     starField[n].starFieldUpdate();
   }
-  ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
+
+  if (gameRunning){
+    ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
   
   animatePlayer();
   playerShields.playerShieldsUpdate();
@@ -480,12 +499,20 @@ function animate(){
       smallBoomSprite.splice(sb, 1);
     }
   }
+  }
 };
+
+
+function newGame(){
+  cancelAnimationFrame(animRe);
+  gameRunning = true;
+  initPlayer();
+  initEnemySprites()
+  initEnemySprites2();
+  animate()
+
+}
 
 // run when parsed
 initStarField();
-initPlayer();
-
-initEnemySprites()
-initEnemySprites2();
 animate();
