@@ -234,7 +234,7 @@ class Sprite {
     this.counter += 1;
     if (this.counter >= 350){
       initEnemyAmmo(this.x, this.y);
-      this.counter = 0;
+      this.counter = Math.floor(Math.random()*25);
       console.log("Enemy fire!")
     };
   }
@@ -433,6 +433,45 @@ function initExplosion(x, y) {
     explosionSprite.push(new Sprite(x, y, explosionRadius, "rgba(185, 15, 15, 0.6)"))
     explosionRadius += -2;
   }
+
+  explosionRadius = 16;
+  y = startingY;
+  x = startingX;
+  for (let m = 0; m < 3; m++) {
+    y += 10
+    x += 10
+    explosionSprite.push(new Sprite(x, y, explosionRadius, "rgba(45, 2, 58, 0.8)"));
+    explosionRadius += -4;
+  }
+  explosionRadius = 16;
+  y = startingY;
+  x = startingX;
+  for (let n = 0; n < 3; n++) {
+    y += 10
+    x += -10
+    explosionSprite.push(new Sprite(x, y, explosionRadius, "rgba(45, 2, 58, 0.8)"));
+    explosionRadius += -4;
+  }
+  explosionRadius = 16;
+  y = startingY;
+  x = startingX;
+  for (let p = 0; p < 3; p++) {
+    y += -10
+    x += 10
+    explosionSprite.push(new Sprite(x, y, explosionRadius, "rgba(45, 2, 58, 0.8)"));
+    explosionRadius += -4;
+  }
+  explosionRadius = 16;
+  y = startingY;
+  x = startingX;
+  for (let q = 0; q < 3; q++) {
+    y += -10
+    x += -10
+    explosionSprite.push(new Sprite(x, y, explosionRadius, "rgba(45, 2, 58, 0.8)"));
+    explosionRadius += -4;
+  }
+  
+   
 }
 
 function animatePlayer() {
