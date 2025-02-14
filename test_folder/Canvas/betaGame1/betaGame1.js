@@ -11,8 +11,10 @@ canvas.style.backgroundColor = "rgb(3, 0, 30)";
 const ctx = canvas.getContext('2d');
 
 // event listeners
-let gameRunning = false;
-document.getElementById('newGameBtn').addEventListener('click', () => newGame());
+
+document.getElementById('newGameBtn').addEventListener('click', () => newGame(1));
+
+document.getElementById('newGameBtn2').addEventListener('click', () => newGame(2));
 
 document.addEventListener("keydown", (event)=> {
   switch (event.key){
@@ -28,7 +30,7 @@ document.addEventListener("keydown", (event)=> {
           x = 8;
           y = -6;
         }
-      initAmmo(playerSprite.x, playerSprite.y, x, y);
+      initAmmo(playerSprite.x, playerSprite.y, x, y, 2);
       break;
 
     case "ArrowLeft": 
@@ -72,6 +74,10 @@ document.addEventListener("keydown", (event)=> {
       break;
     case 'd':
       kaboom1(200, 200);
+      break;
+    case 'f':
+      initSmallExplosion(200, 200);
+      break;
   }
 });
 
@@ -199,7 +205,7 @@ class Sprite {
         kaboom1(this.x, this.y);
         enemySprites2[k].hitPoints += -1;
         if (enemySprites2[k].hitPoints == 0){
-          initExplosion(enemySprites2[k].x, enemySprites2[k].y);
+          initSmallExplosion(enemySprites2[k].x, enemySprites2[k].y);
           enemySprites2.splice(k, 1);
         }
         playerAmmo.splice(this, 1);
@@ -339,11 +345,26 @@ function initEnemyShields(){
 }
 
 let playerAmmo = [];
-function initAmmo(x, y, vx, vy){
-  y += -15;
-  if (playerAmmo.length < 3){
-    playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
-  };
+function initAmmo(x, y, vx, vy, type = 1){
+  switch (type){
+    case 1:
+      y += -15;
+      if (playerAmmo.length < 3){
+        playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
+      }
+      break;
+    case 2:
+      y += -15;
+      if (playerAmmo.length < 4 ){
+        //playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
+        x += -15
+        playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
+        x += 30
+        playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
+      }
+      break;
+  }
+  
 };
 
 let enemyAmmo = [];
@@ -352,32 +373,34 @@ function initEnemyAmmo(x, y){
 };
 
 let enemySprites = [];
-function initEnemySprites() {
+function initEnemySprites(howMany, hitPoints, shotTimer) {
   enemySprites = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < howMany; i++) {
     x1 = Math.floor(Math.random()*canvas.width);
     y1 = -15;
     x2 = Math.floor(Math.random()*canvas.width);
     y2 = Math.floor(Math.random()*((canvas.height - 60)))
     let location = {x: x2, y: y2};
-    let timer = Math.floor(Math.random()*200);
+    let timer = Math.floor(Math.random()*shotTimer);
     enemySprites.push(new Sprite(x1, y1, 16, "red", 0, 0, location, timer));
     enemySprites[i].draw();
+    enemySprites[i].hitPoints = hitPoints;
     ctx.drawImage(alien1, enemySprites[i].x - 22, enemySprites[i].y -22, 45, 45);
   }
   initEnemyShields();
 };
 
 let enemySprites2 = [];
-function initEnemySprites2() {
+function initEnemySprites2(howMany, hitPoints) {
   enemySprites2 = [];
     x = 20;
     y = 20;
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < howMany; i++) {
     enemySprites2.push(new Sprite(x, y, 12, "orange", 2, 0));
     x += 60;
     y += 20;
     enemySprites2[i].draw();
+    enemySprites2[i].hitPoints = hitPoints;
   }
 };
 
@@ -433,10 +456,13 @@ function initExplosion(x, y) {
     explosionSprite.push(new Sprite(x, y, explosionRadius, "rgba(185, 15, 15, 0.6)"))
     explosionRadius += -2;
   }
+  initSmallExplosion(startingX, startingY);
+}
 
+function initSmallExplosion(x, y){
+  let startingX = x;
+  let startingY = y;
   explosionRadius = 16;
-  y = startingY;
-  x = startingX;
   for (let m = 0; m < 3; m++) {
     y += 10
     x += 10
@@ -470,8 +496,6 @@ function initExplosion(x, y) {
     explosionSprite.push(new Sprite(x, y, explosionRadius, "rgba(45, 2, 58, 0.8)"));
     explosionRadius += -4;
   }
-  
-   
 }
 
 function animatePlayer() {
@@ -525,90 +549,103 @@ function animate(){
 
   if (gameRunning){
     ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
-  
-  animatePlayer();
-  playerShields.playerShieldsUpdate();
+    animatePlayer();
+    playerShields.playerShieldsUpdate();
 
-  for (let i = 0; i < playerAmmo.length; i++) {
-    playerAmmo[i].ammoUpdate();
-    
-  }
+    for (let i = 0; i < playerAmmo.length; i++) {
+      playerAmmo[i].ammoUpdate();
+      
+    }
 
-  for (let l = 0; l < enemySprites2.length; l++) {
-    enemySprites2[l].enemy2Update();
-    ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
-  }
-  if (enemySprites2.length <= 0) {
-    enemyShieldsStatus = false;
-  }
+    for (let l = 0; l < enemySprites2.length; l++) {
+      enemySprites2[l].enemy2Update();
+      ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
+    }
+    if (enemySprites2.length <= 0) {
+      enemyShieldsStatus = false;
+    }
 
-  if (enemyShieldsStatus){
-    for (let es = 0; es < enemySprites.length; es++) {
-      enemyShields[es].x = enemySprites[es].x;
-      enemyShields[es].y = enemySprites[es].y;
-      enemyShields[es].enemyShieldsUpdate();
+    if (enemyShieldsStatus){
+      for (let es = 0; es < enemySprites.length; es++) {
+        enemyShields[es].x = enemySprites[es].x;
+        enemyShields[es].y = enemySprites[es].y;
+        enemyShields[es].enemyShieldsUpdate();
+      }
+    }
+
+    for (let j = 0; j < enemySprites.length; j++) {
+      enemySprites[j].enemyUpdate();
+      ctx.drawImage(alien1, enemySprites[j].x - 23, enemySprites[j].y -23, 45, 45);
+    }
+
+    for (let k = 0; k < enemyAmmo.length; k++) {
+      spliceThis = false;
+      enemyAmmo[k].enemyAmmoUpdate();
+      if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *2 < 0) && (playerShields.shields.strength > 0)){
+        shieldHit();
+        kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+        spliceThis = true;
+      }
+      if (enemyAmmo[k].y >= canvas.height){
+        console.log("boom!")
+        kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
+        spliceThis = true;
+      };
+
+      if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
+        kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+        spliceThis = true;
+      }
+      if (spliceThis){
+        enemyAmmo.splice(k, 1);
+      }
+    }
+
+    for (let m = 0; m < boomSprite.length; m++) {
+      boomSprite[m].kaboom1Update();
+      if (boomSprite[m].radius >= 26) {
+        boomSprite.splice(m, 1);
+      }
+    }
+
+    for (let sb = 0; sb < smallBoomSprite.length; sb++) {
+      smallBoomSprite[sb].kaboom1Update();
+      if (smallBoomSprite[sb].radius >= 20) {
+        smallBoomSprite.splice(sb, 1);
+      }
+    }
+
+    for (let exp = 0; exp < explosionSprite.length; exp++){
+      explosionSprite[exp].explosionUpdate();
+      if (explosionSprite[exp].radius >= 24){
+        explosionSprite.splice(exp, 1);
+      }
     }
   }
-
-  for (let j = 0; j < enemySprites.length; j++) {
-    enemySprites[j].enemyUpdate();
-    ctx.drawImage(alien1, enemySprites[j].x - 23, enemySprites[j].y -23, 45, 45);
-  }
-
-  for (let k = 0; k < enemyAmmo.length; k++) {
-    spliceThis = false;
-    enemyAmmo[k].enemyAmmoUpdate();
-    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *2 < 0) && (playerShields.shields.strength > 0)){
-      shieldHit();
-      kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
-      spliceThis = true;
-    }
-    if (enemyAmmo[k].y >= canvas.height){
-      console.log("boom!")
-      kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
-      spliceThis = true;
-    };
-
-    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
-      kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
-      spliceThis = true;
-    }
-    if (spliceThis){
-      enemyAmmo.splice(k, 1);
-    }
-  }
-
-  for (let m = 0; m < boomSprite.length; m++) {
-    boomSprite[m].kaboom1Update();
-    if (boomSprite[m].radius >= 26) {
-      boomSprite.splice(m, 1);
-    }
-  }
-
-  for (let sb = 0; sb < smallBoomSprite.length; sb++) {
-    smallBoomSprite[sb].kaboom1Update();
-    if (smallBoomSprite[sb].radius >= 20) {
-      smallBoomSprite.splice(sb, 1);
-    }
-  }
-
-  for (let exp = 0; exp < explosionSprite.length; exp++){
-    explosionSprite[exp].explosionUpdate();
-    if (explosionSprite[exp].radius >= 24){
-      explosionSprite.splice(exp, 1);
-    }
-  }}
 };
 
+// initiate new game and next level functions
+let gameRunning = false;
+function newGame(level = 1){
+  switch (level){
+    case 1:
+      cancelAnimationFrame(animRe);
+      gameRunning = true;
+      initPlayer();
+      initEnemySprites(3, 6, 200);
+      initEnemySprites2(6, 3);
+      animate();
+      break;
+    
+    case 2:
+      //cancelAnimationFrame(animRe);
+      gameRunning = true;
+      initPlayer();
+      initEnemySprites(4, 6, 180);
+      initEnemySprites2(8, 4);
+      break
 
-function newGame(){
-  cancelAnimationFrame(animRe);
-  gameRunning = true;
-  initPlayer();
-  initEnemySprites()
-  initEnemySprites2();
-  animate()
-
+  }
 }
 
 // run when parsed
