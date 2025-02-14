@@ -329,8 +329,6 @@ class Sprite {
     this.radians += this.velocity.y;
     this.y = this.startingY + Math.cos(this.radians)*50;
     this.x = this.startingX + Math.sin(this.radians)*50;
-    // this.x += this.velocity.x;
-    // this.y += this.velocity.y;
     this.draw(); 
     this.startingX += 1;
     if (this.startingX > canvas.width){
@@ -594,6 +592,7 @@ function animate(){
       enemySprites2[l].enemy2Update();
       ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
     }
+    
     if (enemySprites2.length <= 0) {
       enemyShieldsStatus = false;
     }
