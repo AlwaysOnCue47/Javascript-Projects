@@ -96,6 +96,8 @@ class Sprite {
   constructor(x, y, radius, color, vx = 0, vy = 0, location = [], counter = 0) {
     this.x = x;
     this.y = y;
+    this.startingX = x;
+    this.startingY = y;
     this.radius = radius;
     this.color = color;
     this.velocity = {x: vx, y: vy};
@@ -103,6 +105,7 @@ class Sprite {
     this.counter = counter;
     this.shields = {strength: 0, hit: false, upCount: 0};
     this.hitPoints = 3;
+    this.radians = 0 
 
   };
 
@@ -306,6 +309,20 @@ class Sprite {
     }
     this.draw();
   }
+
+  testSpriteUpdate() {
+    this.radians += this.velocity.y;
+    this.y = this.startingY + Math.cos(this.radians)*50;
+    this.x = this.startingX + Math.sin(this.radians)*50;
+    // this.x += this.velocity.x;
+    // this.y += this.velocity.y;
+    this.draw(); 
+    this.startingX += 1;
+    if (this.startingX > canvas.width){
+      this.startingX = -2;
+    }
+
+  }
 };
 
 // functions with related variables
@@ -356,7 +373,6 @@ function initAmmo(x, y, vx, vy, type = 1){
     case 2:
       y += -15;
       if (playerAmmo.length < 4 ){
-        //playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
         x += -15
         playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
         x += 30
@@ -547,6 +563,8 @@ function animate(){
     starField[n].starFieldUpdate();
   }
 
+  testSprite.testSpriteUpdate();
+
   if (gameRunning){
     ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
     animatePlayer();
@@ -638,7 +656,6 @@ function newGame(level = 1){
       break;
     
     case 2:
-      //cancelAnimationFrame(animRe);
       gameRunning = true;
       initPlayer();
       initEnemySprites(4, 6, 180);
@@ -649,5 +666,9 @@ function newGame(level = 1){
 }
 
 // run when parsed
+testSprite = new Sprite(300, 300, 5, 'red', 2, .05);
+
+testSprite.draw();
+
 initStarField();
 animate();
