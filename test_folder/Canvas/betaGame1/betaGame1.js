@@ -12,7 +12,7 @@ const ctx = canvas.getContext('2d');
 
 // event listeners
 
-document.getElementById('canvas').addEventListener('click', () =>{
+document.getElementById('canvas').addEventListener('click', () => {
   let x = 0;
       let y = -8;
         if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
@@ -24,12 +24,11 @@ document.getElementById('canvas').addEventListener('click', () =>{
           y = -6;
         }
       initAmmo(playerSprite.x, playerSprite.y, x, y, 2);
-
 });
 
 document.getElementById('newGameBtn').addEventListener('click', () => newGame(1));
 
-document.getElementById('newGameBtn2').addEventListener('click', () => newGame(2));
+document.getElementById('newGameBtn2').addEventListener('click', () => newGame(3));
 
 document.addEventListener("keydown", (event)=> {
   switch (event.key){
@@ -82,7 +81,7 @@ document.addEventListener("keydown", (event)=> {
       break;
     
     case 'a':
-      enemyShieldsStatus = !enemyShieldsStatus;  
+      kaboom2(200, 200);;  
       break;
     case 's':
       initExplosion(200, 200);
@@ -100,6 +99,7 @@ document.addEventListener("keydown", (event)=> {
 
 let alien1 = document.getElementById('alien1');
 let alien2 = document.getElementById('alien2');
+let alien3 = document.getElementById('alien3');
 let playerShip = document.getElementById('playerShip');
 let playerShipRight = document.getElementById('playerShipRightTurn');
 let playerShipLeft = document.getElementById('playerShipLeftTurn');
@@ -121,7 +121,6 @@ class Sprite {
     this.shields = {strength: 0, hit: false, upCount: 0};
     this.hitPoints = 3;
     this.radians = 0 
-
   };
 
   draw(){
@@ -130,7 +129,6 @@ class Sprite {
     ctx.arc(this.x, this.y, this.radius, Math.PI*2, false);
     ctx.fill();
     ctx.closePath();
-
   };
 
   playerUpdate() {
@@ -202,7 +200,7 @@ class Sprite {
         if (!enemyShieldsStatus){
           kaboom1(this.x, this.y);
           enemySprites[i].hitPoints += -1
-          if (enemySprites[i].hitPoints <= -3){
+          if (enemySprites[i].hitPoints <= 0){
             initExplosion(enemySprites[i].x, enemySprites[i].y);
             enemySprites.splice(i, 1);
           }
@@ -222,11 +220,24 @@ class Sprite {
       if (getDistance(this.x, this.y, enemySprites2[k].x, enemySprites2[k].y)- enemySprites2[k].radius * 2 < 0){
         kaboom1(this.x, this.y);
         enemySprites2[k].hitPoints += -1;
-        if (enemySprites2[k].hitPoints == 0){
+        if (enemySprites2[k].hitPoints <= 0){
           initSmallExplosion(enemySprites2[k].x, enemySprites2[k].y);
           enemySprites2.splice(k, 1);
         }
         playerAmmo.splice(this, 1);
+      }
+    }
+
+    for (let l = 0; l < enemySprites3.length; l++) {
+      if (getDistance(this.x, this.y, enemySprites3[l].x, enemySprites3[l].y)- enemySprites3[l].radius * 2 < 0){
+        kaboom1(this.x, this.y);
+        enemySprites3[l].hitPoints += -1;
+        if (enemySprites3[l].hitPoints <= 0){
+          initSmallExplosion(enemySprites3[l].x, enemySprites3[l].y);
+          enemySprites3.splice(l, 1);
+        }
+        playerAmmo.splice(this, 1);
+      
       }
     }
   }
@@ -282,7 +293,7 @@ class Sprite {
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     this.draw();
-  };
+  }
 
   enemyShieldsUpdate(){
     this.draw();
@@ -294,6 +305,31 @@ class Sprite {
       this.x = -14;
     }
     this.draw();
+  }
+
+  enemy3Update() {
+    switch (this.counter){
+      case 0, 1, 2, 3, 4, 5: 
+        this.color = "green"
+        break;
+      
+      case 6, 7, 8, 9, 10:
+        this.color ="orange"
+        break;
+      
+      case 11:
+        this.counter = 0;
+        break;
+    }
+    this.counter += 1;
+    this.radians += this.velocity.y;
+    this.y = this.startingY + Math.cos(this.radians)*50;
+    this.x = this.startingX + Math.sin(this.radians)*50;
+    this.draw(); 
+    this.startingX += 1;
+    if (this.startingX > canvas.width + 100){
+      this.startingX = -20;
+    }
   }
 
   kaboom1Update() {
@@ -323,18 +359,6 @@ class Sprite {
       this.x = Math.random()* canvas.width;
     }
     this.draw();
-  }
-
-  testSpriteUpdate() {
-    this.radians += this.velocity.y;
-    this.y = this.startingY + Math.cos(this.radians)*50;
-    this.x = this.startingX + Math.sin(this.radians)*50;
-    this.draw(); 
-    this.startingX += 1;
-    if (this.startingX > canvas.width){
-      this.startingX = -2;
-    }
-
   }
 };
 
@@ -372,7 +396,7 @@ function initEnemyShields(){
     enemyShields.push(new Sprite(enemySprites[i].x, enemySprites[i].y, 28, "rgba(109, 17, 133, 0.5)"))
     
   }
-}
+};
 
 let playerAmmo = [];
 function initAmmo(x, y, vx, vy, type = 1){
@@ -380,16 +404,16 @@ function initAmmo(x, y, vx, vy, type = 1){
     case 1:
       y += -15;
       if (playerAmmo.length < 3){
-        playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(8, 253, 0)", vx, vy));
       }
       break;
     case 2:
       y += -15;
       if (playerAmmo.length < 4 ){
         x += -15
-        playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 255, 252)", vx, vy));
         x += 30
-        playerAmmo.push(new Sprite(x, y, 3, "white", vx, vy));
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 255, 252)", vx, vy));
       }
       break;
   }
@@ -422,7 +446,7 @@ function initEnemySprites(howMany, hitPoints, shotTimer) {
 let enemySprites2 = [];
 function initEnemySprites2(howMany, hitPoints) {
   enemySprites2 = [];
-    x = 20;
+    x = -300;
     y = 20;
   for (let i = 0; i < howMany; i++) {
     enemySprites2.push(new Sprite(x, y, 12, "orange", 2, 0));
@@ -430,6 +454,18 @@ function initEnemySprites2(howMany, hitPoints) {
     y += 20;
     enemySprites2[i].draw();
     enemySprites2[i].hitPoints = hitPoints;
+  }
+};
+
+let enemySprites3 = []
+function initEnemySprites3(howMany, hitPoints){
+  x = -30;
+  y = 100;
+  for (let i = 0; i < howMany; i++) {
+    enemySprites3.push(new Sprite(x, y, 12, "rgba(0,0,0,0)", 2, .05));
+    enemySprites3[i].hitPoints = hitPoints;
+    enemySprites3[i].draw();
+    x += -130;
   }
 };
 
@@ -451,7 +487,7 @@ let smallBoomSprite = []
 function kaboom2(x, y) {
   smallBoomSprite.push(new Sprite(x, y, 5, "lightblue"));
   console.log("small boom");
-}
+};
 
 let explosionSprite = [];
 function initExplosion(x, y) {
@@ -486,7 +522,7 @@ function initExplosion(x, y) {
     explosionRadius += -2;
   }
   initSmallExplosion(startingX, startingY);
-}
+};
 
 function initSmallExplosion(x, y){
   let startingX = x;
@@ -525,7 +561,7 @@ function initSmallExplosion(x, y){
     explosionSprite.push(new Sprite(x, y, explosionRadius, "rgba(45, 2, 58, 0.8)"));
     explosionRadius += -4;
   }
-}
+};
 
 function animatePlayer() {
   playerSprite.playerUpdate();
@@ -576,7 +612,7 @@ function animate(){
     starField[n].starFieldUpdate();
   }
 
-  testSprite.testSpriteUpdate();
+  //testSprite.testSpriteUpdate();
 
   if (gameRunning){
     ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
@@ -592,8 +628,8 @@ function animate(){
       enemySprites2[l].enemy2Update();
       ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
     }
-    
-    if (enemySprites2.length <= 0) {
+
+    if (enemySprites2.length <= 0 && enemySprites3.length <= 0) {
       enemyShieldsStatus = false;
     }
 
@@ -631,6 +667,11 @@ function animate(){
       if (spliceThis){
         enemyAmmo.splice(k, 1);
       }
+    }
+
+    for (let e3 = 0; e3 < enemySprites3.length; e3++) {
+      enemySprites3[e3].enemy3Update();
+      ctx.drawImage(alien3, enemySprites3[e3].x - 35, enemySprites3[e3].y -32, 68, 68);
     }
 
     for (let m = 0; m < boomSprite.length; m++) {
@@ -675,14 +716,17 @@ function newGame(level = 1){
       initEnemySprites(4, 6, 180);
       initEnemySprites2(8, 4);
       break
+    
+    case 3:
+      gameRunning = true;
+      initPlayer();
+      initEnemySprites(3, 6, 200);
+      initEnemySprites3(6, 6);
+      break;
 
   }
-}
+};
 
 // run when parsed
-testSprite = new Sprite(300, 300, 5, 'red', 2, .05);
-
-testSprite.draw();
-
 initStarField();
 animate();
