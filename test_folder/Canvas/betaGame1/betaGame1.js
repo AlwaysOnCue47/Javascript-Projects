@@ -92,6 +92,8 @@ document.addEventListener("keydown", (event)=> {
     case 'f':
       initSmallExplosion(200, 200);
       break;
+    case 'p':
+      gameRunning = !gameRunning;
   }
 });
 
@@ -253,7 +255,6 @@ class Sprite {
           enemySprites3.splice(l, 1);
         }
         playerAmmo.splice(this, 1);
-      
       }
     }
 
@@ -265,8 +266,7 @@ class Sprite {
           initSmallExplosion(enemySprites4[m].x, enemySprites4[m].y);
           enemySprites4.splice(m, 1);
         }
-        playerAmmo.splice(this, 1);
-      
+        playerAmmo.splice(this, 1);      
       }
     }
   }
@@ -286,6 +286,7 @@ class Sprite {
     if (this.y == this.location.y) {
       this.velocity.y = 0;
     };
+
     this.y += this.velocity.y;
     this.x += this.velocity.x;
     this.draw();
@@ -298,7 +299,7 @@ class Sprite {
     this.counter += 1;
     if (this.counter >= 350){
       initEnemyAmmo(this.x, this.y);
-      this.counter = Math.floor(Math.random()*25);
+      this.counter = Math.floor(Math.random()*50);
       console.log("Enemy fire!")
     };
   }
@@ -473,7 +474,7 @@ function initEnemySprites(howMany, hitPoints, shotTimer) {
     y2 = Math.floor(Math.random()*((canvas.height - 60)))
     let location = {x: x2, y: y2};
     let timer = Math.floor(Math.random()*shotTimer);
-    enemySprites.push(new Sprite(x1, y1, 16, "red", 0, 0, location, timer));
+    enemySprites.push(new Sprite(x1, y1, 16, "rgba(0,0,0,0)", 0, 0, location, timer));
     enemySprites[i].draw();
     enemySprites[i].hitPoints = hitPoints;
     ctx.drawImage(alien1, enemySprites[i].x - 22, enemySprites[i].y -22, 45, 45);
