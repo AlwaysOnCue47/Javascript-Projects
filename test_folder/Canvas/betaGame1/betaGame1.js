@@ -14,16 +14,16 @@ const ctx = canvas.getContext('2d');
 
 document.getElementById('canvas').addEventListener('click', () => {
   let x = 0;
-      let y = -8;
-        if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
-          x = -8;
-          y = -6;
-        }
-        if (playerSprite.x >= 0 && playerSprite.x <= 100){
-          x = 8;
-          y = -6;
-        }
-      initAmmo(playerSprite.x, playerSprite.y, x, y, 2);
+  let y = -8;
+    if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
+      x = -8;
+      y = -6;
+    }
+    if (playerSprite.x >= 0 && playerSprite.x <= 100){
+      x = 8;
+      y = -6;
+    }
+  initAmmo(playerSprite.x, playerSprite.y, x, y, 2);
 });
 
 document.getElementById('newGameBtn').addEventListener('click', () => newGame(1));
@@ -175,11 +175,7 @@ class Sprite {
       this.color = "rgba(0,0,0,0)"
     }
 
-    ctx.beginPath();
-    ctx.fillStyle = this.color;
-    ctx.arc(this.x, this.y, this.radius, Math.PI*2, false);
-    ctx.fill();
-    ctx.closePath();
+   this.draw();
   }
 
   ammoUpdate() {
@@ -655,6 +651,33 @@ function animateExplosions(){
   }
 };
 
+function animateEnemyAmmo() {
+  for (let k = 0; k < enemyAmmo.length; k++) {
+    spliceThis = false;
+    enemyAmmo[k].enemyAmmoUpdate();
+    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *2 < 0) && (playerShields.shields.strength > 0)){
+      shieldHit();
+      kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+      spliceThis = true;
+    }
+
+    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
+      kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+      spliceThis = true;
+    }
+
+    if (enemyAmmo[k].y >= canvas.height){
+      console.log("boom!")
+      kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
+      spliceThis = true;
+    };
+
+    if (spliceThis){
+      enemyAmmo.splice(k, 1);
+    }
+  }
+};
+
 function animate(){
   animRe = requestAnimationFrame(animate);
   ctx.fillStyle = "rgba(3,0,30,0.8)";
@@ -671,75 +694,74 @@ function animate(){
       playerAmmo[i].ammoUpdate();
     }
 
-    if (enemySprites2.length <= 0 && enemySprites3.length <= 0) {
-      enemyShieldsStatus = false;
-    }
+  if (enemySprites2.length <= 0 && enemySprites3.length <= 0) {
+    enemyShieldsStatus = false;
+  }
 
-    if (enemyShieldsStatus){
-      for (let es = 0; es < enemySprites.length; es++) {
-        enemyShields[es].x = enemySprites[es].x;
-        enemyShields[es].y = enemySprites[es].y;
-        enemyShields[es].enemyShieldsUpdate();
-      }
+  if (enemyShieldsStatus){
+    for (let es = 0; es < enemySprites.length; es++) {
+      enemyShields[es].x = enemySprites[es].x;
+      enemyShields[es].y = enemySprites[es].y;
+      enemyShields[es].enemyShieldsUpdate();
     }
+  }
     
-    switch (gameLevel){
-      case 1:
+  switch (gameLevel){
+    case 1:
+      animateEnemies();
+      if (isLevelCompleted()){
+        nextLevel(2);
+      }
+    break;
+
+    case 2: 
+      animateEnemies();
+      if (isLevelCompleted()){
+        nextLevel(3);
+      }
+    break;
+
+      case 3:
         animateEnemies();
         if (isLevelCompleted()){
-          nextLevel(2);
+          nextLevel(4);
         }
       break;
-
-      case 2: 
+      
+      case 4:
         animateEnemies();
         if (isLevelCompleted()){
-          nextLevel(3);
+          nextLevel(1);
         }
-        break;
-
-        case 3:
-          animateEnemies();
-          if (isLevelCompleted()){
-            nextLevel(4);
-          }
-          break;
-        
-        case 4:
-          animateEnemies();
-          if (isLevelCompleted()){
-            nextLevel(1);
-          }
-          break;
-      }
-
-      for (let k = 0; k < enemyAmmo.length; k++) {
-        spliceThis = false;
-        enemyAmmo[k].enemyAmmoUpdate();
-        if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *2 < 0) && (playerShields.shields.strength > 0)){
-          shieldHit();
-          kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
-          spliceThis = true;
-        }
+      break;
+    }
+    animateEnemyAmmo()
+      // for (let k = 0; k < enemyAmmo.length; k++) {
+      //   spliceThis = false;
+      //   enemyAmmo[k].enemyAmmoUpdate();
+      //   if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *2 < 0) && (playerShields.shields.strength > 0)){
+      //     shieldHit();
+      //     kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+      //     spliceThis = true;
+      //   }
   
-        if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
-          kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
-          spliceThis = true;
-        }
+      //   if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
+      //     kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+      //     spliceThis = true;
+      //   }
 
-        if (enemyAmmo[k].y >= canvas.height){
-          console.log("boom!")
-          kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
-          spliceThis = true;
-        };
+      //   if (enemyAmmo[k].y >= canvas.height){
+      //     console.log("boom!")
+      //     kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
+      //     spliceThis = true;
+      //   };
 
-        if (spliceThis){
-          enemyAmmo.splice(k, 1);
-        }
-      }
+      //   if (spliceThis){
+      //     enemyAmmo.splice(k, 1);
+      //   }
+      // }
 
       animateExplosions();
-  
     }
 };
 
@@ -774,7 +796,7 @@ function newGame(level = 1){
     
     case 2:
       initPlayer();
-      initEnemySprites(4, 8, 2000);
+      initEnemySprites(4, 8, 200);
       initEnemySprites2(8, 4);
       break
     
