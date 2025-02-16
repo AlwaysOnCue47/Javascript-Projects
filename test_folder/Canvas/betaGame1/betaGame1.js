@@ -195,7 +195,7 @@ class Sprite {
         if (enemyShieldsStatus){
           kaboom2(this.x, this.y);
           enemySprites[i].y += -10;
-          enemySprites[i].location.x -= 10;
+          enemySprites[i].x += Math.floor((Math.random()*10));
         }
         if (!enemyShieldsStatus){
           kaboom1(this.x, this.y);
@@ -409,7 +409,7 @@ function initAmmo(x, y, vx, vy, type = 1){
       break;
     case 2:
       y += -15;
-      if (playerAmmo.length < 4 ){
+      if (playerAmmo.length < 6 ){
         x += -15
         playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 255, 252)", vx, vy));
         x += 30
@@ -417,7 +417,6 @@ function initAmmo(x, y, vx, vy, type = 1){
       }
       break;
   }
-  
 };
 
 let enemyAmmo = [];
@@ -574,6 +573,7 @@ function animatePlayer() {
     if (playerSprite.x > 100 && playerSprite.x < canvas.width -100){
       ctx.drawImage(playerShip, playerSprite.x-24, playerSprite.y-24, 50, 50);
     }
+    playerShields.playerShieldsUpdate();
 };
 
 let starField = [];
@@ -601,7 +601,59 @@ function getDistance(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
 };
 
-// animation function
+// animation functions
+
+function animateEnemies(){
+  if (enemySprites.length > 0){
+    for (let j = 0; j < enemySprites.length; j++) {
+      enemySprites[j].enemyUpdate();
+      ctx.drawImage(alien1, enemySprites[j].x - 23, enemySprites[j].y -23, 45, 45);
+    }
+  }
+
+  if (enemySprites2.length > 0){
+    for (let l = 0; l < enemySprites2.length; l++) {
+      enemySprites2[l].enemy2Update();
+      ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
+    }
+  }
+
+  if (enemySprites3.length > 0){
+    for (let e3 = 0; e3 < enemySprites3.length; e3++) {
+      enemySprites3[e3].enemy3Update();
+      ctx.drawImage(alien3, enemySprites3[e3].x - 35, enemySprites3[e3].y -32, 68, 68);
+    }
+  }
+};
+
+function animateExplosions(){
+  if (boomSprite.length > 0 ){
+    for (let m = 0; m < boomSprite.length; m++) {
+      boomSprite[m].kaboom1Update();
+      if (boomSprite[m].radius >= 26) {
+        boomSprite.splice(m, 1);
+      }
+    }
+  }
+  
+  if (smallBoomSprite.length > 0){
+    for (let sb = 0; sb < smallBoomSprite.length; sb++) {
+      smallBoomSprite[sb].kaboom1Update();
+      if (smallBoomSprite[sb].radius >= 20) {
+        smallBoomSprite.splice(sb, 1);
+      }
+    }
+  }
+  
+  if (explosionSprite.length > 0 ){
+    for (let exp = 0; exp < explosionSprite.length; exp++){
+      explosionSprite[exp].explosionUpdate();
+      if (explosionSprite[exp].radius >= 24){
+        explosionSprite.splice(exp, 1);
+      }
+    }
+  }
+};
 
 function animate(){
   animRe = requestAnimationFrame(animate);
@@ -611,22 +663,12 @@ function animate(){
   for (let n = 0; n < starField.length; n++) {
     starField[n].starFieldUpdate();
   }
-
-  //testSprite.testSpriteUpdate();
+  ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
 
   if (gameRunning){
-    ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
     animatePlayer();
-    playerShields.playerShieldsUpdate();
-
     for (let i = 0; i < playerAmmo.length; i++) {
       playerAmmo[i].ammoUpdate();
-      
-    }
-
-    for (let l = 0; l < enemySprites2.length; l++) {
-      enemySprites2[l].enemy2Update();
-      ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
     }
 
     if (enemySprites2.length <= 0 && enemySprites3.length <= 0) {
@@ -640,90 +682,119 @@ function animate(){
         enemyShields[es].enemyShieldsUpdate();
       }
     }
+    
+    switch (gameLevel){
+      case 1:
+        animateEnemies();
+        if (isLevelCompleted()){
+          nextLevel(2);
+        }
+      break;
 
-    for (let j = 0; j < enemySprites.length; j++) {
-      enemySprites[j].enemyUpdate();
-      ctx.drawImage(alien1, enemySprites[j].x - 23, enemySprites[j].y -23, 45, 45);
-    }
+      case 2: 
+        animateEnemies();
+        if (isLevelCompleted()){
+          nextLevel(3);
+        }
+        break;
 
-    for (let k = 0; k < enemyAmmo.length; k++) {
-      spliceThis = false;
-      enemyAmmo[k].enemyAmmoUpdate();
-      if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *2 < 0) && (playerShields.shields.strength > 0)){
-        shieldHit();
-        kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
-        spliceThis = true;
+        case 3:
+          animateEnemies();
+          if (isLevelCompleted()){
+            nextLevel(4);
+          }
+          break;
+        
+        case 4:
+          animateEnemies();
+          if (isLevelCompleted()){
+            nextLevel(1);
+          }
+          break;
       }
-      if (enemyAmmo[k].y >= canvas.height){
-        console.log("boom!")
-        kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
-        spliceThis = true;
-      };
 
-      if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
-        kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
-        spliceThis = true;
-      }
-      if (spliceThis){
-        enemyAmmo.splice(k, 1);
-      }
-    }
+      for (let k = 0; k < enemyAmmo.length; k++) {
+        spliceThis = false;
+        enemyAmmo[k].enemyAmmoUpdate();
+        if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *2 < 0) && (playerShields.shields.strength > 0)){
+          shieldHit();
+          kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+          spliceThis = true;
+        }
+  
+        if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
+          kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
+          spliceThis = true;
+        }
 
-    for (let e3 = 0; e3 < enemySprites3.length; e3++) {
-      enemySprites3[e3].enemy3Update();
-      ctx.drawImage(alien3, enemySprites3[e3].x - 35, enemySprites3[e3].y -32, 68, 68);
-    }
+        if (enemyAmmo[k].y >= canvas.height){
+          console.log("boom!")
+          kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
+          spliceThis = true;
+        };
 
-    for (let m = 0; m < boomSprite.length; m++) {
-      boomSprite[m].kaboom1Update();
-      if (boomSprite[m].radius >= 26) {
-        boomSprite.splice(m, 1);
+        if (spliceThis){
+          enemyAmmo.splice(k, 1);
+        }
       }
-    }
 
-    for (let sb = 0; sb < smallBoomSprite.length; sb++) {
-      smallBoomSprite[sb].kaboom1Update();
-      if (smallBoomSprite[sb].radius >= 20) {
-        smallBoomSprite.splice(sb, 1);
-      }
+      animateExplosions();
+  
     }
-
-    for (let exp = 0; exp < explosionSprite.length; exp++){
-      explosionSprite[exp].explosionUpdate();
-      if (explosionSprite[exp].radius >= 24){
-        explosionSprite.splice(exp, 1);
-      }
-    }
-  }
 };
 
 // initiate new game and next level functions
+
+let gameLevel = 1;
+levelTimer = 0;
+function nextLevel(L){
+  ctx.beginPath();
+  ctx.fillStyle = 'green'
+  ctx.fillRect(200, 200, 200, 200)
+  ctx.closePath();
+  levelTimer += 1;
+  if (levelTimer >= 300){
+    newGame(L);
+    gameLevel = L;
+    levelTimer = 0
+    console.log(gameLevel);
+  }
+
+};
+
 let gameRunning = false;
 function newGame(level = 1){
+  gameRunning = true;
   switch (level){
     case 1:
-      cancelAnimationFrame(animRe);
-      gameRunning = true;
       initPlayer();
-      initEnemySprites(3, 6, 200);
+      initEnemySprites(3, 8, 200);
       initEnemySprites2(6, 3);
-      animate();
       break;
     
     case 2:
-      gameRunning = true;
       initPlayer();
-      initEnemySprites(4, 6, 180);
+      initEnemySprites(4, 8, 2000);
       initEnemySprites2(8, 4);
       break
     
     case 3:
-      gameRunning = true;
       initPlayer();
-      initEnemySprites(3, 6, 200);
-      initEnemySprites3(6, 6);
+      initEnemySprites(3, 8, 180);
+      initEnemySprites3(6, 4);
       break;
+    
+    case 4: initPlayer()
+      initEnemySprites(4, 10, 160);
+      initEnemySprites2(4, 6);
+      initEnemySprites3(4, 6,);
+      break;
+  }
+};
 
+function isLevelCompleted(){
+  if (enemySprites.length == 0 && enemySprites2.length == 0 && enemySprites3.length == 0){
+    return true;
   }
 };
 
