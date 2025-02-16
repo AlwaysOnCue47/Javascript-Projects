@@ -93,7 +93,7 @@ document.addEventListener("keydown", (event)=> {
       initSmallExplosion(200, 200);
       break;
     case 'p':
-      gameRunning = !gameRunning;
+      gameRunning = !gameRunning
   }
 });
 
@@ -331,8 +331,8 @@ class Sprite {
 
   enemy2Update() {
     this.x += this.velocity.x;
-    if (this.x > canvas.width + 14){
-      this.x = -14;
+    if (this.x <= -14){
+      this.x = canvas.width + 14;
     }
     this.draw();
   }
@@ -485,11 +485,11 @@ function initEnemySprites(howMany, hitPoints, shotTimer) {
 let enemySprites2 = [];
 function initEnemySprites2(howMany, hitPoints) {
   enemySprites2 = [];
-    x = -300;
+    x = canvas.width + 300;
     y = 20;
   for (let i = 0; i < howMany; i++) {
-    enemySprites2.push(new Sprite(x, y, 12, "orange", 2, 0));
-    x += 60;
+    enemySprites2.push(new Sprite(x, y, 12, "orange", -2, 0));
+    x += -60;
     y += 20;
     enemySprites2[i].draw();
     enemySprites2[i].hitPoints = hitPoints;
@@ -663,17 +663,18 @@ function getDistance(x1, y1, x2, y2) {
 // animation functions
 
 function animateEnemies(){
-  if (enemySprites.length > 0){
-    for (let j = 0; j < enemySprites.length; j++) {
-      enemySprites[j].enemyUpdate();
-      ctx.drawImage(alien1, enemySprites[j].x - 23, enemySprites[j].y -23, 45, 45);
-    }
-  }
-
+  
   if (enemySprites2.length > 0){
     for (let l = 0; l < enemySprites2.length; l++) {
       enemySprites2[l].enemy2Update();
       ctx.drawImage(alien2, enemySprites2[l].x - 25, enemySprites2[l].y -25, 50, 50);
+    }
+  }
+
+  if (enemySprites.length > 0){
+    for (let j = 0; j < enemySprites.length; j++) {
+      enemySprites[j].enemyUpdate();
+      ctx.drawImage(alien1, enemySprites[j].x - 23, enemySprites[j].y -23, 45, 45);
     }
   }
 
