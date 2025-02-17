@@ -44,53 +44,6 @@ document.getElementById('newGameBtn2').addEventListener('click', () => newGame(3
 document.addEventListener("keydown", (event)=> {
   switch (event.key){
 
-    case "ArrowUp":
-      let x = 0;
-      let y = -8;
-        if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
-          x = -8;
-          y = -6;
-        }
-        if (playerSprite.x >= 0 && playerSprite.x <= 100){
-          x = 8;
-          y = -6;
-        }
-      initAmmo(playerSprite.x, playerSprite.y, x, y, 2);
-      break;
-
-    case "ArrowLeft": 
-        switch (playerSprite.velocity.x) {
-          case -4: 
-          playerSprite.velocity.x = -5;
-          break;
-          case -5: 
-          playerSprite.velocity.x = -6;
-          break;
-          case -6: 
-          break;
-          default: playerSprite.velocity.x = -4;
-        }
-      break;
-
-    case "ArrowRight": 
-      switch (playerSprite.velocity.x) {
-        case 4: 
-        playerSprite.velocity.x = 5;
-        break;
-        case 5: 
-        playerSprite.velocity.x = 6;
-        break;
-        case 6:
-        break;
-        default: 
-        playerSprite.velocity.x = 4;
-      }
-    break;
-
-    case "ArrowDown":
-      playerSprite.velocity.x = 0; playerSprite.velocity.y = 0;
-      break;
-    
     case 'a':
       kaboom2(200, 200);;  
       break;
