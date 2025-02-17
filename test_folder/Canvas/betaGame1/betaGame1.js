@@ -9,8 +9,13 @@ canvas.style.width = 680;
 canvas.style.height = 420;
 canvas.style.backgroundColor = "rgb(3, 0, 30)";
 const ctx = canvas.getContext('2d');
+const rect = canvas.getBoundingClientRect();
 
 // event listeners
+
+canvas.addEventListener("dragstart", (event) => {
+  event.preventDefault();
+});
 
 document.getElementById('canvas').addEventListener('click', () => {
   let x = 0;
@@ -25,6 +30,12 @@ document.getElementById('canvas').addEventListener('click', () => {
     }
   initAmmo(playerSprite.x, playerSprite.y, x, y, 2);
 });
+
+let mouse = {x: 200, y: 200};
+  canvas.addEventListener('mousemove', (event)=> {
+  mouse.x = event.clientX - rect.left;
+  mouse.y = event.clientY; 
+})
 
 document.getElementById('newGameBtn').addEventListener('click', () => newGame(1));
 
@@ -135,31 +146,22 @@ class Sprite {
   };
 
   playerUpdate() {
-    if (this.x >= canvas.width){
-      this.x = 0;
-    }
-    if (this.x < 0 ){
-      this.x = canvas.width - 1;
-    }
 
     if (this.x >= 0 && this.x <= 100) {
-      this.velocity.y = this.velocity.x;
-    }
-    
-    if (this.x <= canvas.width && this.x >= canvas.width - 100){
-      this.velocity.y = -this.velocity.x;
+      this.y = this.x + 270;
     }
 
-    if (this.x >= 101 && this.x <= canvas.width - 101){
-      this.velocity.y = 0;
-      this.y = canvas.height - 45;
+    if (this.x >= 580 && this.x <= canvas.width) {
+      this.y = -(this.x - 580) + 370;
     }
-    if (this.y <= 270){
-      this.y = 271;
-    }
-   
-    this.x += this.velocity.x;
-    this.y += this.velocity.y;
+
+    if (this.x <= 1){this.x == 1};
+    if (this.x >= canvas.width){this.x = canvas.width -1};
+    if (this.x >= 101 && this.x <= 579) {this.y == canvas.height - 50;}
+    
+    this.startingX += (mouse.x - this.startingX) *0.10;
+    this.x = this.startingX;
+
     this.draw();
   }
 
@@ -406,7 +408,7 @@ function shieldHit() {
 
 let playerSprite;
 function initPlayer(){
-  playerSprite = new Sprite(canvas.width/2, canvas.height-45, 15, "rgba(0, 0, 0, 0)");
+  playerSprite = new Sprite(canvas.width/2, canvas.height-50, 15, "rgba(0, 0, 0, 0)");
   playerSprite.draw();
   initPlayerShields();
 };
@@ -788,8 +790,6 @@ function animate(){
     }
   }
 
-
-    
   switch (gameLevel){
     case 1:
       animateEnemies();
@@ -822,7 +822,6 @@ function animate(){
 
     animateEnemyAmmo();
     animateExplosions();
-
   }
 };
 
@@ -832,8 +831,8 @@ let gameLevel = 1;
 levelTimer = 0;
 function nextLevel(L){
   ctx.beginPath();
-  ctx.fillStyle = 'green'
-  ctx.fillRect(200, 200, 200, 200)
+  ctx.fillStyle = 'rgba(42, 177, 30, 0.5)';
+  ctx.fillRect(200, 100, 300, 200)
   ctx.closePath();
   levelTimer += 1;
   if (levelTimer >= 300){
