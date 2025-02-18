@@ -31,7 +31,9 @@ document.getElementById('canvas').addEventListener('click', () => {
   initAmmo(playerSprite.x, playerSprite.y, x, y, 2);
 });
 
-document.getElementById('newGameBtn').addEventListener('click', () => newGame(1));
+document.getElementById('newGameBtn').addEventListener('click', () =>{
+  newGame(1);
+} );
 
 document.addEventListener("keydown", (event)=> {
   switch (event.key){
@@ -88,7 +90,8 @@ class Sprite {
     this.counter = counter;
     this.shields = {strength: 0, hit: false, upCount: 0};
     this.hitPoints = 10;
-    this.radians = 0 
+    this.radians = 0
+    this.id = "object type";
   };
 
   draw(){
@@ -250,12 +253,18 @@ class Sprite {
     if (this.velocity.x == 0 && this.velocity.y == 0 ){
       this.location.x = Math.floor(Math.random()* (canvas.width-160) +30);
       this.location.y = Math.floor(Math.random()* (canvas.height-160) +30);
-      console.log("change direction");
     };
     this.counter += 1;
     if (this.counter >= 350){
-      initEnemyAmmo(this.x, this.y);
-      this.counter = Math.floor(Math.random()*50);
+      switch (this.id){
+        case "redAlien":
+          initEnemyAmmo(this.x, this.y, 3);
+          this.counter = Math.floor(Math.random()*50);
+          break;
+        case "greenAlien":
+          initEnemyAmmo(this.x, this.y, 2);
+          this.counter = Math.floor(Math.random()*50);
+      };
       console.log("Enemy fire!")
     };
   }
@@ -360,9 +369,11 @@ function shieldHit() {
   console.log(playerShields.shields.strength);
 };
 
+let shipHitPoints;
 let playerSprite;
 function initPlayer(){
   playerSprite = new Sprite(canvas.width/2, canvas.height-50, 15, "rgba(0, 0, 0, 0)");
+  shipHitPoints = 8;
   playerSprite.draw();
   initPlayerShields();
 };
@@ -416,8 +427,8 @@ function initAmmo(x, y, vx, vy, type = 1){
 };
 
 let enemyAmmo = [];
-function initEnemyAmmo(x, y){
-  enemyAmmo.push(new Sprite(x, y, 8, "darkorange", 0, 1,[], 1));
+function initEnemyAmmo(x, y, vy){
+  enemyAmmo.push(new Sprite(x, y, 8, "darkorange", 0, vy,[], 1));
 };
 
 let enemySprites = [];
@@ -433,6 +444,7 @@ function initEnemySprites(howMany, hitPoints, shotTimer) {
     enemySprites.push(new Sprite(x1, y1, 16, "rgba(0,0,0,0)", 0, 0, location, timer));
     enemySprites[i].draw();
     enemySprites[i].hitPoints = hitPoints;
+    enemySprites[i].id ="greenAlien";
     ctx.drawImage(alien1, enemySprites[i].x - 22, enemySprites[i].y -22, 45, 45);
   }
   initEnemyShields();
@@ -478,6 +490,7 @@ function initEnemySprites4(howMany, hitPoints, shotTimer){
     enemySprites4.push(new Sprite(x1, y1, 16, "red", 0, 0, location, timer));
     enemySprites4[i].draw();
     enemySprites4[i].hitPoints = hitPoints;
+    enemySprites4[i].id = "redAlien";
     ctx.drawImage(alien4, enemySprites4[i].x - 22, enemySprites4[i].y -22, 45, 45);
   }
   initEnemyShields();
@@ -647,6 +660,7 @@ function animateEnemies(){
       ctx.drawImage(alien4, enemySprites4[k].x - 23, enemySprites4[k].y -23, 45, 45);
     }
   }
+  animateEnemyAmmo();
 };
 
 function animateExplosions(){
@@ -678,7 +692,7 @@ function animateExplosions(){
   }
 };
 
-let shipHitPoints = 5;
+
 let shipExplosionTimer = 0; 
 function animateEnemyAmmo() {
   for (let k = 0; k < enemyAmmo.length; k++) {
@@ -704,28 +718,13 @@ function animateEnemyAmmo() {
       shipHitPoints += -1;
       if (shipHitPoints <= 0 ){
         playerDead();
-        
       }
-      
     };
 
     if (spliceThis){
       enemyAmmo.splice(k, 1);
     }
   }
-};
-
-function playerDead(){
-  initExplosion(playerSprite.x, playerSprite.y);
-  x = 10;
-  y = canvas.height - 25;
-  for (let i = 0; i < 10; i++) {
-    initSmallExplosion(x, y);
-    explosionSprite[i].explosionUpdate();
-    x += 80;
-  }
-  playerSprite.hitPoints = 0;
-
 };
 
 function animate(){
@@ -797,9 +796,11 @@ function animate(){
           nextLevel(1);
         }
       break;
+
+      case 0:
+        nextLevel(0);
       }
 
-      animateEnemyAmmo();
       animateExplosions();
     }
 };
@@ -812,7 +813,6 @@ function nextLevel(L){
   ctx.beginPath();
   ctx.fillStyle = 'rgba(42, 177, 30, 0.5)';
   ctx.fillRect(200, 100, 300, 200);
- //ctx.fillText("Level Complete! Next wave approaching!", )
   ctx.closePath();
   levelTimer += 1;
   if (levelTimer >= 300){
@@ -828,6 +828,8 @@ function newGame(level = 1){
   gameRunning = true;
   switch (level){
     case 1:
+      clearAllEnemyArrays();
+      gameLevel = 1;
       initPlayer();
       initEnemySprites(2, 8, 200);
       initEnemySprites2(6, 4);
@@ -847,12 +849,17 @@ function newGame(level = 1){
       initEnemySprites3(4, 4);
       break;
     
-    case 4: initPlayer()
+    case 4: 
+      initPlayer()
       initEnemySprites(3, 10, 160);
       initEnemySprites2(4, 6);
       initEnemySprites3(4, 6,);
       initEnemySprites4(3, 10, 160)
       break;
+    
+    case 0:
+      clearAllEnemyArrays();
+    break;
   }
 };
 
@@ -860,6 +867,29 @@ function isLevelCompleted(){
   if (enemySprites.length == 0 && enemySprites2.length == 0 && enemySprites3.length == 0 && enemySprites4.length == 0){
     return true;
   }
+};
+
+function playerDead(){
+  console.log('player dead 1');
+  initExplosion(playerSprite.x, playerSprite.y);
+  x = 10;
+  y = canvas.height - 25;
+  for (let i = 0; i < 10; i++) {
+    initSmallExplosion(x, y);
+    explosionSprite[i].explosionUpdate();
+    x += 80;
+  }
+  playerSprite.hitPoints = 0;
+  gameLevel = 0;
+};
+
+function clearAllEnemyArrays(){
+  enemySprites = [];
+  enemySprites2 = [];
+  enemySprites3 = [];
+  enemySprites4 = [];
+  enemyAmmo = [];
+
 };
 
 // run when parsed
