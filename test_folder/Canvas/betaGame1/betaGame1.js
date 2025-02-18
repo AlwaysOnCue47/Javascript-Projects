@@ -31,15 +31,7 @@ document.getElementById('canvas').addEventListener('click', () => {
   initAmmo(playerSprite.x, playerSprite.y, x, y, 2);
 });
 
-let mouse = {x: 200, y: 200};
-  canvas.addEventListener('mousemove', (event)=> {
-  mouse.x = event.clientX - rect.left;
-  mouse.y = event.clientY; 
-})
-
 document.getElementById('newGameBtn').addEventListener('click', () => newGame(1));
-
-document.getElementById('newGameBtn2').addEventListener('click', () => newGame(3));
 
 document.addEventListener("keydown", (event)=> {
   switch (event.key){
@@ -72,6 +64,15 @@ let playerShipRight = document.getElementById('playerShipRightTurn');
 let playerShipLeft = document.getElementById('playerShipLeftTurn');
 let background = document.getElementById('backgroundShip');
 
+// other variables
+
+let mouse = {x: 200, y: 200};
+
+canvas.addEventListener('mousemove', (event)=> { // mouse position on the canvas 
+mouse.x = event.clientX - rect.left;
+mouse.y = event.clientY; - rect.top;
+})
+
 // class constructors
 
 class Sprite {
@@ -86,7 +87,7 @@ class Sprite {
     this.location = location;
     this.counter = counter;
     this.shields = {strength: 0, hit: false, upCount: 0};
-    this.hitPoints = 3;
+    this.hitPoints = 10;
     this.radians = 0 
   };
 
@@ -677,6 +678,8 @@ function animateExplosions(){
   }
 };
 
+let shipHitPoints = 5;
+let shipExplosionTimer = 0; 
 function animateEnemyAmmo() {
   for (let k = 0; k < enemyAmmo.length; k++) {
     spliceThis = false;
@@ -690,18 +693,39 @@ function animateEnemyAmmo() {
     if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
       kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
       spliceThis = true;
+      playerSprite.hitPoints += -1;
+      if (playerSprite.hitPoints == 0){ playerDead();};
     }
 
     if (enemyAmmo[k].y >= canvas.height){
       console.log("boom!")
       kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
       spliceThis = true;
+      shipHitPoints += -1;
+      if (shipHitPoints <= 0 ){
+        playerDead();
+        
+      }
+      
     };
 
     if (spliceThis){
       enemyAmmo.splice(k, 1);
     }
   }
+};
+
+function playerDead(){
+  initExplosion(playerSprite.x, playerSprite.y);
+  x = 10;
+  y = canvas.height - 25;
+  for (let i = 0; i < 10; i++) {
+    initSmallExplosion(x, y);
+    explosionSprite[i].explosionUpdate();
+    x += 80;
+  }
+  playerSprite.hitPoints = 0;
+
 };
 
 function animate(){
@@ -715,67 +739,69 @@ function animate(){
   ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
 
   if (gameRunning){
-    animatePlayer();
-    for (let i = 0; i < playerAmmo.length; i++) {
+  
+    if (playerSprite.hitPoints >= 1){
+      animatePlayer();
+      for (let i = 0; i < playerAmmo.length; i++) {
       playerAmmo[i].ammoUpdate();
+    }}  
+
+    if (enemySprites2.length <= 0 ) {
+      enemyShieldsStatus = false;
     }
 
-  if (enemySprites2.length <= 0 ) {
-    enemyShieldsStatus = false;
-  }
-
-  if (enemySprites3.length <= 0) {
-    enemyShieldsStatus2 = false;
-  }
-
-  if (enemyShieldsStatus){
-    for (let es = 0; es < enemySprites.length; es++) {
-      enemyShields[es].x = enemySprites[es].x;
-      enemyShields[es].y = enemySprites[es].y;
-      enemyShields[es].enemyShieldsUpdate();
-    }
-  }
-  if (enemyShieldsStatus2){
-    for (let es2 = 0; es2 < enemySprites4.length; es2++) {
-      enemyShields2[es2].x = enemySprites4[es2].x;
-      enemyShields2[es2].y = enemySprites4[es2].y;
-      enemyShields2[es2].enemyShieldsUpdate();
-    }
-  }
-
-  switch (gameLevel){
-    case 1:
-      animateEnemies();
-      if (isLevelCompleted()){
-        nextLevel(2);
-      }
-    break;
-
-    case 2: 
-      animateEnemies();
-      if (isLevelCompleted()){
-        nextLevel(3);
-      }
-    break;
-
-    case 3:
-      animateEnemies();
-      if (isLevelCompleted()){
-        nextLevel(4);
-      }
-    break;
-    
-    case 4:
-      animateEnemies();
-      if (isLevelCompleted()){
-        nextLevel(1);
-      }
-    break;
+    if (enemySprites3.length <= 0) {
+      enemyShieldsStatus2 = false;
     }
 
-    animateEnemyAmmo();
-    animateExplosions();
-  }
+    if (enemyShieldsStatus){
+      for (let es = 0; es < enemySprites.length; es++) {
+        enemyShields[es].x = enemySprites[es].x;
+        enemyShields[es].y = enemySprites[es].y;
+        enemyShields[es].enemyShieldsUpdate();
+      }
+    }
+    if (enemyShieldsStatus2){
+      for (let es2 = 0; es2 < enemySprites4.length; es2++) {
+        enemyShields2[es2].x = enemySprites4[es2].x;
+        enemyShields2[es2].y = enemySprites4[es2].y;
+        enemyShields2[es2].enemyShieldsUpdate();
+      }
+    }
+
+    switch (gameLevel){
+      case 1:
+        animateEnemies();
+        if (isLevelCompleted()){
+          nextLevel(2);
+        }
+      break;
+
+      case 2: 
+        animateEnemies();
+        if (isLevelCompleted()){
+          nextLevel(3);
+        }
+      break;
+
+      case 3:
+        animateEnemies();
+        if (isLevelCompleted()){
+          nextLevel(4);
+        }
+      break;
+      
+      case 4:
+        animateEnemies();
+        if (isLevelCompleted()){
+          nextLevel(1);
+        }
+      break;
+      }
+
+      animateEnemyAmmo();
+      animateExplosions();
+    }
 };
 
 // initiate new game and next level functions
@@ -785,7 +811,8 @@ levelTimer = 0;
 function nextLevel(L){
   ctx.beginPath();
   ctx.fillStyle = 'rgba(42, 177, 30, 0.5)';
-  ctx.fillRect(200, 100, 300, 200)
+  ctx.fillRect(200, 100, 300, 200);
+ //ctx.fillText("Level Complete! Next wave approaching!", )
   ctx.closePath();
   levelTimer += 1;
   if (levelTimer >= 300){
