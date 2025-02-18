@@ -9,11 +9,11 @@ canvas.style.width = 680;
 canvas.style.height = 420;
 canvas.style.backgroundColor = "rgb(3, 0, 30)";
 const ctx = canvas.getContext('2d');
-const rect = canvas.getBoundingClientRect();
+const rect = canvas.getBoundingClientRect(); // get the canvas position relative to it's position on the page. 
 
 // event listeners
 
-canvas.addEventListener("dragstart", (event) => {
+canvas.addEventListener("dragstart", (event) => { // prevents click and drag function on canvas element
   event.preventDefault();
 });
 
@@ -66,7 +66,7 @@ let playerShipRight = document.getElementById('playerShipRightTurn');
 let playerShipLeft = document.getElementById('playerShipLeftTurn');
 let background = document.getElementById('backgroundShip');
 
-// other variables
+// other variables and listeners
 
 let mouse = {x: 200, y: 200};
 
@@ -478,7 +478,6 @@ function initEnemySprites3(howMany, hitPoints){
 
 let enemySprites4 = []
 function initEnemySprites4(howMany, hitPoints, shotTimer){
-
   enemySprites4 = [];
   for (let i = 0; i < howMany; i++) {
     x1 = Math.floor(Math.random()*canvas.width);
@@ -692,7 +691,6 @@ function animateExplosions(){
   }
 };
 
-
 let shipExplosionTimer = 0; 
 function animateEnemyAmmo() {
   for (let k = 0; k < enemyAmmo.length; k++) {
@@ -799,13 +797,17 @@ function animate(){
 
       case 0:
         nextLevel(0);
+        if (levelTimer == 299){
+          gameRunning = false;
+          levelTimer = 0;
+        }
       }
 
       animateExplosions();
     }
 };
 
-// initiate new game and next level functions
+// new game, end game and next level functions
 
 let gameLevel = 1;
 levelTimer = 0;
@@ -817,7 +819,6 @@ function nextLevel(L){
   levelTimer += 1;
   if (levelTimer >= 300){
     newGame(L);
-    gameLevel = L;
     levelTimer = 0
     console.log(gameLevel);
   }
@@ -826,10 +827,10 @@ function nextLevel(L){
 let gameRunning = false;
 function newGame(level = 1){
   gameRunning = true;
+  gameLevel = level;
   switch (level){
     case 1:
       clearAllEnemyArrays();
-      gameLevel = 1;
       initPlayer();
       initEnemySprites(2, 8, 200);
       initEnemySprites2(6, 4);
@@ -881,6 +882,8 @@ function playerDead(){
   }
   playerSprite.hitPoints = 0;
   gameLevel = 0;
+  enemyShieldsStatus = false;
+  enemyShieldsStatus2 = false;
 };
 
 function clearAllEnemyArrays(){
@@ -888,6 +891,8 @@ function clearAllEnemyArrays(){
   enemySprites2 = [];
   enemySprites3 = [];
   enemySprites4 = [];
+  enemyShieldsStatus = false;
+  enemyShieldsStatus2 = false;
   enemyAmmo = [];
 
 };
