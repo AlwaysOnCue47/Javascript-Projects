@@ -68,6 +68,18 @@ let background = document.getElementById('backgroundShip');
 
 // other variables and listeners
 
+let shieldBox = document.getElementById('shields');
+let lifeBox = document.getElementById('life');
+let shipLifeBox = document.getElementById('transportShip');
+
+function updateScoreBox() {
+  if (playerSprite){
+    shieldBox.innerHTML = ("Shield strength: " + playerShields.shields.strength);
+    lifeBox.innerHTML = ("Player Health: " + playerSprite.hitPoints);
+    shipLifeBox.innerHTML = ("Ship Health: " + shipHitPoints) ;
+  } 
+};
+
 let mouse = {x: 200, y: 200};
 
 canvas.addEventListener('mousemove', (event)=> { // mouse position on the canvas 
@@ -89,7 +101,7 @@ class Sprite {
     this.location = location;
     this.counter = counter;
     this.shields = {strength: 0, hit: false, upCount: 0};
-    this.hitPoints = 10;
+    this.hitPoints = 6;
     this.radians = 0
     this.id = "object type";
   };
@@ -231,6 +243,7 @@ class Sprite {
   }
 
   enemyUpdate() {
+    
     if (this.location.x > this.x){
       this.velocity.x = 1;
     } else {this.velocity.x = -1};
@@ -239,10 +252,11 @@ class Sprite {
       this.velocity.y = 1;
     } else {this.velocity.y = -1};
 
-    if (this.x == this.location.x) {
+    if (this.x - this.location.x >= -5 && this.x - this.location.x <= 5) {
       this.velocity.x = 0;
     };
-    if (this.y == this.location.y) {
+
+    if (this.y - this.location.y >= -5 && this.y - this.location.y <= 5) {
       this.velocity.y = 0;
     };
 
@@ -254,6 +268,7 @@ class Sprite {
       this.location.x = Math.floor(Math.random()* (canvas.width-160) +30);
       this.location.y = Math.floor(Math.random()* (canvas.height-160) +30);
     };
+
     this.counter += 1;
     if (this.counter >= 350){
       switch (this.id){
@@ -373,7 +388,7 @@ let shipHitPoints;
 let playerSprite;
 function initPlayer(){
   playerSprite = new Sprite(canvas.width/2, canvas.height-50, 15, "rgba(0, 0, 0, 0)");
-  shipHitPoints = 8;
+  shipHitPoints = 18;
   playerSprite.draw();
   initPlayerShields();
 };
@@ -381,7 +396,7 @@ function initPlayer(){
 let playerShields;
 function initPlayerShields(){
   playerShields = new Sprite(canvas.width/2, canvas.height-45, 28, "rgba(0, 0, 0, 0)", 0, 0, [], 10);
-  playerShields.shields.strength = 10;
+  playerShields.shields.strength = 8;
   console.log(playerShields);
 };
 
@@ -441,7 +456,7 @@ function initEnemySprites(howMany, hitPoints, shotTimer) {
     y2 = Math.floor(Math.random()*((canvas.height - 60)))
     let location = {x: x2, y: y2};
     let timer = Math.floor(Math.random()*shotTimer);
-    enemySprites.push(new Sprite(x1, y1, 16, "rgba(0,0,0,0)", 0, 0, location, timer));
+    enemySprites.push(new Sprite(x1, y1, 16, "rgba(0,0,0,0)", 1, 1, location, timer));
     enemySprites[i].draw();
     enemySprites[i].hitPoints = hitPoints;
     enemySprites[i].id ="greenAlien";
@@ -743,19 +758,14 @@ function animate(){
       playerAmmo[i].ammoUpdate();
     }}  
 
-    if (enemySprites2.length <= 0 ) {
-      enemyShieldsStatus = false;
-    }
-
-    if (enemySprites3.length <= 0) {
-      enemyShieldsStatus2 = false;
-    }
-
     if (enemyShieldsStatus){
       for (let es = 0; es < enemySprites.length; es++) {
         enemyShields[es].x = enemySprites[es].x;
         enemyShields[es].y = enemySprites[es].y;
         enemyShields[es].enemyShieldsUpdate();
+      }
+      if (enemySprites2.length <= 0 ) {
+        enemyShieldsStatus = false;
       }
     }
     if (enemyShieldsStatus2){
@@ -763,6 +773,9 @@ function animate(){
         enemyShields2[es2].x = enemySprites4[es2].x;
         enemyShields2[es2].y = enemySprites4[es2].y;
         enemyShields2[es2].enemyShieldsUpdate();
+      }
+      if (enemySprites3.length <= 0) {
+        enemyShieldsStatus2 = false;
       }
     }
 
@@ -805,6 +818,7 @@ function animate(){
 
       animateExplosions();
     }
+    updateScoreBox();
 };
 
 // new game, end game and next level functions
