@@ -70,7 +70,7 @@ function updateScoreBox() {
 let mouse = {x: 200, y: 200};
 canvas.addEventListener('mousemove', (event)=> { // mouse position on the canvas 
 mouse.x = event.clientX - rect.left;
-mouse.y = event.clientY; - rect.top;
+mouse.y = event.clientY - rect.top;
 })
 
 // class constructors
@@ -625,20 +625,6 @@ function initSmallExplosion(x, y){
   }
 };
 
-function animatePlayer() {
-  playerSprite.playerUpdate();
-    if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
-      ctx.drawImage(playerShipLeft, playerSprite.x-24, playerSprite.y-24, 50, 50)
-    }
-    if (playerSprite.x >= 0 && playerSprite.x <= 100){
-      ctx.drawImage(playerShipRight, playerSprite.x-24, playerSprite.y-24, 50, 50)
-    }
-    if (playerSprite.x > 100 && playerSprite.x < canvas.width -100){
-      ctx.drawImage(playerShip, playerSprite.x-24, playerSprite.y-24, 50, 50);
-    }
-    playerShields.playerShieldsUpdate();
-};
-
 let starField = [];
 function initStarField() {
   let x;
@@ -665,6 +651,20 @@ function getDistance(x1, y1, x2, y2) {
 };
 
 // animation functions
+
+function animatePlayer() {
+  playerSprite.playerUpdate();
+    if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
+      ctx.drawImage(playerShipLeft, playerSprite.x-24, playerSprite.y-24, 50, 50)
+    }
+    if (playerSprite.x >= 0 && playerSprite.x <= 100){
+      ctx.drawImage(playerShipRight, playerSprite.x-24, playerSprite.y-24, 50, 50)
+    }
+    if (playerSprite.x > 100 && playerSprite.x < canvas.width -100){
+      ctx.drawImage(playerShip, playerSprite.x-24, playerSprite.y-24, 50, 50);
+    }
+    playerShields.playerShieldsUpdate();
+};
 
 function animateEnemies(){
   
