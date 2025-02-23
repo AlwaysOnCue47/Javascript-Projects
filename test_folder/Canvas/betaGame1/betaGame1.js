@@ -55,6 +55,7 @@ document.addEventListener("keydown", (event)=> {
 
     case 'q':
       initWeaponPowerUp();
+      initShieldPowerUp();
   }
 });
 
@@ -252,6 +253,15 @@ class Sprite {
         if (ammoType < 4) {
           ammoType += 1;
         }
+        spliceThis = true;
+      }
+    }
+
+    for (let spu = 0; spu < shieldPowerUp.length; spu++) {
+      if (getDistance(this.x, this.y, shieldPowerUp[spu].x, shieldPowerUp[spu].y)-shieldPowerUp[spu].radius*2 <0){
+        initSmallExplosion(this.x, this.y);
+        shieldPowerUp.splice(spu, 1);
+        playerShields.shields.strength += 10;
         spliceThis = true;
       }
       
@@ -479,8 +489,13 @@ let spawnWeaponPowerUp = false;
 let weaponPowerUp = []
 function initWeaponPowerUp() {
   weaponPowerUp.push(new Sprite(-15, canvas.height/2, 15, "green", 2, .05));
-  
-}
+};
+
+let spawnShieldPowerUp = false;
+let shieldPowerUp = [];
+function initShieldPowerUp() {
+  shieldPowerUp.push(new Sprite(-15, canvas.height/4, 15, "purple", 2, .05));
+};
 
 let ammoType = 1;
 let playerAmmo = [];
@@ -600,7 +615,7 @@ function initEnemySprites4(howMany, hitPoints, shotTimer){
     ctx.drawImage(alien4, enemySprites4[i].x - 22, enemySprites4[i].y -22, 45, 45);
   }
   initEnemyShields();
-}
+};
 
 let boomSprite = [];
 function kaboom1(x, y) {
@@ -838,9 +853,15 @@ function animateWeaponUpgrade(){
   }
 };
 
+function animateShieldUgrade() {
+  for (let spu = 0; spu < shieldPowerUp.length; spu++) {
+    shieldPowerUp[spu].weaponPowerUpUpdate();
+  }
+};
+
 // Main animation function
 
-function animate(){   // <-- MAIN animation function
+function animate(){   //                        <-- MAIN animation function
   animRe = requestAnimationFrame(animate);
   ctx.fillStyle = "rgba(3,0,30,0.8)";
   ctx.fillRect(0, 0,canvas.width, canvas.height)
@@ -887,6 +908,10 @@ function animate(){   // <-- MAIN animation function
     switch (gameLevel){
       case 1:
         animateEnemies();
+        if (enemySprites2.length <= 3 && !spawnWeaponPowerUp) {
+          initWeaponPowerUp();
+          spawnWeaponPowerUp = true;
+        }
         if (isLevelCompleted()){
           nextLevel(2);
         }
@@ -894,6 +919,10 @@ function animate(){   // <-- MAIN animation function
 
       case 2: 
         animateEnemies();
+        if (enemySprites3.length <= 3 && !spawnWeaponPowerUp) {
+          initWeaponPowerUp();
+          spawnWeaponPowerUp = true;
+        }
         if (isLevelCompleted()){
           nextLevel(3);
         }
@@ -901,6 +930,14 @@ function animate(){   // <-- MAIN animation function
 
       case 3:
         animateEnemies();
+        if (enemySprites2.length == 0 && !spawnWeaponPowerUp) {
+          initWeaponPowerUp();
+          spawnWeaponPowerUp = true;
+        }
+        if (enemySprites3.length <= 2 && !spawnShieldPowerUp) {
+          initShieldPowerUp();
+          spawnShieldPowerUp = true;
+        }
         if (isLevelCompleted()){
           nextLevel(4);
         }
@@ -908,6 +945,10 @@ function animate(){   // <-- MAIN animation function
       
       case 4:
         animateEnemies();
+        if (enemySprites3.length <= 3 && !spawnShieldPowerUp) {
+          initShieldPowerUp();
+          spawnShieldPowerUp = true;
+        }
         if (isLevelCompleted()){
           nextLevel(5);
         }
@@ -915,6 +956,10 @@ function animate(){   // <-- MAIN animation function
 
       case 5:
         animateEnemies();
+        if (enemySprites2.length <= 4 && !spawnWeaponPowerUp) {
+          initWeaponPowerUp();
+          spawnWeaponPowerUp = true;
+        }
         if (isLevelCompleted()){
           nextLevel(1);
         }
@@ -928,6 +973,7 @@ function animate(){   // <-- MAIN animation function
       }
       animateExplosions();
       animateWeaponUpgrade();
+      animateShieldUgrade();
     }
     updateScoreBox();
 };
@@ -937,12 +983,16 @@ function animate(){   // <-- MAIN animation function
 let gameLevel = 1;
 levelTimer = 0;
 function nextLevel(L){
+  enemyAmmo = [];
+  
   ctx.beginPath();
   ctx.fillStyle = 'rgba(42, 177, 30, 0.5)';
   ctx.fillRect(200, 100, 300, 200);
   ctx.closePath();
   levelTimer += 1;
   if (levelTimer >= 300){
+    spawnWeaponPowerUp = false;
+    spawnShieldPowerUp = false;
     newGame(L);
     levelTimer = 0
     console.log(gameLevel);
@@ -989,7 +1039,6 @@ function newGame(level = 1){
       initPlayer();
       initEnemySprites(6, 10, 250);
       initEnemySprites2(12, 6);
-
       break;
     
     case 0:
