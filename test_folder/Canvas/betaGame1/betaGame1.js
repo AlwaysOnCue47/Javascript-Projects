@@ -28,18 +28,23 @@ document.getElementById('canvas').addEventListener('click', () => {
       x = 8;
       y = -6;
     }
-  initAmmo(playerSprite.x, playerSprite.y, x, y, 2);
+  initAmmo(playerSprite.x, playerSprite.y, x, y, ammoType);
 });
 
 document.getElementById('newGameBtn').addEventListener('click', () =>{
   newGame(1);
-} );
+});
 
 document.addEventListener("keydown", (event)=> {
   switch (event.key){
     case 'p':
       gameRunning = !gameRunning;
       break;
+
+    case 'a':
+      if (ammoType < 4){
+        ammoType += 1;
+      }   
   }
 });
 
@@ -71,7 +76,7 @@ let mouse = {x: 200, y: 200};
 canvas.addEventListener('mousemove', (event)=> { // mouse position on the canvas 
 mouse.x = event.clientX - rect.left;
 mouse.y = event.clientY - rect.top;
-})
+});
 
 // class constructors
 
@@ -86,10 +91,10 @@ class Sprite {
     this.velocity = {x: vx, y: vy};
     this.location = location;
     this.counter = counter;
+    this.shotTimer = 100; // a default value
     this.shields = {strength: 0, hit: false, upCount: 0};
-    this.hitPoints = 6;
+    this.hitPoints = 6; // a default value
     this.radians = 0
-    this.id = "object type";
   };
 
   draw(){
@@ -255,9 +260,9 @@ class Sprite {
     };
 
     this.counter += 1;
-    if (this.counter >= 350){
+    if (this.counter >= this.shotTimer){
       initEnemyAmmo(this.x, this.y, 3);
-      this.counter = Math.floor(Math.random()*50);
+      this.counter = Math.floor(Math.random()*60);
       console.log("Enemy fire!")
     };
 
@@ -291,9 +296,9 @@ class Sprite {
     };
 
     this.counter += 1;
-    if (this.counter >= 350){
+    if (this.counter >= this.shotTimer){
       initEnemyAmmo(this.x, this.y, 2);
-      this.counter = Math.floor(Math.random()*50);
+      this.counter = Math.floor(Math.random()*60);
       console.log("Enemy fire!")
     };
   }
@@ -434,6 +439,7 @@ function initEnemyShields(){
   }
 };
 
+let ammoType = 1;
 let playerAmmo = [];
 function initAmmo(x, y, vx, vy, type = 1){
   switch (type){
@@ -442,16 +448,43 @@ function initAmmo(x, y, vx, vy, type = 1){
       if (playerAmmo.length < 3){
         playerAmmo.push(new Sprite(x, y, 3, "rgb(8, 253, 0)", vx, vy));
       }
-      break;
+    break;
     case 2:
       y += -15;
       if (playerAmmo.length < 6 ){
-        x += -15
-        playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 255, 252)", vx, vy));
-        x += 30
+        x += -15;
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 222, 255)", vx, vy));
+        x += 30;
         playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 255, 252)", vx, vy));
       }
-      break;
+    break;
+    case 3:
+      y += -15;
+      if (playerAmmo.length < 9){
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(211, 35, 23)", vx, vy));
+        x += -15;
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 255, 252)", vx, vy));
+        x += 30;
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 255, 252)", vx, vy));
+      }
+    break;
+    case 4:
+      y += -15;
+      x1 = x;
+      if (playerAmmo.length < 12){
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(211, 35, 23)", vx, vy));
+        x += -15;
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 255, 252)", vx+1, vy));
+        x += 30;
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(200, 255, 252)", vx-1, vy));
+        y += 40;
+        // playerAmmo.push(new Sprite(x1, y, 3, "rgb(211, 35, 23)", vx, vy));
+        x1 += -15;
+        playerAmmo.push(new Sprite(x1, y, 3, "rgb(200, 255, 252)", vx-2, vy));
+        x1 += 30;
+        playerAmmo.push(new Sprite(x1, y, 3, "rgb(200, 255, 252)", vx+2, vy));
+      }
+    break;
   }
 };
 
@@ -459,6 +492,7 @@ let enemyAmmo = [];
 function initEnemyAmmo(x, y, vy){
   enemyAmmo.push(new Sprite(x, y, 8, "darkorange", 0, vy,[], 1));
 };
+
 let greenAlienXSpeed = 1;
 let greenAlienYSpeed = 1;
 let redAlienXSpeed = 2;
@@ -480,7 +514,7 @@ function initEnemySprites(howMany, hitPoints, shotTimer) {
     enemySprites.push(new Sprite(x1, y1, 16, "rgba(0,0,0,0)", 1, 1, location, timer));
     enemySprites[i].draw();
     enemySprites[i].hitPoints = hitPoints;
-    enemySprites[i].id ="greenAlien";
+    enemySprites[i].shotTimer = shotTimer;
     ctx.drawImage(alien1, enemySprites[i].x - 22, enemySprites[i].y -22, 45, 45);
   }
   initEnemyShields();
@@ -525,7 +559,7 @@ function initEnemySprites4(howMany, hitPoints, shotTimer){
     enemySprites4.push(new Sprite(x1, y1, 16, "red", 0, 0, location, timer));
     enemySprites4[i].draw();
     enemySprites4[i].hitPoints = hitPoints;
-    enemySprites4[i].id = "redAlien";
+    enemySprites4[i].shotTimer = shotTimer;
     ctx.drawImage(alien4, enemySprites4[i].x - 22, enemySprites4[i].y -22, 45, 45);
   }
   initEnemyShields();
@@ -832,10 +866,16 @@ function animate(){
       case 4:
         animateEnemies();
         if (isLevelCompleted()){
-          nextLevel(1);
+          nextLevel(5);
         }
       break;
 
+      case 5:
+        animateEnemies();
+        if (isLevelCompleted()){
+          nextLevel(1);
+        }
+      break;
       case 0:
         nextLevel(0);
         if (levelTimer == 299){
@@ -879,24 +919,31 @@ function newGame(level = 1){
     
     case 2:
       initPlayer();
-      initEnemySprites4(2, 10, 200);
+      initEnemySprites4(2, 10, 160);
       initEnemySprites3(6, 4);
       break
     
     case 3:
       initPlayer();
       initEnemySprites(2, 8, 180);
-      initEnemySprites4(2, 10, 200);
+      initEnemySprites4(2, 10, 160);
       initEnemySprites2(4, 4);
       initEnemySprites3(4, 4);
       break;
     
     case 4: 
       initPlayer()
-      initEnemySprites(3, 10, 160);
-      initEnemySprites2(4, 6);
-      initEnemySprites3(4, 6,);
-      initEnemySprites4(3, 10, 160)
+      initEnemySprites(2, 10, 180);
+      initEnemySprites2(6, 6);
+      initEnemySprites3(6, 6,);
+      initEnemySprites4(2, 10, 140);
+      break;
+    
+    case 5:
+      initPlayer();
+      initEnemySprites(6, 10, 180);
+      initEnemySprites2(12, 6);
+
       break;
     
     case 0:
