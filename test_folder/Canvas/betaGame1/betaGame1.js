@@ -335,7 +335,6 @@ class Sprite {
     if (this.counter >= this.shotTimer){
       initEnemyAmmo(this.x, this.y, 2);
       this.counter = Math.floor(Math.random()*60);
-      console.log("Enemy fire!")
     };
   }
 
@@ -567,7 +566,6 @@ function initEnemySprites(howMany, hitPoints, shotTimer) {
     enemySprites[i].draw();
     enemySprites[i].hitPoints = hitPoints;
     enemySprites[i].shotTimer = shotTimer;
-    ctx.drawImage(alien1, enemySprites[i].x - 22, enemySprites[i].y -22, 45, 45);
   }
   initEnemyShields();
 };
@@ -586,7 +584,7 @@ function initEnemySprites2(howMany, hitPoints) {
   }
 };
 
-let enemySprites3 = []
+let enemySprites3 = [];
 function initEnemySprites3(howMany, hitPoints){
   x = -30;
   y = 100;
@@ -598,7 +596,7 @@ function initEnemySprites3(howMany, hitPoints){
   }
 };
 
-let enemySprites4 = []
+let enemySprites4 = [];
 function initEnemySprites4(howMany, hitPoints, shotTimer){
   enemySprites4 = [];
   for (let i = 0; i < howMany; i++) {
@@ -617,6 +615,18 @@ function initEnemySprites4(howMany, hitPoints, shotTimer){
   initEnemyShields();
 };
 
+let finalBossSprite;
+let miniBosses = [];
+function initFinalBoss() {
+  finalBossSprite = new Sprite(canvas.width/2, canvas.height/2, 50, "lightgreen", 1, 0);
+  radians = Math.PI/2;
+  for (let i = 0; i < 4; i++) {
+    miniBosses.push(new Sprite(canvas.width/2, canvas.height/2, 16, "red", 2, .05));
+    miniBosses[i].radians = radians;
+    radians += Math.PI/2; 
+  }
+}
+
 let boomSprite = [];
 function kaboom1(x, y) {
   x += -5;
@@ -631,7 +641,7 @@ function kaboom1(x, y) {
   };
 };
 
-let smallBoomSprite = []
+let smallBoomSprite = [];
 function kaboom2(x, y) {
   smallBoomSprite.push(new Sprite(x, y, 5, "lightblue"));
   console.log("small boom");
@@ -930,10 +940,7 @@ function animate(){   //                        <-- MAIN animation function
 
       case 3:
         animateEnemies();
-        if (enemySprites2.length == 0 && !spawnWeaponPowerUp) {
-          initWeaponPowerUp();
-          spawnWeaponPowerUp = true;
-        }
+    
         if (enemySprites3.length <= 2 && !spawnShieldPowerUp) {
           initShieldPowerUp();
           spawnShieldPowerUp = true;
@@ -949,6 +956,10 @@ function animate(){   //                        <-- MAIN animation function
           initShieldPowerUp();
           spawnShieldPowerUp = true;
         }
+        if (enemySprites2.length <= 3 && !spawnWeaponPowerUp) {
+          initWeaponPowerUp();
+          spawnWeaponPowerUp = true;
+        }
         if (isLevelCompleted()){
           nextLevel(5);
         }
@@ -956,9 +967,13 @@ function animate(){   //                        <-- MAIN animation function
 
       case 5:
         animateEnemies();
-        if (enemySprites2.length <= 4 && !spawnWeaponPowerUp) {
+        if (enemySprites2.length <= 6 && !spawnWeaponPowerUp) {
           initWeaponPowerUp();
           spawnWeaponPowerUp = true;
+        }
+        if (enemySprites2.length <= 4 && !spawnShieldPowerUp){
+          initShieldPowerUp();
+          spawnShieldPowerUp = true;
         }
         if (isLevelCompleted()){
           nextLevel(1);
@@ -1007,10 +1022,12 @@ function newGame(level = 1){
     case 1:
       ammoType = 1;
       playerAmmo = [];
+      spawnWeaponPowerUp = false;
+      spawnShieldPowerUp = false;
       clearAllEnemyArrays();
       initPlayer();
       initEnemySprites(2, 8, 200);
-      initEnemySprites2(6, 4);
+      initEnemySprites2(6, 2);
       break;
     
     case 2:
