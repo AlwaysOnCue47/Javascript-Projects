@@ -264,7 +264,6 @@ class Sprite {
         playerShields.shields.strength += 10;
         spliceThis = true;
       }
-      
     }
     if (spliceThis){playerAmmo.splice(this, 1);};
   }
@@ -394,6 +393,21 @@ class Sprite {
     if (this.startingX > canvas.width + 100){
       this.startingX = -20;
     }
+  }
+
+  finalBossUpdate() {
+    this.x += this.velocity.x;
+    if (this.x >= 580){this.velocity.x = -this.velocity.x};
+    if (this.x <= 100){this.velocity.x = 1};
+    this.draw();
+  }
+
+  miniBossUpdate() {
+    this.radians += this.velocity.y;
+    this.y = this.startingY + Math.cos(this.radians)*100;
+    this.x = finalBossSprite.x + Math.sin(this.radians)*100;
+    this.draw();
+
   }
 
   weaponPowerUpUpdate() {
@@ -618,10 +632,10 @@ function initEnemySprites4(howMany, hitPoints, shotTimer){
 let finalBossSprite;
 let miniBosses = [];
 function initFinalBoss() {
-  finalBossSprite = new Sprite(canvas.width/2, canvas.height/2, 50, "lightgreen", 1, 0);
+  finalBossSprite = new Sprite(canvas.width/2, canvas.height/3, 50, "lightgreen", 1, 0);
   radians = Math.PI/2;
   for (let i = 0; i < 4; i++) {
-    miniBosses.push(new Sprite(canvas.width/2, canvas.height/2, 16, "red", 2, .05));
+    miniBosses.push(new Sprite(canvas.width/2, canvas.height/3, 16, "red", 2, .025));
     miniBosses[i].radians = radians;
     radians += Math.PI/2; 
   }
@@ -869,6 +883,14 @@ function animateShieldUgrade() {
   }
 };
 
+function animateFinalBoss(){
+  finalBossSprite.finalBossUpdate();
+  for (let i = 0; i < miniBosses.length; i++) {
+    miniBosses[i].miniBossUpdate();
+    
+  }
+}
+
 // Main animation function
 
 function animate(){   //                        <-- MAIN animation function
@@ -976,9 +998,14 @@ function animate(){   //                        <-- MAIN animation function
           spawnShieldPowerUp = true;
         }
         if (isLevelCompleted()){
-          nextLevel(1);
+          nextLevel(6);
         }
       break;
+
+      case 6: 
+        animateFinalBoss();
+      break;
+
       case 0:
         nextLevel(0);
         if (levelTimer == 299){
@@ -1056,6 +1083,11 @@ function newGame(level = 1){
       initPlayer();
       initEnemySprites(6, 10, 250);
       initEnemySprites2(12, 6);
+      break;
+
+    case 6:
+      initPlayer();
+      initFinalBoss();
       break;
     
     case 0:
