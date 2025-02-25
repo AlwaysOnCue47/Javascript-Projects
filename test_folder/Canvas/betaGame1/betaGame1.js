@@ -126,8 +126,6 @@ class Sprite {
       this.y = -(this.x - 580) + 370;
     }
 
-    if (this.x <= 1){this.x == 1};
-    if (this.x >= canvas.width){this.x = canvas.width -1};
     if (this.x >= 101 && this.x <= 579) {this.y == canvas.height - 50;}
     
     this.startingX += (mouse.x - this.startingX) *0.10;
@@ -159,7 +157,8 @@ class Sprite {
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     if (this.y <= 0){
-      playerAmmo.splice(this, 1);
+      //playerAmmo.splice(this, 1);
+      spliceThis = true;
       
     }
     this.draw();
@@ -190,6 +189,7 @@ class Sprite {
           kaboom2(this.x, this.y);
           enemySprites4[m].y += -10;
           enemySprites4[m].x += Math.floor((Math.random()*10));
+          
         }
         if (!enemyShieldsStatus2){
           kaboom1(this.x, this.y);
@@ -229,18 +229,6 @@ class Sprite {
         if (enemySprites3[l].hitPoints <= 0){
           initSmallExplosion(enemySprites3[l].x, enemySprites3[l].y);
           enemySprites3.splice(l, 1);
-        }
-        spliceThis = true;
-      }
-    }
-
-    for (let m = 0; m < enemySprites4.length; m++) {
-      if (getDistance(this.x, this.y, enemySprites4[m].x, enemySprites4[m].y)- enemySprites4[m].radius * 2 < 0){
-        kaboom1(this.x, this.y);
-        enemySprites4[m].hitPoints += -1;
-        if (enemySprites4[m].hitPoints <= 0){
-          initExplosion(enemySprites4[m].x, enemySprites4[m].y);
-          enemySprites4.splice(m, 1);
         }
         spliceThis = true;
       }
@@ -298,7 +286,6 @@ class Sprite {
     if (this.counter >= this.shotTimer){
       initEnemyAmmo(this.x, this.y, 3);
       this.counter = Math.floor(Math.random()*60);
-      console.log("Enemy fire!")
     };
 
   }
@@ -486,14 +473,14 @@ function initEnemyShields(){
   if (enemySprites.length > 0){
     enemyShieldsStatus = true;
   for (let i = 0; i < enemySprites.length; i++) {
-    enemyShields.push(new Sprite(enemySprites[i].x, enemySprites[i].y, 28, "rgba(109, 17, 133, 0.5)"));
+    enemyShields.push(new Sprite(enemySprites[i].x, enemySprites[i].y, 30, "rgba(109, 17, 133, 0.5)"));
     }
   }
   
   if (enemySprites4.length > 0) {
     enemyShieldsStatus2 = true;
     for (let j = 0; j < enemySprites4.length; j++) {
-      enemyShields2.push(new Sprite(enemySprites4[j].x, enemySprites4[j].y, 28, "rgba(20, 145, 15, 0.5)"));
+      enemyShields2.push(new Sprite(enemySprites4[j].x, enemySprites4[j].y, 30, "rgba(20, 145, 15, 0.5)"));
     }
   }
 };
@@ -542,12 +529,12 @@ function initAmmo(x, y, vx, vy, type = 1){
     case 4:
       y += -15;
       x1 = x;
-      if (playerAmmo.length < 12){
+      if (playerAmmo.length < 9){
         playerAmmo.push(new Sprite(x, y, 3, "rgb(91, 245, 124)", vx, vy-2));
         x += -15;
-        playerAmmo.push(new Sprite(x, y, 3, "rgb(91, 245, 124)", vx+1, vy-2));
-        x += 30;
         playerAmmo.push(new Sprite(x, y, 3, "rgb(91, 245, 124)", vx-1, vy-2));
+        x += 30;
+        playerAmmo.push(new Sprite(x, y, 3, "rgb(91, 245, 124)", vx+1, vy-2));
       }
     break;
   }
@@ -658,7 +645,6 @@ function kaboom1(x, y) {
 let smallBoomSprite = [];
 function kaboom2(x, y) {
   smallBoomSprite.push(new Sprite(x, y, 5, "lightblue"));
-  console.log("small boom");
 };
 
 let explosionSprite = [];
@@ -856,7 +842,6 @@ function animateEnemyAmmo() {
     }
 
     if (enemyAmmo[k].y >= canvas.height){
-      console.log("boom!")
       kaboom1(enemyAmmo[k].x, enemyAmmo[k].y);
       spliceThis = true;
       shipHitPoints += -1;
