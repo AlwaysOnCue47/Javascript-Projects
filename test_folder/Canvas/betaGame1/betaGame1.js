@@ -32,7 +32,7 @@ document.getElementById('canvas').addEventListener('click', () => {
 });
 
 document.getElementById('newGameBtn').addEventListener('click', () =>{
-  newGame(1);
+  newGame(6);
 });
 
 document.addEventListener("keydown", (event)=> {
@@ -157,14 +157,12 @@ class Sprite {
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     if (this.y <= 0){
-      //playerAmmo.splice(this, 1);
       spliceThis = true;
-      
     }
     this.draw();
 
     for (let i = 0; i < enemySprites.length; i++) {
-      if (getDistance(this.x, this.y, enemySprites[i].x, enemySprites[i].y) - enemySprites[i].radius * 2 < 0){
+      if (getDistance(this.x, this.y, enemySprites[i].x, enemySprites[i].y) - enemySprites[i].radius < 0){
         spliceThis = true;
         if (enemyShieldsStatus){
           kaboom2(this.x, this.y);
@@ -183,7 +181,7 @@ class Sprite {
     }
 
     for (let m = 0; m < enemySprites4.length; m++) {
-      if (getDistance(this.x, this.y, enemySprites4[m].x, enemySprites4[m].y) - enemySprites4[m].radius * 2 < 0){
+      if (getDistance(this.x, this.y, enemySprites4[m].x, enemySprites4[m].y) - enemySprites4[m].radius < 0){
         spliceThis = true;
         if (enemyShieldsStatus2){
           kaboom2(this.x, this.y);
@@ -203,7 +201,7 @@ class Sprite {
     }
 
     for (let j = 0; j < enemyAmmo.length; j++) {
-      if (getDistance(this.x, this.y, enemyAmmo[j].x, enemyAmmo[j].y) - enemyAmmo[j].radius * 2 < 0){
+      if (getDistance(this.x, this.y, enemyAmmo[j].x, enemyAmmo[j].y) - enemyAmmo[j].radius*1.5 < 0){
         kaboom1(this.x, this.y);
         enemyAmmo.splice(j, 1);
         spliceThis = true;
@@ -211,7 +209,7 @@ class Sprite {
     }
 
     for (let k = 0; k < enemySprites2.length; k++ ){
-      if (getDistance(this.x, this.y, enemySprites2[k].x, enemySprites2[k].y)- enemySprites2[k].radius * 2 < 0){
+      if (getDistance(this.x, this.y, enemySprites2[k].x, enemySprites2[k].y)- enemySprites2[k].radius*1.5 < 0){
         kaboom1(this.x, this.y);
         enemySprites2[k].hitPoints += -1;
         if (enemySprites2[k].hitPoints <= 0){
@@ -223,7 +221,7 @@ class Sprite {
     }
 
     for (let l = 0; l < enemySprites3.length; l++) {
-      if (getDistance(this.x, this.y, enemySprites3[l].x, enemySprites3[l].y)- enemySprites3[l].radius * 2 < 0){
+      if (getDistance(this.x, this.y, enemySprites3[l].x, enemySprites3[l].y)- enemySprites3[l].radius*1.5 < 0){
         kaboom1(this.x, this.y);
         enemySprites3[l].hitPoints += -1;
         if (enemySprites3[l].hitPoints <= 0){
@@ -235,7 +233,7 @@ class Sprite {
     }
 
     for (let wpu = 0; wpu < weaponPowerUp.length; wpu++) {
-      if (getDistance(this.x, this.y, weaponPowerUp[wpu].x, weaponPowerUp[wpu].y)-weaponPowerUp[wpu].radius*2 <0){
+      if (getDistance(this.x, this.y, weaponPowerUp[wpu].x, weaponPowerUp[wpu].y)-weaponPowerUp[wpu].radius <0){
         initSmallExplosion(this.x, this.y);
         weaponPowerUp.splice(wpu, 1);
         if (ammoType < 4) {
@@ -246,11 +244,18 @@ class Sprite {
     }
 
     for (let spu = 0; spu < shieldPowerUp.length; spu++) {
-      if (getDistance(this.x, this.y, shieldPowerUp[spu].x, shieldPowerUp[spu].y)-shieldPowerUp[spu].radius*2 <0){
+      if (getDistance(this.x, this.y, shieldPowerUp[spu].x, shieldPowerUp[spu].y)-shieldPowerUp[spu].radius <0){
         initSmallExplosion(this.x, this.y);
         shieldPowerUp.splice(spu, 1);
         playerShields.shields.strength += 10;
         spliceThis = true;
+      }
+    }
+
+    if (finalBossSprite) {
+      if (getDistance(this.x, this.y, finalBossSprite.x, finalBossSprite.y)-50 <0){
+        spliceThis = true;
+        kaboom2(this.x, this.y);
       }
     }
     if (spliceThis){playerAmmo.splice(this, 1);};
@@ -387,6 +392,13 @@ class Sprite {
     if (this.x >= 580){this.velocity.x = -this.velocity.x};
     if (this.x <= 100){this.velocity.x = 1};
     this.draw();
+    this.counter += 1;
+    if (this.counter >= 180){
+      initEnemyAmmo(this.x, this.y-20, 4, 0);
+      initEnemyAmmo(this.x, this.y-20, 4, -2);
+      initEnemyAmmo(this.x, this.y-20, 4, 2);
+      this.counter = 0;
+    }
   }
 
   miniBossUpdate() {
@@ -394,7 +406,11 @@ class Sprite {
     this.y = this.startingY + Math.cos(this.radians)*100;
     this.x = finalBossSprite.x + Math.sin(this.radians)*100;
     this.draw();
-
+    this.counter += 1;
+    if (this.counter >= this.shotTimer){
+      initEnemyAmmo(this.x, this.y, 2)
+      this.counter = 0;
+    }
   }
 
   weaponPowerUpUpdate() {
@@ -541,8 +557,8 @@ function initAmmo(x, y, vx, vy, type = 1){
 };
 
 let enemyAmmo = [];
-function initEnemyAmmo(x, y, vy){
-  enemyAmmo.push(new Sprite(x, y, 8, "darkorange", 0, vy,[], 1));
+function initEnemyAmmo(x, y, vy, vx = 0){
+  enemyAmmo.push(new Sprite(x, y, 8, "darkorange", vx, vy,[], 1));
 };
 
 let greenAlienXSpeed = 1;
@@ -621,10 +637,13 @@ let miniBosses = [];
 function initFinalBoss() {
   finalBossSprite = new Sprite(canvas.width/2, canvas.height/3, 50, "lightgreen", 1, 0);
   radians = Math.PI/2;
+  shotTimer = 200;
   for (let i = 0; i < 4; i++) {
     miniBosses.push(new Sprite(canvas.width/2, canvas.height/3, 16, "red", 2, .025));
     miniBosses[i].radians = radians;
-    radians += Math.PI/2; 
+    miniBosses[i].shotTimer = shotTimer;
+    radians += Math.PI/2;
+    shotTimer += 50;
   }
 }
 
@@ -828,13 +847,13 @@ function animateEnemyAmmo() {
   for (let k = 0; k < enemyAmmo.length; k++) {
     spliceThis = false;
     enemyAmmo[k].enemyAmmoUpdate();
-    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *2 < 0) && (playerShields.shields.strength > 0)){
+    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerShields.x, playerShields.y) - playerShields.radius *1.5 < 0) && (playerShields.shields.strength > 0)){
       shieldHit();
       kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
       spliceThis = true;
     }
 
-    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius*2 < 0)){
+    if ((getDistance(enemyAmmo[k].x, enemyAmmo[k].y, playerSprite.x, playerSprite.y)- playerSprite.radius < 0)){
       kaboom2(enemyAmmo[k].x, enemyAmmo[k].y);
       spliceThis = true;
       playerSprite.hitPoints += -1;
@@ -988,6 +1007,7 @@ function animate(){   //                        <-- MAIN animation function
       break;
 
       case 6: 
+        animateEnemyAmmo();
         animateFinalBoss();
       break;
 
