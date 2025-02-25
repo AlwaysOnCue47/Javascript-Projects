@@ -1,5 +1,98 @@
 /* Portfolio2 Stylesheet */
 
+*{
+  margin: 0;
+  padding: 0;
+}
+
+html{
+  font-size: 12pt;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+nav {
+  height: 60px;
+  background-color: rgb(63, 63, 63);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.linksContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+nav a{
+  height: 100%;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: rgb(149, 207, 255)
+}
+
+nav a:hover {
+  background-color: azure;
+}
+
+nav .homeLink{
+  margin-right: auto;
+}
+
+#sidebarActive{
+  display: none;
+}
+
+.openSidebarButton, .closeSidebarButton{
+  display: none;
+}
+
+/* EXTRA SMALL SCREENS */
+
+@media (max-width: 640px){
+  .linksContainer{
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    z-index: 10;
+    width: 200px;
+    background-color: rgba(0, 0, 0, 0.75);
+    box-shadow: -5px 0 5px rgba(132, 0, 255, 0.25);
+    transition: 0.75s ease-out;
+  }
+  nav a{
+    box-sizing: border-box;
+    height: auto;
+    width: 100%;
+    padding: 20px 30px;
+    justify-content: flex-start;
+  }
+  .openSidebarButton, .closeSidebarButton{
+    padding: 20px;
+    display: block;
+  }
+
+  #sidebarActive:checked ~ .linksContainer{
+    right: 0;
+  }
+
+  #sidebarActive:checked ~ #overlay{
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9;
+  }
+}
+
+
 /* Desktop first media queries */
 /* 2xl */
 /* @media (max-width: 1536px) {} */
