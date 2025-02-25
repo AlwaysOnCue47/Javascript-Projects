@@ -56,6 +56,7 @@ document.addEventListener("keydown", (event)=> {
     case 'q':
       initWeaponPowerUp();
       initShieldPowerUp();
+      initLittleEnemySprites(200, 200);
   }
 });
 
@@ -254,8 +255,42 @@ class Sprite {
 
     if (finalBossSprite) {
       if (getDistance(this.x, this.y, finalBossSprite.x, finalBossSprite.y)-50 <0){
-        spliceThis = true;
-        kaboom2(this.x, this.y);
+        if (miniBosses.length >= 1 || littleEnemySprites.length >= 1){
+          spliceThis = true;
+          kaboom2(this.x, this.y);
+        } else {
+          spliceThis = true;
+          kaboom1(this.x, this.y);
+          finalBossSprite.hitPoints += -1;
+          if (finalBossSprite.hitPoints <= 0){
+            finalBossSprite = false;
+            initExplosion(this.x, this.y);
+            initExplosion(this.x+20, this.y+20);
+            initExplosion(this.x-20, this.y-20);
+            initExplosion(this.x-20, this.y+20);
+            initExplosion(this.x+20, this.y-20);
+          }
+        }
+        
+      }
+      for (let mb = 0; mb < miniBosses.length; mb++) {
+        if (getDistance(this.x, this.y, miniBosses[mb].x, miniBosses[mb].y)-miniBosses[mb].radius <0){
+          spliceThis = true;
+          kaboom1(this.x, this.y);
+          miniBosses[mb].hitPoints += -1;
+          if (miniBosses[mb].hitPoints <= 0){
+            initExplosion(miniBosses[mb].x, miniBosses[mb].y);
+            initLittleEnemySprites(miniBosses[mb].x+15, miniBosses[mb].y+10);
+            miniBosses.splice(mb, 1);
+          }
+        }
+      }
+      for (let les = 0; les < littleEnemySprites.length; les++) {
+        if (getDistance(this.x, this.y, littleEnemySprites[les].x, littleEnemySprites[les].y)-littleEnemySprites[les].radius <0){
+          spliceThis = true;
+          initSmallExplosion(littleEnemySprites[les].x, littleEnemySprites[les].y);
+          littleEnemySprites.splice(les, 1);
+        }        
       }
     }
     if (spliceThis){playerAmmo.splice(this, 1);};
@@ -393,7 +428,7 @@ class Sprite {
     if (this.x <= 100){this.velocity.x = 1};
     this.draw();
     this.counter += 1;
-    if (this.counter >= 180){
+    if (this.counter >= 200){
       initEnemyAmmo(this.x, this.y-20, 4, 0);
       initEnemyAmmo(this.x, this.y-20, 4, -2);
       initEnemyAmmo(this.x, this.y-20, 4, 2);
@@ -587,6 +622,22 @@ function initEnemySprites(howMany, hitPoints, shotTimer) {
   initEnemyShields();
 };
 
+let littleEnemySprites = [];
+function initLittleEnemySprites(x, y){
+  greenAlienXSpeed = 3;
+  greenAlienYSpeed = 3;
+ 
+  for (let i = 0; i < 8; i++) {
+    x2 = Math.floor(Math.random()*canvas.width);
+    y2 = Math.floor(Math.random()*((canvas.height - 60)))
+    let location = {x: x2, y: y2};
+    littleEnemySprites.push(new Sprite(x, y, 8, "green", greenAlienXSpeed, greenAlienYSpeed, location, 0));
+    littleEnemySprites[i].shotTimer = 1200;
+    littleEnemySprites[i].hitPoints = 1;
+    
+  }
+}
+
 let enemySprites2 = [];
 function initEnemySprites2(howMany, hitPoints) {
   enemySprites2 = [];
@@ -636,12 +687,14 @@ let finalBossSprite;
 let miniBosses = [];
 function initFinalBoss() {
   finalBossSprite = new Sprite(canvas.width/2, canvas.height/3, 50, "lightgreen", 1, 0);
+  finalBossSprite.hitPoints = 100;
   radians = Math.PI/2;
   shotTimer = 200;
   for (let i = 0; i < 4; i++) {
     miniBosses.push(new Sprite(canvas.width/2, canvas.height/3, 16, "red", 2, .025));
     miniBosses[i].radians = radians;
     miniBosses[i].shotTimer = shotTimer;
+    miniBosses[i].hitPoints = 20;
     radians += Math.PI/2;
     shotTimer += 50;
   }
@@ -746,9 +799,9 @@ function initStarField() {
   let y;
   let vy;
   let radius;
-  let color = ["rgba(119, 128, 0, 0.7)", "rgba(119, 128, 0, 0.5)", "rgba(119, 128, 0, 0.25)"];
+  let color = ["rgb(92, 99, 0)", "rgb(41, 20, 0)", "rgb(36, 39, 0)"];
   let thisColor;
-  for (let i = 0; i < 75; i++) {
+  for (let i = 0; i < 65; i++) {
     x = Math.random()* canvas.width;
     y = Math.random()* canvas.height;
     vy = Math.random()* 1.4;
@@ -892,6 +945,11 @@ function animateFinalBoss(){
   for (let i = 0; i < miniBosses.length; i++) {
     miniBosses[i].miniBossUpdate();
   }
+
+  for (let j = 0; j < littleEnemySprites.length; j++) {
+    littleEnemySprites[j].enemyUpdate();
+    
+  }
 }
 
 // Main animation function
@@ -1005,9 +1063,13 @@ function animate(){   //                        <-- MAIN animation function
         }
       break;
 
-      case 6: 
-        animateEnemyAmmo();
-        animateFinalBoss();
+      case 6:
+        if (finalBossSprite){
+          animateEnemyAmmo();
+          animateFinalBoss();
+
+        }
+        
       break;
 
       case 0:
