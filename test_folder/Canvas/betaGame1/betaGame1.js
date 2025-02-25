@@ -32,7 +32,7 @@ document.getElementById('canvas').addEventListener('click', () => {
 });
 
 document.getElementById('newGameBtn').addEventListener('click', () =>{
-  newGame(6);
+  newGame(1);
 });
 
 document.addEventListener("keydown", (event)=> {
@@ -56,7 +56,6 @@ document.addEventListener("keydown", (event)=> {
     case 'q':
       initWeaponPowerUp();
       initShieldPowerUp();
-      initLittleEnemySprites(200, 200);
   }
 });
 
@@ -632,7 +631,7 @@ function initLittleEnemySprites(x, y){
     y2 = Math.floor(Math.random()*((canvas.height - 60)))
     let location = {x: x2, y: y2};
     littleEnemySprites.push(new Sprite(x, y, 10, "rgba(0,0,0,0)", greenAlienXSpeed, greenAlienYSpeed, location, 0));
-    littleEnemySprites[i].shotTimer = 1200;
+    littleEnemySprites[i].shotTimer = 1000;
     littleEnemySprites[i].hitPoints = 1;
     
   }
@@ -1203,7 +1202,7 @@ function clearAllEnemyArrays(){
   enemyShieldsStatus = false;
   enemyShieldsStatus2 = false;
   enemyAmmo = [];
-  finalBossSprite = undefined;
+  finalBossSprite = false;
   miniBosses = [];
 
 };
