@@ -32,7 +32,7 @@ document.getElementById('canvas').addEventListener('click', () => {
 });
 
 document.getElementById('newGameBtn').addEventListener('click', () =>{
-  newGame(1);
+  newGame(6);
 });
 
 document.addEventListener("keydown", (event)=> {
@@ -424,7 +424,7 @@ class Sprite {
 
   finalBossUpdate() {
     this.x += this.velocity.x;
-    if (this.x >= 580){this.velocity.x = -this.velocity.x};
+    if (this.x >= 540){this.velocity.x = -this.velocity.x};
     if (this.x <= 100){this.velocity.x = 1};
     this.draw();
     this.counter += 1;
@@ -631,7 +631,7 @@ function initLittleEnemySprites(x, y){
     x2 = Math.floor(Math.random()*canvas.width);
     y2 = Math.floor(Math.random()*((canvas.height - 60)))
     let location = {x: x2, y: y2};
-    littleEnemySprites.push(new Sprite(x, y, 8, "green", greenAlienXSpeed, greenAlienYSpeed, location, 0));
+    littleEnemySprites.push(new Sprite(x, y, 10, "rgba(0,0,0,0)", greenAlienXSpeed, greenAlienYSpeed, location, 0));
     littleEnemySprites[i].shotTimer = 1200;
     littleEnemySprites[i].hitPoints = 1;
     
@@ -686,12 +686,12 @@ function initEnemySprites4(howMany, hitPoints, shotTimer){
 let finalBossSprite;
 let miniBosses = [];
 function initFinalBoss() {
-  finalBossSprite = new Sprite(canvas.width/2, canvas.height/3, 50, "lightgreen", 1, 0);
+  finalBossSprite = new Sprite(canvas.width/2, canvas.height/3, 65, "rgb(80, 0, 67)", 1, 0);
   finalBossSprite.hitPoints = 100;
   radians = Math.PI/2;
-  shotTimer = 200;
+  shotTimer = 400;
   for (let i = 0; i < 4; i++) {
-    miniBosses.push(new Sprite(canvas.width/2, canvas.height/3, 16, "red", 2, .025));
+    miniBosses.push(new Sprite(canvas.width/2, canvas.height/3, 16, "black", 2, .025));
     miniBosses[i].radians = radians;
     miniBosses[i].shotTimer = shotTimer;
     miniBosses[i].hitPoints = 20;
@@ -799,9 +799,9 @@ function initStarField() {
   let y;
   let vy;
   let radius;
-  let color = ["rgb(92, 99, 0)", "rgb(41, 20, 0)", "rgb(36, 39, 0)"];
+  let color = ["rgb(81, 87, 0)", "rgb(65, 31, 0)", "rgb(45, 49, 0)"];
   let thisColor;
-  for (let i = 0; i < 65; i++) {
+  for (let i = 0; i < 60; i++) {
     x = Math.random()* canvas.width;
     y = Math.random()* canvas.height;
     vy = Math.random()* 1.4;
@@ -940,16 +940,27 @@ function animateShieldUgrade() {
   }
 };
 
+let checkColor = false;
 function animateFinalBoss(){
   finalBossSprite.finalBossUpdate();
+  ctx.drawImage(alien1, finalBossSprite.x-60, finalBossSprite.y-60, 120, 120)
   for (let i = 0; i < miniBosses.length; i++) {
     miniBosses[i].miniBossUpdate();
+    ctx.drawImage(alien1, miniBosses[i].x-23, miniBosses[i].y-23, 45, 45);
   }
 
   for (let j = 0; j < littleEnemySprites.length; j++) {
     littleEnemySprites[j].enemyUpdate();
+    ctx.drawImage(alien1, littleEnemySprites[j].x-10, littleEnemySprites[j].y-10, 30, 30);
     
   }
+  if (!checkColor){
+    if (miniBosses.length == 0 && littleEnemySprites.length == 0) {
+      finalBossSprite.color = 'rgba(0,0,0,0)';
+      checkColor = true;
+    }
+  }
+  
 }
 
 // Main animation function
