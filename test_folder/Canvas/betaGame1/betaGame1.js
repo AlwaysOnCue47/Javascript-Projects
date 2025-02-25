@@ -32,7 +32,7 @@ document.getElementById('canvas').addEventListener('click', () => {
 });
 
 document.getElementById('newGameBtn').addEventListener('click', () =>{
-  newGame(6);
+  newGame(1);
 });
 
 document.addEventListener("keydown", (event)=> {
@@ -891,7 +891,6 @@ function animateFinalBoss(){
   finalBossSprite.finalBossUpdate();
   for (let i = 0; i < miniBosses.length; i++) {
     miniBosses[i].miniBossUpdate();
-    
   }
 }
 
@@ -1131,6 +1130,8 @@ function clearAllEnemyArrays(){
   enemyShieldsStatus = false;
   enemyShieldsStatus2 = false;
   enemyAmmo = [];
+  finalBossSprite = undefined;
+  miniBosses = [];
 
 };
 
