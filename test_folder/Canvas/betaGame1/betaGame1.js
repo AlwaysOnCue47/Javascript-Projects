@@ -69,6 +69,8 @@ let playerShip = document.getElementById('playerShip');
 let playerShipRight = document.getElementById('playerShipRightTurn');
 let playerShipLeft = document.getElementById('playerShipLeftTurn');
 let background = document.getElementById('backgroundShip');
+let shieldPowerUpImage = document.getElementById('shieldPowerUp');
+let weaponPowerUpImage = document.getElementById('weaponPowerUp');
 
 // other variables and listeners
 
@@ -247,7 +249,8 @@ class Sprite {
       if (getDistance(this.x, this.y, shieldPowerUp[spu].x, shieldPowerUp[spu].y)-shieldPowerUp[spu].radius <0){
         initSmallExplosion(this.x, this.y);
         shieldPowerUp.splice(spu, 1);
-        playerShields.shields.strength += 10;
+        playerShields.shields.strength += 11;
+        shieldHit();
         spliceThis = true;
       }
     }
@@ -930,12 +933,40 @@ function animateEnemyAmmo() {
 function animateWeaponUpgrade(){
   for (let wpu = 0; wpu < weaponPowerUp.length; wpu++) {
     weaponPowerUp[wpu].weaponPowerUpUpdate();
+    ctx.drawImage(weaponPowerUpImage, weaponPowerUp[wpu].x-25, weaponPowerUp[wpu].y-25, 55, 55);
+    weaponPowerUp[wpu].counter +=1;
+    switch (weaponPowerUp[wpu].counter){
+      
+        case 1, 2, 3, 4, 5:
+          weaponPowerUp[wpu].color = "rgb(168, 0, 28)";
+          break;
+        case 6, 7, 8, 9, 10:
+          weaponPowerUp[wpu].color = "rgb(192, 196, 0)";
+          break;
+        case 11:
+          weaponPowerUp[wpu].counter = 0;
+          break;
+
+    }
   }
 };
 
 function animateShieldUgrade() {
   for (let spu = 0; spu < shieldPowerUp.length; spu++) {
     shieldPowerUp[spu].weaponPowerUpUpdate();
+    ctx.drawImage(shieldPowerUpImage, shieldPowerUp[spu].x-25, shieldPowerUp[spu].y-25, 55, 55);
+    shieldPowerUp[spu].counter +=1;
+    switch (shieldPowerUp[spu].counter){
+      case 1, 2, 3, 4, 5:
+        shieldPowerUp[spu].color = "rgb(21, 32, 179)";
+        break;
+      case 6, 7, 8, 9, 10:
+        shieldPowerUp[spu].color = "rgb(9, 255, 0)";
+        break;
+      case 11:
+        shieldPowerUp[spu].counter = 0;
+        break;
+    }
   }
 };
 
@@ -1121,6 +1152,7 @@ let gameRunning = false;
 function newGame(level = 1){
   gameRunning = true;
   gameLevel = level;
+  clearAllEnemyArrays();
   switch (level){
     case 1:
       ammoType = 1;
@@ -1190,8 +1222,7 @@ function playerDead(){
   }
   playerSprite.hitPoints = 0;
   gameLevel = 0;
-  enemyShieldsStatus = false;
-  enemyShieldsStatus2 = false;
+  
 };
 
 function clearAllEnemyArrays(){
@@ -1204,6 +1235,7 @@ function clearAllEnemyArrays(){
   enemyAmmo = [];
   finalBossSprite = false;
   miniBosses = [];
+  littleEnemySprites = [];
 
 };
 
