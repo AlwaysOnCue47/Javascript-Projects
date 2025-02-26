@@ -1222,6 +1222,8 @@ function playerDead(){
   }
   playerSprite.hitPoints = 0;
   gameLevel = 0;
+  enemyShieldsStatus = false;
+  enemyShieldsStatus2 = false;
   
 };
 

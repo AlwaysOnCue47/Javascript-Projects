@@ -16,6 +16,7 @@ nav {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-bottom: 20px;
 }
 
 .linksContainer {
@@ -51,9 +52,72 @@ nav .homeLink{
   display: none;
 }
 
-/* EXTRA SMALL SCREENS */
+.container {
+  border-style: solid;
+  border-color: red;
+  max-width: 1536px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  
+}
+
+#heroSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#heroSectionCardContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+/* EXTRA EXTRA LARGE SCREEN */
+
+@media (max-width: 1536px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* EXTRA LARGE SCREEN */
+
+@media (max-width: 1280px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+/* LARGE SCREEN */
+
+@media (max-width: 1024px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+/* MEDIUM SCREEN */
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+/* SMALL SCREENS */
 
 @media (max-width: 640px){
+  .container {
+    max-width: 475px;
+    border-style: solid;
+    border-color: green;
+  }
+
   .linksContainer{
     flex-direction: column;
     align-items: flex-start;
@@ -91,6 +155,13 @@ nav .homeLink{
     z-index: 9;
   }
 }
+
+@media (max-width: 475px) {
+  .container {
+    width: 100%;
+  }
+}
+
 
 
 /* Desktop first media queries */
