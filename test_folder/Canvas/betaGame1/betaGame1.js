@@ -1080,10 +1080,10 @@ function animate(){   //                        <-- MAIN animation function
           initShieldPowerUp();
           spawnShieldPowerUp = true;
         }
-        if (enemySprites2.length <= 3 && !spawnWeaponPowerUp) {
-          initWeaponPowerUp();
-          spawnWeaponPowerUp = true;
-        }
+        // if (enemySprites2.length <= 3 && !spawnWeaponPowerUp) {
+        //   initWeaponPowerUp();
+        //   spawnWeaponPowerUp = true;
+        // }
         if (isLevelCompleted()){
           nextLevel(5);
         }
