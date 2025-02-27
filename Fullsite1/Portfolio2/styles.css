@@ -9,10 +9,12 @@
 html{
   font-size: 12pt;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: gainsboro;
+  padding-top: 60px;
 }
 
 nav {
@@ -22,6 +24,10 @@ nav {
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 20px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+
 }
 
 .linksContainer {
@@ -75,6 +81,7 @@ nav .homeLink{
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 250px;
 }
 
@@ -140,6 +147,26 @@ nav .homeLink{
 @media (max-width: 768px) {
   .container {
     max-width: 640px;
+  }
+
+  #heroSection {
+    height: 140px;
+  }
+
+  #aboutSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #aboutSectionRow {
+    height: 300px;
+    min-width: 95%;
+  }
+
+  #aboutSectionTitle {
+    height: 100px;
+    min-width: 100%;
   }
 }
 
