@@ -3,11 +3,12 @@
 *{
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html{
   font-size: 12pt;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 body {
@@ -70,8 +71,11 @@ nav .homeLink{
 
 #heroSection {
   display: flex;
+  background-color: lightgray;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   flex-direction: column;
   align-items: center;
+  height: 250px;
 }
 
 #heroSectionCardContainer {
@@ -82,17 +86,31 @@ nav .homeLink{
 }
 
 #aboutSection {
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 150px;
+  gap: 20px;
+  border: 1pt green solid;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-#aboutSectionCardContainer {
-  width: 100%;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+#aboutSectionTitle {
+ background-color: aqua;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ grid-column: span 4;
 }
+
+#aboutSectionRow {
+  background-color: pink;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
 /* EXTRA EXTRA LARGE SCREEN */
 
 @media (max-width: 1536px) {
