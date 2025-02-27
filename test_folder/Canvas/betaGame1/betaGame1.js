@@ -1064,7 +1064,6 @@ function animate(){   //                        <-- MAIN animation function
 
       case 3:
         animateEnemies();
-    
         if (enemySprites3.length <= 2 && !spawnShieldPowerUp) {
           initShieldPowerUp();
           spawnShieldPowerUp = true;
@@ -1080,10 +1079,6 @@ function animate(){   //                        <-- MAIN animation function
           initShieldPowerUp();
           spawnShieldPowerUp = true;
         }
-        // if (enemySprites2.length <= 3 && !spawnWeaponPowerUp) {
-        //   initWeaponPowerUp();
-        //   spawnWeaponPowerUp = true;
-        // }
         if (isLevelCompleted()){
           nextLevel(5);
         }
@@ -1108,7 +1103,9 @@ function animate(){   //                        <-- MAIN animation function
         if (finalBossSprite){
           animateEnemyAmmo();
           animateFinalBoss();
-
+        }
+        if (!finalBossSprite){
+          nextLevel(1);
         }
         
       break;
