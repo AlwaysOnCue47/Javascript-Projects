@@ -1144,7 +1144,17 @@ function nextLevel(L){
   ctx.beginPath();
   ctx.fillStyle = 'rgba(42, 177, 30, 0.5)';
   ctx.fillRect(200, 100, 300, 200);
-  ctx.closePath();
+  ctx.font = "36px impact";
+  ctx.fillStyle = "black";
+  if (L == 0){
+    ctx.fillText("Game Over", 265, 150);
+    ctx.closePath();
+  }else {
+    ctx.fillText("Level Cleared", 250, 150);
+    ctx.font = "20px Ariel";
+    ctx.fillText("more enemies ahead!", 260, 175);
+    ctx.closePath();
+  }
   levelTimer += 1;
   if (levelTimer >= 300){
     spawnWeaponPowerUp = false;

@@ -26,7 +26,6 @@ div {
   position: absolute;
   top: 45%;
   left: 45%;
-  transition: ease-in-out;
 }
 
 #masterContainer {
