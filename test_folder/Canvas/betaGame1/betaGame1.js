@@ -9,7 +9,7 @@ canvas.style.width = 680;
 canvas.style.height = 420;
 canvas.style.backgroundColor = "rgb(3, 0, 30)";
 const ctx = canvas.getContext('2d');
-const rect = canvas.getBoundingClientRect(); // get the canvas position relative to it's position on the page. 
+let rect = canvas.getBoundingClientRect(); // get the canvas position relative to it's position on the page. 
 
 // event listeners
 
@@ -59,24 +59,28 @@ document.addEventListener("keydown", (event)=> {
   }
 });
 
+window.addEventListener('resize', ()=> {
+  rect = canvas.getBoundingClientRect();
+});
+
 // images 
 
-let alien1 = document.getElementById('alien1');
-let alien2 = document.getElementById('alien2');
-let alien3 = document.getElementById('alien3');
-let alien4 = document.getElementById('alien4');
-let playerShip = document.getElementById('playerShip');
-let playerShipRight = document.getElementById('playerShipRightTurn');
-let playerShipLeft = document.getElementById('playerShipLeftTurn');
-let background = document.getElementById('backgroundShip');
-let shieldPowerUpImage = document.getElementById('shieldPowerUp');
-let weaponPowerUpImage = document.getElementById('weaponPowerUp');
+const alien1 = document.getElementById('alien1');
+const alien2 = document.getElementById('alien2');
+const alien3 = document.getElementById('alien3');
+const alien4 = document.getElementById('alien4');
+const playerShip = document.getElementById('playerShip');
+const playerShipRight = document.getElementById('playerShipRightTurn');
+const playerShipLeft = document.getElementById('playerShipLeftTurn');
+const background = document.getElementById('backgroundShip');
+const shieldPowerUpImage = document.getElementById('shieldPowerUp');
+const weaponPowerUpImage = document.getElementById('weaponPowerUp');
 
 // other variables and listeners
 
-let shieldBox = document.getElementById('shields');
-let lifeBox = document.getElementById('life');
-let shipLifeBox = document.getElementById('transportShip');
+const shieldBox = document.getElementById('shields');
+const lifeBox = document.getElementById('life');
+const shipLifeBox = document.getElementById('transportShip');
 function updateScoreBox() {
   if (playerSprite){
     shieldBox.innerHTML = ("Shield strength: " + playerShields.shields.strength);
@@ -426,8 +430,11 @@ class Sprite {
 
   finalBossUpdate() {
     this.x += this.velocity.x;
+    if (this.y < canvas.height/3){
+      this.y += this.velocity.y
+    }
     if (this.x >= 540){this.velocity.x = -this.velocity.x};
-    if (this.x <= 100){this.velocity.x = 1};
+    if (this.x <= 100){this.velocity.x = -this.velocity.x};
     this.draw();
     this.counter += 1;
     if (this.counter >= 200){
@@ -440,7 +447,7 @@ class Sprite {
 
   miniBossUpdate() {
     this.radians += this.velocity.y;
-    this.y = this.startingY + Math.cos(this.radians)*100;
+    this.y = finalBossSprite.y + Math.cos(this.radians)*100;
     this.x = finalBossSprite.x + Math.sin(this.radians)*100;
     this.draw();
     this.counter += 1;
@@ -688,12 +695,12 @@ function initEnemySprites4(howMany, hitPoints, shotTimer){
 let finalBossSprite;
 let miniBosses = [];
 function initFinalBoss() {
-  finalBossSprite = new Sprite(canvas.width/2, canvas.height/3, 65, "rgb(80, 0, 67)", 1, 0);
+  finalBossSprite = new Sprite(canvas.width/2, -40, 65, "rgb(80, 0, 67)", 1, 1);
   finalBossSprite.hitPoints = 100;
   radians = Math.PI/2;
   shotTimer = 400;
   for (let i = 0; i < 4; i++) {
-    miniBosses.push(new Sprite(canvas.width/2, canvas.height/3, 16, "black", 2, .025));
+    miniBosses.push(new Sprite(canvas.width/2, -40, 16, "black", 2, .025));
     miniBosses[i].radians = radians;
     miniBosses[i].shotTimer = shotTimer;
     miniBosses[i].hitPoints = 20;
@@ -982,16 +989,17 @@ function animateFinalBoss(){
   for (let j = 0; j < littleEnemySprites.length; j++) {
     littleEnemySprites[j].enemyUpdate();
     ctx.drawImage(alien1, littleEnemySprites[j].x-10, littleEnemySprites[j].y-10, 30, 30);
-    
   }
+
   if (!checkColor){
     if (miniBosses.length == 0 && littleEnemySprites.length == 0) {
       finalBossSprite.color = 'rgba(0,0,0,0)';
+      finalBossSprite.velocity.x *= 3;
+      finalBossSprite.shotTimer = 200;
       checkColor = true;
     }
   }
-  
-}
+};
 
 // Main animation function
 
@@ -1191,6 +1199,7 @@ function newGame(level = 1){
       break;
 
     case 6:
+      checkColor = false;
       initPlayer();
       initFinalBoss();
       break;
