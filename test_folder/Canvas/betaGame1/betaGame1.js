@@ -9,7 +9,11 @@ canvas.style.width = 680;
 canvas.style.height = 420;
 canvas.style.backgroundColor = "rgb(3, 0, 30)";
 const ctx = canvas.getContext('2d');
-let rect = canvas.getBoundingClientRect(); // get the canvas position relative to it's position on the page. 
+let rect = canvas.getBoundingClientRect(); // get the canvas position relative to it's position on the page.
+
+window.addEventListener('resize', ()=> {  // update rect values on window resize
+  rect = canvas.getBoundingClientRect();
+});
 
 // event listeners
 
@@ -31,7 +35,8 @@ document.getElementById('canvas').addEventListener('click', () => {
   initAmmo(playerSprite.x, playerSprite.y, x, y, ammoType);
 });
 
-document.getElementById('newGameBtn').addEventListener('click', () =>{
+const newGameBtm = document.getElementById('newGameBtn');
+newGameBtm.addEventListener('click', () =>{
   newGame(1);
 });
 
@@ -57,10 +62,6 @@ document.addEventListener("keydown", (event)=> {
       initWeaponPowerUp();
       initShieldPowerUp();
   }
-});
-
-window.addEventListener('resize', ()=> {
-  rect = canvas.getBoundingClientRect();
 });
 
 // images 
@@ -286,7 +287,7 @@ class Sprite {
           miniBosses[mb].hitPoints += -1;
           if (miniBosses[mb].hitPoints <= 0){
             initExplosion(miniBosses[mb].x, miniBosses[mb].y);
-            initLittleEnemySprites(miniBosses[mb].x+15, miniBosses[mb].y+10);
+            initLittleEnemySprites(finalBossSprite.x, finalBossSprite.y);
             miniBosses.splice(mb, 1);
           }
         }
@@ -1123,6 +1124,7 @@ function animate(){   //                        <-- MAIN animation function
         if (levelTimer == 299){
           gameRunning = false;
           levelTimer = 0;
+          newGameBtm.style.display = 'block';
         }
       }
       animateExplosions();
@@ -1156,6 +1158,7 @@ function nextLevel(L){
 let gameRunning = false;
 function newGame(level = 1){
   gameRunning = true;
+  newGameBtm.style.display = 'none';
   gameLevel = level;
   clearAllEnemyArrays();
   switch (level){
