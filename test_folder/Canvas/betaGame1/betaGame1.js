@@ -386,7 +386,6 @@ class Sprite {
         break;
     }
     this.counter += 1;
-
     this.x += this.velocity.x;
     this.y += this.velocity.y;
     this.draw();
@@ -485,7 +484,6 @@ class Sprite {
       this.color = "rgba(185, 15, 15, 0.6)";
     }
     this.draw();
-    
   }
 
   starFieldUpdate() {
@@ -636,7 +634,6 @@ let littleEnemySprites = [];
 function initLittleEnemySprites(x, y){
   greenAlienXSpeed = 3;
   greenAlienYSpeed = 3;
- 
   for (let i = 0; i < 8; i++) {
     x2 = Math.floor(Math.random()*canvas.width);
     y2 = Math.floor(Math.random()*((canvas.height - 60)))
@@ -644,7 +641,6 @@ function initLittleEnemySprites(x, y){
     littleEnemySprites.push(new Sprite(x, y, 10, "rgba(0,0,0,0)", greenAlienXSpeed, greenAlienYSpeed, location, 0));
     littleEnemySprites[i].shotTimer = 1000;
     littleEnemySprites[i].hitPoints = 1;
-    
   }
 }
 
@@ -733,7 +729,6 @@ let explosionSprite = [];
 function initExplosion(x, y) {
   let startingX = x;
   let startingY = y;
-
   let explosionRadius = 12;
   for (let i = 0; i < 6; i++) {
     x += 10;
@@ -944,17 +939,15 @@ function animateWeaponUpgrade(){
     ctx.drawImage(weaponPowerUpImage, weaponPowerUp[wpu].x-25, weaponPowerUp[wpu].y-25, 55, 55);
     weaponPowerUp[wpu].counter +=1;
     switch (weaponPowerUp[wpu].counter){
-      
-        case 1, 2, 3, 4, 5:
-          weaponPowerUp[wpu].color = "rgb(168, 0, 28)";
-          break;
-        case 6, 7, 8, 9, 10:
-          weaponPowerUp[wpu].color = "rgb(192, 196, 0)";
-          break;
-        case 11:
-          weaponPowerUp[wpu].counter = 0;
-          break;
-
+      case 1, 2, 3, 4, 5:
+        weaponPowerUp[wpu].color = "rgb(168, 0, 28)";
+      break;
+      case 6, 7, 8, 9, 10:
+        weaponPowerUp[wpu].color = "rgb(192, 196, 0)";
+      break;
+      case 11:
+        weaponPowerUp[wpu].counter = 0;
+      break;
     }
   }
 };
@@ -1116,7 +1109,6 @@ function animate(){   //                        <-- MAIN animation function
         if (!finalBossSprite){
           nextLevel(1);
         }
-        
       break;
 
       case 0:
@@ -1140,7 +1132,6 @@ let gameLevel = 1;
 levelTimer = 0;
 function nextLevel(L){
   enemyAmmo = [];
-  
   ctx.beginPath();
   ctx.fillStyle = 'rgba(42, 177, 30, 0.5)';
   ctx.fillRect(200, 100, 300, 200);
@@ -1195,7 +1186,7 @@ function newGame(level = 1){
       initEnemySprites4(2, 10, 160);
       initEnemySprites2(4, 4);
       initEnemySprites3(4, 4);
-      break;
+    break;
     
     case 4: 
       initPlayer()
@@ -1203,19 +1194,19 @@ function newGame(level = 1){
       initEnemySprites2(6, 6);
       initEnemySprites3(6, 6,);
       initEnemySprites4(2, 10, 140);
-      break;
+    break;
     
     case 5:
       initPlayer();
       initEnemySprites(6, 10, 250);
       initEnemySprites2(12, 6);
-      break;
+    break;
 
     case 6:
       checkColor = false;
       initPlayer();
       initFinalBoss();
-      break;
+    break;
     
     case 0:
       clearAllEnemyArrays();
@@ -1243,7 +1234,6 @@ function playerDead(){
   gameLevel = 0;
   enemyShieldsStatus = false;
   enemyShieldsStatus2 = false;
-  
 };
 
 function clearAllEnemyArrays(){
@@ -1257,7 +1247,6 @@ function clearAllEnemyArrays(){
   finalBossSprite = false;
   miniBosses = [];
   littleEnemySprites = [];
-
 };
 
 // run when parsed
