@@ -1077,9 +1077,14 @@ function animate(){   //                        <-- MAIN animation function
       
       case 4:
         animateEnemies();
-        if (enemySprites3.length <= 3 && !spawnShieldPowerUp) {
+        if (enemySprites3.length == 3 && !spawnShieldPowerUp) {
           initShieldPowerUp();
           spawnShieldPowerUp = true;
+        }
+        if (enemySprites2.length == 0 && !spawnSecondWave) {
+          initEnemySprites3(4, 6,);
+          initEnemySprites4(2, 10, 140);
+          spawnSecondWave = true;
         }
         if (isLevelCompleted()){
           nextLevel(5);
@@ -1156,11 +1161,13 @@ function nextLevel(L){
   }
 };
 
+let spawnSecondWave = false;
 let gameRunning = false;
 function newGame(level = 1){
   gameRunning = true;
   newGameBtm.style.display = 'none';
   gameLevel = level;
+  spawnSecondWave = false;
   clearAllEnemyArrays();
   switch (level){
     case 1:
@@ -1190,10 +1197,8 @@ function newGame(level = 1){
     
     case 4: 
       initPlayer()
-      initEnemySprites(2, 10, 180);
-      initEnemySprites2(6, 6);
-      initEnemySprites3(6, 6,);
-      initEnemySprites4(2, 10, 140);
+      initEnemySprites(3, 10, 180);
+      initEnemySprites2(8, 6);
     break;
     
     case 5:
