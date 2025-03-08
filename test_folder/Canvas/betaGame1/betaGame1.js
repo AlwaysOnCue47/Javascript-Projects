@@ -82,11 +82,28 @@ const weaponPowerUpImage = document.getElementById('weaponPowerUp');
 const shieldBox = document.getElementById('shields');
 const lifeBox = document.getElementById('life');
 const shipLifeBox = document.getElementById('transportShip');
+const levelBox = document.getElementById('level');
 function updateScoreBox() {
   if (playerSprite){
     shieldBox.innerHTML = ("Shield strength: " + playerShields.shields.strength);
     lifeBox.innerHTML = ("Player Health: " + playerSprite.hitPoints);
     shipLifeBox.innerHTML = ("Ship Health: " + shipHitPoints) ;
+    levelBox.innerHTML = ("Level: " + gameLevel);
+    if (shipHitPoints <= 5) {
+      shipLifeBox.style.backgroundColor = "darkred";
+    }else shipLifeBox.style.removeProperty("background-color");
+    if (playerShields.shields.strength >= 2 && playerShields.shields.strength <= 5) {
+      shieldBox.style.backgroundColor = "rgb(134, 132, 0)";
+    } 
+    if (playerShields.shields.strength <= 1){
+      shieldBox.style.backgroundColor = "darkred";
+    } else shieldBox.style.removeProperty("background-color");
+    if (playerSprite.hitPoints == 3 || playerSprite.hitPoints == 2) {
+      lifeBox.style.backgroundColor = "rgb(134, 132, 0)";
+    }
+    if (playerSprite.hitPoints <= 1) {
+      lifeBox.style.backgroundColor = "darkred";
+    } else lifeBox.style.removeProperty("background-color");
   } 
 };
 
