@@ -8,15 +8,50 @@ html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-img {
-  width: 100px;
-  height: 100px;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(22, 22, 26);
 }
 
 div {
   user-select: none;
+}
+
+#imageContainer {
+  display: none;
+}
+
+#gameContainer {
+  position: absolute;
+  display: grid;
+  margin-top: 20px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(0, 167, 8);
+  background-color: rgb(0, 0, 60);
+  box-shadow: 12px 12px 8px rgb(32, 1, 61);
+}
+
+#gameTitle {
+  background-color: rgb(0, 0, 60);
+  margin: auto;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: rgb(170, 170, 170);
+  font-size: large;
+}
+
+#scoreBox {
+  color: rgb(255, 147, 6);
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(65, 252, 252);
+  height: 40px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: space-evenly;;
+  align-items: center;
 }
 
 #newGameBtn {
@@ -28,61 +63,6 @@ div {
   left: 45%;
 }
 
-#masterContainer {
-  display: grid;
-  border-style: dashed;
-  background-color: lightgreen;
-  border-color: red;
-}
-
-#subContainer {
-  min-width: 1080px;
-  margin: auto;
-  display: grid;
-  justify-content: space-evenly;
-  grid-template-columns: minmax(200px, 400px) min-content minmax(200px, 400px);
-  gap: 10px;
-}
-
-#leftContainer {
-  display: grid;
-  grid-template-rows: auto;
-  background-color: lightblue;
-}
-
-#gameContainer {
-  display: grid;
-  border-style: dashed;
-  position: relative;
-  background-color: rgb(0, 0, 60);
-  
-}
-
-#gameTitle {
-  background-color: rgb(0, 0, 60);
-  margin: auto;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  color: rgb(170, 170, 170);
-  font-size: large;
-  
-}
-
-#rightContainer {
-  background-color: lightpink;
-}
-
-#scoreBox {
-  color: rgb(255, 147, 6);
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(65, 252, 252);
-  height: 40px;
-  display: flex;
-  justify-content: space-evenly;;
-  align-items: center;
-}
-
 #shields, #life, #transportShip, #level {
   display: flex;
   height: 100%;
@@ -92,8 +72,8 @@ div {
   
 }
 
-#bottomText {
-  background-color: aliceblue;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  margin: 0 auto;
+#infoBox {
+  display: flex;
+  justify-content: center;
 }
+

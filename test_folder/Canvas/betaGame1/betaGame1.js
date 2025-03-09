@@ -96,7 +96,7 @@ function updateScoreBox() {
     else shipLifeBox.style.removeProperty("background-color");
 
     if (playerShields.shields.strength >= 2 && playerShields.shields.strength <= 5) {
-      shieldBox.style.backgroundColor = "rgb(116, 33, 0)";
+      shieldBox.style.backgroundColor = "rgb(148, 42, 0)";
     } 
     else if (playerShields.shields.strength <= 1){
       shieldBox.style.backgroundColor = "rgb(158, 0, 0)";
