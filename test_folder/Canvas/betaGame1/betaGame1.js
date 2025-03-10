@@ -11,11 +11,11 @@ canvas.style.backgroundColor = "rgb(3, 0, 30)";
 const ctx = canvas.getContext('2d');
 let rect = canvas.getBoundingClientRect(); // get the canvas position relative to it's position on the page.
 
+// event listeners
+
 window.addEventListener('resize', ()=> {  // update rect values on window resize
   rect = canvas.getBoundingClientRect();
 });
-
-// event listeners
 
 canvas.addEventListener("dragstart", (event) => { // prevents click and drag function on canvas element
   event.preventDefault();
@@ -28,7 +28,7 @@ document.getElementById('canvas').addEventListener('click', () => {
       x = -8;
       y = -6;
     }
-    if (playerSprite.x >= 0 && playerSprite.x <= 100){
+    else if (playerSprite.x >= 0 && playerSprite.x <= 100){
       x = 8;
       y = -6;
     }
@@ -104,7 +104,7 @@ function updateScoreBox() {
     else {shieldBox.style.removeProperty("background-color");}
     
     if (playerSprite.hitPoints == 3 || playerSprite.hitPoints == 2) {
-      lifeBox.style.backgroundColor = "rgb(116, 33, 0)";
+      lifeBox.style.backgroundColor = "rgb(148, 42, 0)";
     }
     else if (playerSprite.hitPoints <= 1) {
       lifeBox.style.backgroundColor = "rgb(158, 0, 0)";
@@ -486,7 +486,7 @@ class Sprite {
     this.draw(); 
     this.startingX += 1;
     if (this.startingX > canvas.width + 20){
-      this.startingX = -20;
+      this.velocity.y = 0;
     }
   }
 
@@ -1028,9 +1028,9 @@ function animate(){   //                        <-- MAIN animation function
   for (let n = 0; n < starField.length; n++) {
     starField[n].starFieldUpdate();
   }
-  ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
-
+  
   if (gameRunning){
+    ctx.drawImage(background, -10, canvas.height - 80, canvas.width+20, 200);
   
     if (playerSprite.hitPoints >= 1){
       animatePlayer();
@@ -1244,6 +1244,8 @@ function newGame(level = 1){
 
 function isLevelCompleted(){
   if (enemySprites.length == 0 && enemySprites2.length == 0 && enemySprites3.length == 0 && enemySprites4.length == 0){
+    shieldPowerUp = [];
+    weaponPowerUp = [];
     return true;
   }
 };
@@ -1275,6 +1277,8 @@ function clearAllEnemyArrays(){
   finalBossSprite = false;
   miniBosses = [];
   littleEnemySprites = [];
+  shieldPowerUp = [];
+  weaponPowerUp = [];
 };
 
 // run when parsed
