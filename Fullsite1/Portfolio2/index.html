@@ -24,9 +24,9 @@
       
       <a class="homeLink" href="#">Home</a>        
       <a href="#aboutSection">About</a>
-      <a href="#">Link3</a>
+      <a href="#contentsSection">Demos</a>
       <a href="#">Link4</a>
-      <a href="#">Link5</a>
+      <a href="#footerSection">Footer</a>
     </div>
     </nav>
   
@@ -110,7 +110,6 @@
         <span class="dot" onclick="currentSlide(2)"></span>
         <span class="dot" onclick="currentSlide(3)"></span>
       </div>
-
     </div>
    </div>
 
@@ -120,7 +119,15 @@
   <div class="container">
    <div id="contactSection">
      <h1>CONTACT</h1>
-   </div>
+     <div class="contactForm">
+      <form action="https://formspree.io/f/xqakkbky" method="post">
+        Name: <input type="text" name="name"><br>
+        Email: <input type="email" name="email"><br>
+        Comment: <input type="text" name="comment"><br>
+        <input id="submitButton" type="submit" value="Submit">
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- END CONTACT SECTION -->
@@ -128,7 +135,9 @@
   <!-- FOOTER -->
   <div class="container">
    <div id="footerSection">
-    <h1>FOOTER</h1>
+    <div class="spaceship-container">
+      <div class="item1"><img class="spaceship" src="./images/spaceship.png"></div>
+    </div>
    </div>
   </div>
 
