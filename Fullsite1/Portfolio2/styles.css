@@ -28,7 +28,7 @@ body {
 
 nav {
   height: 60px;
-  background-color: rgb(63, 63, 63);
+  background-color: rgba(63, 63, 63, .9);
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -55,11 +55,15 @@ nav a{
   display: flex;
   align-items: center;
   text-decoration: none;
-  color: rgb(149, 207, 255)
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: large;
+  color: #efa00b;
 }
 
 nav a:hover {
-  background-color: azure;
+  background-color: rgba(28, 182, 74, 0.5);
 }
 
 nav .homeLink{
@@ -70,12 +74,16 @@ nav .homeLink{
   display: none;
 }
 
+#backgroundBox {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
 .openSidebarButton, .closeSidebarButton{
   display: none;
 }
 
 .container {        /* MAIN SECTIONS CONTAINER <----- */
-  border-style: solid;
+  border-style: none;
   border-color: red;
   max-width: 1536px;
   margin-left: auto;
@@ -90,7 +98,6 @@ nav .homeLink{
 
 #heroSection {
   display: flex;
-  background-color: rgba(0, 0, 0, .8);
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   flex-direction: column;
   align-items: center;
@@ -109,7 +116,7 @@ nav .homeLink{
 #aboutSection {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 100px;
+  grid-auto-rows: 160px;
   gap: 20px;
   padding: 6px;
   border: 1pt green solid;
@@ -135,6 +142,19 @@ nav .homeLink{
   grid-row: span 2;
 }
 
+.backgroundImage1 {
+  background-image: url(./images/nervous-system-braint.png);
+  background-size: cover; /* Makes the image cover the entire div */
+  background-position: center; /* Centers the image */
+  background-repeat: no-repeat; /* Prevents tiling */
+  border-style: solid;
+  border-color: #bbb;
+}
+
+#aboutTextBackgroundBox {
+  background-color: rgba(28, 182, 74, 0.5);
+}
+
 /* CONTENT SECTION */
 
 #contentsSection{
@@ -143,7 +163,6 @@ nav .homeLink{
   justify-content: center;
   align-items: center;
   scroll-margin-top: 60px;
-
 }
 
   /* Slideshow container */
@@ -263,7 +282,7 @@ nav .homeLink{
 /* FOOTER SECTION */
 
 #footerSection{
-  background-color: black;
+  background-color: #000022;
 }
 
 .spaceship-container { 
