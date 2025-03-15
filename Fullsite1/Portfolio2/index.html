@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles.css">
   <script defer src="./javascript/main.js"></script> <!---->
-  <title>Portfolio v0.2</title>
+  <title>Portfolio v0.3</title>
 </head>
 <body>
   <video autoplay muted loop id="video"><source src="./images/3129671-uhd_3840_2160_30fps.mp4" type="video/mp4"></video>
@@ -37,11 +37,10 @@
   <div class="backgroundBox">
     <div class="container">
       <div id="heroSection">
-        <div id="heroSectionTitle">
-          <h1>HERO SECTION</h1>
-        </div>
-        <div id="heroSec tionCardContainer">
-          <div>BOX1</div>
+        <img id="avatarImage" src="./images/avatar.png">
+        <div id="heroSectionCardContainer">
+          <div id="heroSectionTitle"><h1>Martin Fobert</h1></div>
+          <div>Title information here</div>
         </div>      
       </div>
     </div>
@@ -57,7 +56,7 @@
       <h1 style="margin-left: 12px;">About</h1>
     </div>
     <div id="aboutSection">
-      <div id="aboutSectionRow" class="backgroundImage1">
+      <div id="aboutSectionRow" class="backgroundImage2">
         <div class="aboutTextBackgroundBox">
           <div>"Computers don't make mistakes. What they do they do on purpose.</div>
         </div>     
@@ -68,7 +67,7 @@
       <div id="aboutSectionRow" >
         <div>BOX3</div>
       </div>
-      <div id="aboutSectionRow" class="backgroundImage2">
+      <div id="aboutSectionRow" class="backgroundImage1">
         <div class="aboutTextBackgroundBox">
           <div>BOX4</div>
         </div>        
@@ -79,6 +78,7 @@
   <!-- END ABOUT SECTION -->
 
   <!-- CONTENTS SECTION -->
+
    <div class="backgroundBox">
     <div class="container">
       <div style="display: flex;">
@@ -123,7 +123,7 @@
          <span class="dot" onclick="currentSlide(3)"></span>
        </div>
       </div>
-     </div>
+    </div>
    </div>
    
   <!-- END CONTENTS SECTION -->
@@ -131,7 +131,10 @@
   <!-- CONTACT SECTION -->
   <div class="container">
    <div id="contactSection">
-     <h1>Contact</h1>
+    <div id="aboutSectionTitle">
+      <div class="littleBox"></div>
+      <h1 style="margin-left: 12px;">Contact</h1>
+    </div>
      <div id="contactSubSection">
       <img src="./images/circuit board closeup blues and orange.PNG" id="contactSectionImage" alt="bgImage - motherboard">
       <div class="contactForm">
@@ -150,7 +153,7 @@
 
   <!-- FOOTER -->
   <div id="footerBackgroundBox">
-    <div class="container">
+    <div class="container" style="margin-bottom: 0;">
       <div id="footerSection">
         <div class="spaceship-container">
          <div class="item1"><img class="spaceship" src="./images/spaceship.png"></div>
