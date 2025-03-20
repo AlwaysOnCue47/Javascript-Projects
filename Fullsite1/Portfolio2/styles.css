@@ -127,16 +127,47 @@ nav .homeLink{
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   flex-direction: row;
   align-items: center;
-  justify-content: left;
   height: 250px;
   color: #717171;
 }
 
-#heroSectionCardContainer {
+#heroSectionLeft {
+  display: flex;
+  flex-direction: row;
+  min-width: 50%;
+  align-items: center;
+}
+
+#heroSectionTitle{
+  display: flex;
+  justify-content: left;
+  font-size: larger;
+}
+
+#heroSectionCard1 {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
+  
+}
+
+#heroSectionRight {
+  display: flex;
+  justify-content: center;
+  min-width: 50%;
+}
+
+#heroSectionCard2 {
+  display: flex;
+  justify-content: center;
+  max-width: 80%;
+}
+
+.textFormat2 {
+  font-size: 16pt;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: #efa00b;
+  text-shadow: 2px 2px 2px #444444;
+
 }
 
 /*                                                                 ABOUT SECTION  */
@@ -462,6 +493,10 @@ nav .homeLink{
     max-width: 768px;
   }
 
+  #heroSectionLeft>img {
+    display: none;
+  }
+
   #aboutSection {
     display: flex;
     flex-direction: column;
@@ -487,6 +522,13 @@ nav .homeLink{
 
   #heroSection {
     height: 140px;
+  }
+  #heroSectionTitle{
+    font-size: 10pt;
+  }
+
+  #heroSectionRight {
+    display: none;
   }
 
   #aboutSection {
@@ -534,6 +576,8 @@ nav .homeLink{
   #heroSection {
     justify-content: center;
   }
+
+  
 
   h1 {
     font-size: medium;
