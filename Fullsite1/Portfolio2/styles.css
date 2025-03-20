@@ -168,7 +168,14 @@ nav .homeLink{
   color: #efa00b;
   font-variant: small-caps;
   text-shadow: 2px 2px 2px #444444;
+}
 
+#iconContainer {
+  margin-top: 8px;
+}
+
+.iconLogo {
+  width: 45px;
 }
 
 /*                                                                 ABOUT SECTION  */
@@ -353,8 +360,6 @@ nav .homeLink{
   max-width: 100%;
   height: 250px;
   justify-content: space-evenly;
-  border-style: solid;
-  border-color: blue;
 
 }
 
@@ -522,8 +527,16 @@ nav .homeLink{
     max-width: 640px;
   }
 
+  .textFormat1 {
+    font-size: 8pt;
+  }
+
+  .iconLogo {
+    width: 25px;
+  }
+
   #heroSection {
-    height: 140px;
+    height: 180px;
   }
   #heroSectionTitle{
     font-size: 10pt;
@@ -559,7 +572,6 @@ nav .homeLink{
   .container {
     max-width: 475px;
     border-style: none;
-    border-color: green;
   }
 
   .linksContainer{
@@ -576,13 +588,11 @@ nav .homeLink{
   }
 
   #heroSection {
-    justify-content: center;
+    justify-content: left;
   }
 
-  
-
   h1 {
-    font-size: medium;
+    font-size: 16pt;
   }
 
   nav {
@@ -622,11 +632,11 @@ nav .homeLink{
   }
 
   .spaceship {
-    height: 50px;
+    height: 25px;
   }
 
   .spaceship-container {
-    height: 50px;
+    height: 25px;
   }
 
   .item1 {
