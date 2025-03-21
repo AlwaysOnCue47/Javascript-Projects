@@ -1,6 +1,6 @@
 /* Portfolio2 Stylesheet */
 
-/*                                    Default styles  */
+/*                                               Default styles  */
 *{
   margin: 0;
   padding: 0;
@@ -262,6 +262,14 @@ nav .homeLink{
   justify-content: center;
   align-items: center;
   
+}
+
+#canvas1 {
+  background-color: rgb(82, 149, 175);
+}
+
+#canvas2 {
+  background-color: rgb(240, 131, 240);
 }
 
   /*                         ---------- Slideshow container ---------- */
