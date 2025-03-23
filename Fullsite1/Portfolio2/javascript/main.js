@@ -76,7 +76,7 @@ canvas1.addEventListener('mousemove', (event)=> {
   mouse1.y = event.clientY - rect1.top;
 });
 
-let circle1 = new Circle(canvas1.width/2, canvas1.height/2, 10, 'green');
+let circle1 = new Circle(canvas1.width/2, canvas1.height/2, 20, 'green');
 let circle2 = new Circle(10, 10, 10, 'blue');
 circle1.draw();
 circle2.draw();
@@ -86,8 +86,8 @@ function animate1(){
   ctx1.clearRect(0,0,canvas1.width, canvas1.height);
   circle2.x = mouse1.x;
   circle2.y = mouse1.y;
-  if  (getDistance(circle1.x, circle1.y, circle2.x, circle2.y)- circle1.radius*2 <= 0) {
-    circle1.color = "red";
+  if  (getDistance(circle1.x, circle1.y, circle2.x, circle2.y)< (circle1.radius + circle2.radius)) {
+    circle1.color = "darkred";
   }else {circle1.color = 'green'};
   circle1.draw();
   circle2.draw();
