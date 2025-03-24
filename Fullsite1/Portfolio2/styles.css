@@ -187,13 +187,12 @@ nav .homeLink{
   grid-auto-rows: 180px;
   gap: 30px;
   padding: 6px;
-  /*border: 1pt green solid;*/
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   scroll-margin-top: 8rem;
 }
 
 #aboutSectionTitle {
-  mask-image: linear-gradient(
+ mask-image: linear-gradient(
     to right,
     rgba(0, 0, 0, 1),
     rgba(0, 0, 0, 0) 90%
@@ -205,11 +204,13 @@ nav .homeLink{
  justify-content: left;
  padding-left: 1rem;
  align-items: center;
+ margin-bottom: 16px;
+ 
 }
 
 #aboutSectionRow {
   background-color: #141414;
-  color: #a3a3a3;
+  color: #c9c9c9;
   padding: 12px;
   display: flex;
   justify-content: center;
@@ -217,6 +218,29 @@ nav .homeLink{
   grid-column: span 2;
   grid-row: span 2;
   box-shadow: -6px 6px 3px rgba(0, 0, 0, .5);
+}
+
+.aboutSectionBorder {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #efa00b;
+  
+}
+
+.cardText {
+  color: #efa00b;
+  text-shadow: 2px 2px 2px #000000;
+  font-size: 16pt;
+  font-variant: small-caps;
+  font-family: Helvetica;
+  text-align: center;
+}
+
+.quote{
+  color: #efa00b;
+  text-shadow: 2px 2px 2px #000000;
+  text-align: right;
+  font-variant: small-caps;
 }
 
 .backgroundImage1 {
@@ -238,10 +262,9 @@ nav .homeLink{
 }
 
 .aboutTextBackgroundBox {
-  background-color: rgba(28, 182, 74, 0.6);
+  background-color: rgba(28, 182, 74, 0.75);
   box-shadow: -6px 6px 3px rgba(0, 0, 0, .5);
-  padding: 6px;
-  
+  padding: 10px 10px 6px 10px
 }
 
 /*                                                      CONTENT / "DEMO" SECTION */
@@ -253,6 +276,7 @@ nav .homeLink{
   justify-content: center;
   align-items: center;
   scroll-margin-top: 8rem;
+  padding-bottom: 16px;
 }
 
 .demoCard {
@@ -368,8 +392,10 @@ nav .homeLink{
   display: flex;
   flex-direction: row;
   max-width: 100%;
+  margin-top: 16px;
   height: 250px;
   justify-content: space-evenly;
+  box-shadow: -6px 6px 3px rgba(0, 0, 0, .5);
 
 }
 
@@ -552,8 +578,8 @@ nav .homeLink{
     font-size: 10pt;
   }
 
-  #heroSectionRight {
-    display: none;
+  .textFormat2 {
+    font-size: 10pt;
   }
 
   #aboutSection {
