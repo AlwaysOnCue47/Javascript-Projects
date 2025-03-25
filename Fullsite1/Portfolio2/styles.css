@@ -15,7 +15,7 @@ html{
 
 body {
   background-color: gainsboro;
-  padding-top: 60px;
+  padding-top: 80px;
   margin-bottom: 0;
   padding-bottom: 0;
 }
@@ -38,7 +38,7 @@ h1 {
 }
 
 #avatarImage {
-  width: 160px;
+  width: 180px;
   height: auto;
   margin: 0px 6px;
 }
@@ -58,6 +58,7 @@ nav {
   position: fixed;
   top: 0;
   z-index: 10;
+  box-shadow: -6px 6px 3px rgba(0, 0, 0, .5);
   user-select: none;
 
 }
@@ -128,7 +129,7 @@ nav .homeLink{
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   flex-direction: row;
   align-items: center;
-  height: 300px;
+  height: 350px;
   color: #717171;
 }
 
@@ -188,7 +189,7 @@ nav .homeLink{
   gap: 30px;
   padding: 6px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  scroll-margin-top: 8rem;
+  scroll-margin-top: 10rem;
 }
 
 #aboutSectionTitle {
@@ -199,12 +200,13 @@ nav .homeLink{
   );
  background-color:  rgba(28, 182, 74, 0.75);
  display: flex;
- padding-top: 6px;
- padding-bottom: 6px;
+ padding-top: 10px;
+ padding-bottom: 10px;
  justify-content: left;
  padding-left: 1rem;
  align-items: center;
  margin-bottom: 16px;
+ border-radius: 5px;
  
 }
 
@@ -249,6 +251,7 @@ nav .homeLink{
   background-position: center; 
   background-repeat: no-repeat; 
   border-style: solid;
+  border-width: 1px;
   border-color: #bbb;
 }
 
@@ -258,13 +261,15 @@ nav .homeLink{
   background-position: center; 
   background-repeat: no-repeat; 
   border-style: solid;
+  border-width: 1px;
   border-color: #bbb;
 }
 
 .aboutTextBackgroundBox {
   background-color: rgba(28, 182, 74, 0.75);
   box-shadow: -6px 6px 3px rgba(0, 0, 0, .5);
-  padding: 10px 10px 6px 10px
+  padding: 12px 10px 4px 10px;
+  border-radius: 5px;
 }
 
 /*                                                      CONTENT / "DEMO" SECTION */
@@ -275,20 +280,42 @@ nav .homeLink{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  scroll-margin-top: 8rem;
+  scroll-margin-top: 10rem;
   padding-bottom: 16px;
 }
+
+#programSectionTitle {
+  mask-image: linear-gradient(
+     to right,
+     rgba(0, 0, 0, 1),
+     rgba(0, 0, 0, 0) 90%
+   );
+  background-color:  #ef9f0bbe;
+  display: flex;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  justify-content: left;
+  padding-left: 1rem;
+  align-items: center;
+  margin-bottom: 16px;
+  border-radius: 5px;
+  
+ }
 
 .demoCard {
   display: flex;
   background-color: #717171;
   min-height: 250px;
   width: 100%;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-evenly;
+  align-items:center;
   padding-top: 10px;
   padding-bottom: 10px;
   
+}
+
+.demoCardTextBox {
+  max-width: 30%;
 }
 
 #canvas1 {
@@ -366,14 +393,14 @@ nav .homeLink{
     height: 15px;
     width: 15px;
     margin: 0 2px;
-    background-color: #bbb;
+    background-color: #717171;
     border-radius: 50%;
     display: inline-block;
     transition: background-color 0.6s ease;
   }
 
   .active, .dot:hover {
-    background-color: #717171;
+    background-color: #bbb;
   }
 
   /* Fading animation */
@@ -527,6 +554,21 @@ nav .homeLink{
   .container {
     max-width: 1024px;
   }
+
+  .demoCard {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .demoCardTextBox {
+    max-width: 90%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+  }
+
+  #avatarImage {
+    width: 160px;
+  }
 }
 
 /* LARGE SCREEN */
@@ -554,6 +596,7 @@ nav .homeLink{
   #aboutSectionTitle {
     min-width: 100%;
   }
+
 }
 
 /* MEDIUM SCREEN */
@@ -600,6 +643,8 @@ nav .homeLink{
   #avatarImage {
     width: 80px;
   }
+
+  
 }
 
 /* SMALL SCREENS */
