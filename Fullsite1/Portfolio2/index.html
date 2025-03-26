@@ -74,7 +74,7 @@
   <!-- ABOUT SECTION -->
 
   <div class="container">
-    <div style="box-shadow: -6px 6px 3px rgba(0, 0, 0, .4);">
+    <div style="box-shadow: 0px 5px 3px rgba(0, 0, 0, .4);">
       <div id="aboutSectionTitle">
         <div class="littleBox"></div>
         <h1 style="margin-left: 12px;">About</h1>
@@ -108,16 +108,15 @@
 
    <div class="backgroundBox" >
     <div style="min-height: 400px;"class="container">
-      <div style="box-shadow: -6px 6px 3px rgba(0, 0, 0, .4);">
+      <div style="box-shadow: -6px 6px 3px rgba(0, 0, 0, 0.4); border-radius: 5px;">
         <div id="programSectionTitle">
-          <div class="littleBox"></div>
+          <div class="littleBox2"></div>
           <h1  style="margin-left: 12px; color: rgb(28, 182, 74);">Program Demos</h1>
         </div>
       </div>     
       <div id="contentsSection">
         <!-- Slideshow container -->
         <div class="slideshow-container">
-          <!-- Full-width images with number and caption text -->
          <div class="mySlides fade">
            <div class="numbertext">1 / 3</div>
            <div class="demoCard">
@@ -125,14 +124,13 @@
               <p>
                 This small program is a demonstration of Object Oreinted programming. A single Class Constructer is used to define the objects (the circles) and each object has it's own behaviour. One follows the mouse postion and the other changes colour when it detects contact (or collision) with the other object.
               </p>
-              <img style="margin-top: 10px;" src="./images/Capture2.PNG" alt="class constructor">
+              <div><img style="margin-top: 10px;" src="./images/Capture2.PNG" alt="class constructor"></div>
             </div>
-            
             <div class="demoCardTextBox">
               <p>
                 How does the object know when a collision has taken place? Using trigonometry is how. 
               </p>
-              <img src="./images/Capture.PNG" style="margin-top: 10px;" alt="Illustration of right angles between objects">
+              <div><img src="./images/Capture.PNG" style="margin-top: 10px;" alt="Illustration of right angles between objects"></div>
             </div>
             <canvas id="canvas1"></canvas>
            </div>
@@ -145,7 +143,7 @@
               <p>
                 Using the X and Y values from each circle a right angle triangle can be drawn from each circle to every other circle on the canvas. Each time a right angle triangle is defined the same equation can be ran to calculate the length of the unknown side. Once that length is calculated to be between 0 and the length of the circle's radius the "get distance" formula returns 'true'.
               </p>
-              <img style="margin-top: 10px;" src="./images/Capture3.PNG" alt="class constructor">
+              <div><img style="margin-top: 10px;" src="./images/Capture3.PNG" alt="class constructor"></div>
             </div>
             <canvas id="canvas2"></canvas>
           </div>
@@ -177,7 +175,7 @@
   <div id="footerBackgroundBox">
     <!-- CONTACT SECTION -->
     <div class="container" style="padding-top: 10px;">
-      <div style="box-shadow: -6px 6px 3px rgba(0, 0, 0, .4);"><div id="aboutSectionTitle">
+      <div style="box-shadow: 0px 5px 3px rgba(0, 0, 0, .4); border-radius: 5px;"><div id="aboutSectionTitle" style="margin-left: 0px;">
         <div class="littleBox"></div>
         <h1 style="margin-left: 12px;">Contact</h1>
       </div></div>

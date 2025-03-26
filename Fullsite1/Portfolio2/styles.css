@@ -206,6 +206,7 @@ nav .homeLink{
  padding-left: 1rem;
  align-items: center;
  margin-bottom: 16px;
+ margin-left: 6px;
  border-radius: 5px;
  
 }
@@ -316,6 +317,13 @@ nav .homeLink{
 
 .demoCardTextBox {
   max-width: 30%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.demoCardTextBox> img {
+  width: auto;
 }
 
 #canvas1 {
@@ -431,6 +439,7 @@ nav .homeLink{
   max-width: 100%;
   width: 50%;
   border-style: solid;
+  border-width: 1px;
   border-color: rgba(28, 182, 74, 0.6);
   background-color: rgba(0,0,0,0.8);
   color: #efa00b;
@@ -479,9 +488,25 @@ nav .homeLink{
   transition: 2s; 
 }
 
+.littleBox2 {
+  margin: 0;
+  height: 30px;
+  width: 30px;
+  border: 3px solid rgb(5, 5, 5);
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgb(28, 182, 74), 0 0 4px rgb(28, 182, 74);
+  animation: 8s spin1 ease-in-out infinite; 
+  transition: 2s;
+}
+
 .littleBox:hover {
   border: 3px solid #efa00b;
   box-shadow: 0 0 8px rgb(17, 0, 255), 0 0 4px rgb(17, 0, 255);
+}
+
+.littleBox2:hover {
+  border: 3px solid rgb(28, 182, 74);
+  box-shadow: 0 0 8px rgb(5, 5, 5), 0 0 4px rgb(5, 5, 5);
 }
 
 @keyframes spin1{
@@ -564,6 +589,7 @@ nav .homeLink{
     max-width: 90%;
     margin-top: 16px;
     margin-bottom: 16px;
+    align-items: center;
   }
 
   #avatarImage {
