@@ -65,7 +65,6 @@ class Circle{
     ctx1.arc(this.x, this.y, this.radius, Math.PI*2, false);
     ctx1.fill();
     ctx1.closePath();
-
   }
 };
 
@@ -167,7 +166,6 @@ class CircleMaker2{
     ctx2.arc(this.x, this.y, this.radius, Math.PI*2, false);
     ctx2.fill();
     ctx2.closePath();
-
   }
 
   update(circles) {
@@ -176,12 +174,9 @@ class CircleMaker2{
       if (getDistance(this.x, this.y, circles[i].x, circles[i].y) - this.radius * 2 < 0) {
         resolveCollision(this, circles[i]);
     }};
-
-    
     if (this.x + this.radius >= canvas2.width || this.x - this.radius <= 0){
       this.velocity.x = -this.velocity.x
     };
-
     if (this.y + this.radius >= canvas2.height || this.y - this.radius <= 0) {
       this.velocity.y = -this.velocity.y
     };
@@ -200,7 +195,6 @@ for (let i = 0; i < 6; i++) {
   let color = colors[Math.floor(Math.random()*4)];
   circles.push(new CircleMaker2(x, y, 15, color));
   circles[i].draw();
-  
 }
 
 function animate2() {
@@ -210,7 +204,6 @@ function animate2() {
     circles[i].update(circles);
   }
 }
-
 
 animate1();
 animate2();

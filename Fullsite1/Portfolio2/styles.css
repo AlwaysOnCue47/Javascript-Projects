@@ -266,6 +266,13 @@ nav .homeLink{
   border-color: #bbb;
 }
 
+.backgroundImage3 {
+  background-image: url(./images/GitHub-Mark-ea2971cee799.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+}
+
 .aboutTextBackgroundBox {
   background-color: rgba(28, 182, 74, 0.75);
   box-shadow: -6px 6px 3px rgba(0, 0, 0, .5);
@@ -318,7 +325,7 @@ nav .homeLink{
 .demoCardTextBox {
   max-width: 30%;
   display: flex;
-  align-items: center;
+  align-items: left;
   flex-direction: column;
 }
 
