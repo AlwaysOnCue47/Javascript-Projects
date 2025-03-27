@@ -129,17 +129,20 @@
               <div><img style="margin-top: 10px; margin-bottom: 10px;"  src="./images/Capture2.PNG" alt="class constructor"></div>
               <p> In addition to the object's properties each object has it's own behaviour. One follows the mouse postion and the other changes colour when it detects contact (or collision) with the other object.</p>
               <p>
-                How does the object know when a collision has taken place? Why using trigonometry of course. Imagine a right angle circle being drawn from the centre of one circle to the centre of the other circle.
+                How does the object know when a collision has taken place? Why using trigonometry of course. Imagine a right angle triangle being drawn from the centre of one circle to the centre of the other circle.
               </p>
-              
             </div>
-            <div class="demoCardTextBox">
-              
+            <div class="demoCardTextBox">             
               <div><img src="./images/Capture.PNG" style="margin-top: 10px; margin-bottom: 10px;" alt="Illustration of right angles between objects"></div>
               <p>Since the program has the value for each circle's X and Y coordinates the exact lengths of the triangles horizontal and vertical sides can be easily determined. With that information we can use a simple trigonometry formula to calculate the length of the unknown side. When that length is less than the sum of each circles radius then a collision has occured. </p>
               <div><img style="margin-top: 10px; margin-bottom: 10px;" src="./images/Capture4.PNG" alt="Get distance equation"></div>
             </div>
-            <canvas id="canvas1"></canvas>
+            <div class="demoCardTextBox">
+              <p>Give it a try.</p>
+              <canvas id="canvas1"></canvas>
+
+            </div>
+            
            </div>
            <div class="text">Collision Detection</div>
          </div>
@@ -152,14 +155,18 @@
               </p>
               <div><img style="margin-top: 10px;" src="./images/Capture3.PNG" alt="class constructor"></div>
             </div>
-            <canvas id="canvas2"></canvas>
+            <div class="demoCardTextBox">
+              <canvas id="canvas2"></canvas>
+
+            </div>
+            
           </div>
            <div class="text">Collision and Reaction</div>
          </div>
          <div class="mySlides fade">
            <div class="numbertext">3 / 3</div>
            <div class="demoCard"><img style="width: 330px;" src="./images/betaGameScreenCapture.png" alt="Game Screen Capture"></div>
-           <div class="text">Caption Three</div>
+           <div class="text">Complete Computer Game</div>
          </div>
          <!-- Next and previous buttons -->
          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
@@ -182,30 +189,42 @@
   <div id="footerBackgroundBox">
     <!-- CONTACT SECTION -->
     <div class="container" style="padding-top: 10px;">
-      <div style="box-shadow: 0px 5px 3px rgba(0, 0, 0, .4); border-radius: 5px;"><div id="aboutSectionTitle" style="margin-left: 0px;">
-        <div class="littleBox"></div>
-        <h1 style="margin-left: 12px;">Contact</h1>
-      </div></div>
-    <div id="contactSection">    
-      <div id="contactSubSection2">
-        <h1>Contact Title</h1>
-        <p>contact section text text text</p>
-      </div>
-      <div id="contactSubSection1">
-        <div class="contactForm">
-          <form action="https://formspree.io/f/xqakkbky" method="post">
-            Name: <input type="text" name="name"><br>
-            Email: <input type="email" name="email"><br>
-            Comment: <input type="text" name="comment"><br>
-            <input id="submitButton" type="submit" value="Submit">
-          </form>
+      <div style="box-shadow: 0px 5px 3px rgba(0, 0, 0, .4); border-radius: 5px;">
+        <div id="aboutSectionTitle" style="margin-left: 0px;">
+          <div class="littleBox"></div>
+          <h1 style="margin-left: 12px;">Contact</h1>
         </div>
       </div>
+      <div id="contactSection">    
+        <div id="contactSubSection2">
+          <div class="glassBackground">
+            <h1>Contact Title</h1>
+            <p class="textFormat3">contact section text text text</p>
+          </div>
+        </div>
+        <div id="contactSubSection1">
+          <div class="contactForm">
+            <form action="https://formspree.io/f/xqakkbky" method="post">
+              Name: <input type="text" name="name"><br>
+              Email: <input type="email" name="email"><br>
+              Comment: <input type="text" name="comment"><br>
+              <input id="submitButton" type="submit" value="Submit">
+            </form>
+          </div>
+        </div>
       </div>
     </div>
     <!-- END CONTACT SECTION -->
     <div class="container" style="margin-bottom: 0;">
       <div id="footerSection">
+        <div style="display: flex; justify-content: space-evenly;">
+          <p> &copy; copyright. Legal stuff.</p>
+          <a href="https://github.com/AlwaysOnCue47" target="_blank">GITHUB</a>
+          <a href="#">Back to top</a>
+          <p> AlwaysOnCue Productions&copy;</p>
+
+        </div>
+        
         <div class="spaceship-container">
          <div class="item1"><img class="spaceship" src="./images/spaceship.png"></div>
         </div>
