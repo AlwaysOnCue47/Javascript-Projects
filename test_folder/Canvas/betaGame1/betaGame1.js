@@ -22,7 +22,8 @@ canvas.addEventListener("dragstart", (event) => { // prevents click and drag fun
 });
 
 document.getElementById('canvas').addEventListener('click', () => {
-  let x = 0;
+  if (gameRunning) {
+    let x = 0;
   let y = -8;
     if (playerSprite.x <= canvas.width && playerSprite.x >= canvas.width - 100){
       x = -8;
@@ -33,6 +34,7 @@ document.getElementById('canvas').addEventListener('click', () => {
       y = -6;
     }
   initAmmo(playerSprite.x, playerSprite.y, x, y, ammoType);
+  }
 });
 
 const newGameBtm = document.getElementById('newGameBtn');
@@ -45,22 +47,6 @@ document.addEventListener("keydown", (event)=> {
     case 'p':
       gameRunning = !gameRunning;
       break;
-
-    case 'a':
-      if (ammoType < 4){
-        ammoType += 1;
-      }
-    break;
-    
-    case 's':
-      if (ammoType > 0 ){
-        ammoType += -1;
-      }
-    break;
-
-    case 'q':
-      initWeaponPowerUp();
-      initShieldPowerUp();
   }
 });
 
@@ -528,7 +514,6 @@ function shieldHit() {
   if (playerShields.shields.strength <= 3) {
     playerShields.shields.upCount = 20;
   }
-  console.log(playerShields.shields.strength);
 };
 
 let shipHitPoints;
@@ -544,7 +529,6 @@ let playerShields;
 function initPlayerShields(){
   playerShields = new Sprite(canvas.width/2, canvas.height-45, 28, "rgba(0, 0, 0, 0)", 0, 0, [], 10);
   playerShields.shields.strength = 8;
-  console.log(playerShields);
 };
 
 let enemyShields = []
@@ -1074,8 +1058,7 @@ function animate(){   //                        <-- MAIN animation function
         if (isLevelCompleted()){
           nextLevel(2);
         }
-      break;
-
+        break;
       case 2: 
         animateEnemies();
         if (enemySprites3.length <= 3 && !spawnWeaponPowerUp) {
@@ -1085,19 +1068,22 @@ function animate(){   //                        <-- MAIN animation function
         if (isLevelCompleted()){
           nextLevel(3);
         }
-      break;
-
+        break;
       case 3:
         animateEnemies();
-        if (enemySprites3.length <= 2 && !spawnShieldPowerUp) {
+        if (enemySprites2.length <= 0 && !spawnShieldPowerUp) {
           initShieldPowerUp();
           spawnShieldPowerUp = true;
+        }
+        if (enemySprites.length == 0 && enemySprites2.length == 0 && !spawnSecondWave) {
+          initEnemySprites4(2, 10, 160);
+          initEnemySprites3(4, 4);
+          spawnSecondWave = true;
         }
         if (isLevelCompleted()){
           nextLevel(4);
         }
-      break;
-      
+        break;
       case 4:
         animateEnemies();
         if (enemySprites3.length == 3 && !spawnShieldPowerUp) {
@@ -1112,8 +1098,7 @@ function animate(){   //                        <-- MAIN animation function
         if (isLevelCompleted()){
           nextLevel(5);
         }
-      break;
-
+        break;
       case 5:
         animateEnemies();
         if (enemySprites2.length <= 6 && !spawnWeaponPowerUp) {
@@ -1127,8 +1112,7 @@ function animate(){   //                        <-- MAIN animation function
         if (isLevelCompleted()){
           nextLevel(6);
         }
-      break;
-
+        break;
       case 6:
         if (finalBossSprite){
           animateEnemyAmmo();
@@ -1137,8 +1121,7 @@ function animate(){   //                        <-- MAIN animation function
         if (!finalBossSprite){
           nextLevel(1);
         }
-      break;
-
+        break;
       case 0:
         nextLevel(0);
         if (levelTimer == 299){
@@ -1166,12 +1149,12 @@ function nextLevel(L){
   ctx.font = "36px impact";
   ctx.fillStyle = "black";
   if (L == 0){
-    ctx.fillText("Game Over", 265, 150);
+    ctx.fillText("Game Over", 270, 200);
     ctx.closePath();
   }else {
-    ctx.fillText("Level Cleared", 250, 150);
+    ctx.fillText("Level Cleared", 250, 200);
     ctx.font = "20px Ariel";
-    ctx.fillText("more enemies ahead!", 260, 175);
+    ctx.fillText("more enemies ahead!", 265, 225);
     ctx.closePath();
   }
   levelTimer += 1;
@@ -1180,7 +1163,6 @@ function nextLevel(L){
     spawnShieldPowerUp = false;
     newGame(L);
     levelTimer = 0
-    console.log(gameLevel);
   }
 };
 
@@ -1203,39 +1185,31 @@ function newGame(level = 1){
       initEnemySprites(2, 8, 200);
       initEnemySprites2(6, 2);
       break;
-    
     case 2:
       initPlayer();
       initEnemySprites4(2, 10, 160);
       initEnemySprites3(6, 4);
       break
-    
     case 3:
       initPlayer();
       initEnemySprites(2, 8, 180);
-      initEnemySprites4(2, 10, 160);
       initEnemySprites2(4, 4);
-      initEnemySprites3(4, 4);
-    break;
-    
+      break;
     case 4: 
       initPlayer()
       initEnemySprites(3, 10, 180);
       initEnemySprites2(8, 6);
-    break;
-    
+      break;
     case 5:
       initPlayer();
       initEnemySprites(6, 10, 250);
       initEnemySprites2(12, 6);
-    break;
-
+      break;
     case 6:
       checkColor = false;
       initPlayer();
       initFinalBoss();
-    break;
-    
+      break;
     case 0:
       clearAllEnemyArrays();
     break;
@@ -1251,7 +1225,6 @@ function isLevelCompleted(){
 };
 
 function playerDead(){
-  console.log('player dead 1');
   initExplosion(playerSprite.x, playerSprite.y);
   x = 10;
   y = canvas.height - 25;
