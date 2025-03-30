@@ -55,6 +55,7 @@
                 <img class="iconLogo" src="./images/icons/bootstrap logo - 512.png" alt="Bootstrap logo">
                 <img class="iconLogo" src="./images/icons/Visual-Studio logo - 256.png" alt="Visual Studio logo">
                 <img class="iconLogo" src="./images/icons/NET-Framework Logo - 512.png" alt="dot NET logo">
+                <img class="iconLogo" src="./images/twitter_thumb_201604_CompTIA_A_2B.png" alt="A plus certified">
               </div>
             </div>
           </div>
@@ -138,11 +139,13 @@
               <div><img style="margin-top: 10px; margin-bottom: 10px;" src="./images/Capture4.PNG" alt="Get distance equation"></div>
             </div>
             <div class="demoCardTextBox">
-              <p>Give it a try.</p>
-              <canvas id="canvas1"></canvas>
+              <p>Give it a try!</p>
+              <div><canvas id="canvas1" style="margin-top: 10px; margin-bottom: 10px;"></canvas></div>
+              <p>Using this simple collision detection formula, or object behaviour, we can program the circles to do more than simply change colour. If we give the circles the properties 'velocity' and 'mass' with a little bit more trigonometry the circles can bounce off each other and the sides of the canvas. 
+                Check out the NEXT SLIDE.
+              </p>
 
-            </div>
-            
+            </div>            
            </div>
            <div class="text">Collision Detection</div>
          </div>
@@ -151,15 +154,13 @@
            <div class="demoCard">
             <div class="demoCardTextBox">
               <p>
-                Using the X and Y values from each circle a right angle triangle can be drawn from each circle to every other circle on the canvas. Each time a right angle triangle is defined the same equation can be ran to calculate the length of the unknown side. Once that length is calculated to be between 0 and the length of the circle's radius the "get distance" formula returns 'true'.
+                Making use of JavaScript's 'requestAnimationFrame' function we can add movement to the program. In the constructor for these circles two more properties have been added. X axis velocity and Y axis velocity. 
               </p>
               <div><img style="margin-top: 10px;" src="./images/Capture3.PNG" alt="class constructor"></div>
             </div>
             <div class="demoCardTextBox">
               <canvas id="canvas2"></canvas>
-
-            </div>
-            
+            </div>            
           </div>
            <div class="text">Collision and Reaction</div>
          </div>
@@ -198,8 +199,8 @@
       <div id="contactSection">    
         <div id="contactSubSection2">
           <div class="glassBackground">
-            <h1>Contact Title</h1>
-            <p class="textFormat3">contact section text text text</p>
+            <h1 class="textFormat3" style="font-size: 20pt;">Get in Touch!</h1>
+            <p class="textFormat3">Questions? Comments? Compliments? Critiques? Looking for a software developer? Feel free to reach out by filling out the contact form. I'd be happy to hear from you!</p>
           </div>
         </div>
         <div id="contactSubSection1">
@@ -217,14 +218,13 @@
     <!-- END CONTACT SECTION -->
     <div class="container" style="margin-bottom: 0;">
       <div id="footerSection">
-        <div style="display: flex; justify-content: space-evenly;">
-          <p> &copy; copyright. Legal stuff.</p>
+        <div id="footerText">
+          <p> An AlwaysOnCue&trade; Production</p>
           <a href="https://github.com/AlwaysOnCue47" target="_blank">GITHUB</a>
           <a href="#">Back to top</a>
-          <p> AlwaysOnCue Productions&copy;</p>
-
+          <p>Legal stuff. Copyright&copy;</p>
+          <p>Made in CANADA&#127809;</p>
         </div>
-        
         <div class="spaceship-container">
          <div class="item1"><img class="spaceship" src="./images/spaceship.png"></div>
         </div>
