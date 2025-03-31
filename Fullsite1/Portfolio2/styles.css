@@ -335,7 +335,7 @@ nav .homeLink{
   border-style: solid;
   border-width: 1px;
   border-color: rgba(0, 0, 0, 0.6);
-  box-shadow: 5px 5px 40px 10px rgb(5, 5, 5) inset;
+  box-shadow: 5px 5px 40px 10px rgb(15, 15, 15) inset;
   
 }
 
@@ -493,8 +493,35 @@ nav .homeLink{
   width: 50%; 
 }
 
-#contactSubSection form {
-  max-width: 100%; 
+#contactForm {
+  min-width: 90%;
+  margin: auto;
+}
+form {
+  width: 100%;
+}
+
+form>input {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 2px;
+}
+
+input[type=submit] {
+  height: 30px;
+  width: 30%;
+  margin: 10px auto;
+  background-color: #4CAF50;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+input[name=comment] {
+  height: auto;
+  padding: 12px 2px;
+  resize: none;
 }
 
 /*                                                                FOOTER SECTION */
