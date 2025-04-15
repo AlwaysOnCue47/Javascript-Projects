@@ -878,6 +878,14 @@ input[name=comment] {
     
   }
 
+  .aboutSectionBorder {
+    overflow: scroll;
+  }
+
+  .aboutSectionBorder> p {
+    font-size: smaller;
+  }
+
  
 }
 
