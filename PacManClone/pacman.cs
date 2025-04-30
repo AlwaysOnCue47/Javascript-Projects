@@ -1,1 +1,0 @@
-/*  Styles for Pacman Clone game */
