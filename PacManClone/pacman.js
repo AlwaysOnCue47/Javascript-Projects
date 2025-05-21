@@ -9,7 +9,48 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 canvas.style.background = 'black';
 
-// constructors 
+
+// Event Listeners
+
+window.addEventListener('keydown', ({key}) => {
+  switch (key) {
+    case 'w':
+      keys.w.pressed = true
+      lastKey = 'w'
+      break
+    case 'a':
+      keys.a.pressed = true
+      lastKey = 'a'
+      break
+    case 's':
+      keys.s.pressed = true
+      lastKey = 's'
+      break
+    case 'd':
+      keys.d.pressed = true
+      lastKey = 'd'
+      break
+  }
+});
+
+window.addEventListener('keyup', ({key}) => {
+  switch (key) {
+    case 'w':
+      keys.w.pressed = false
+      break
+    case 'a':
+      keys.a.pressed = false
+      break
+    case 's':
+      keys.s.pressed = false
+      break
+    case 'd':
+      keys.d.pressed = false
+      break
+  }
+});
+
+// Constructors/Classes 
 
 class Boundary {
   static width = 40;
@@ -26,19 +67,92 @@ class Boundary {
   }
 };
 
+class Player {
+  constructor({position, velocity}) {
+    this.position = position;
+    this.velocity = velocity;
+    this.radius = 15;
+  }
 
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI*2, false);
+    ctx.fillStyle = 'yellow';
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  update() {
+    this.draw();
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+  }
+}
+
+// Functions
+
+function animate() {
+  run = requestAnimationFrame(animate);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  bounderies.forEach((boundary) => {
+  boundary.draw()
+  });
+
+  player.update();
+  player.velocity.y = 0
+  player.velocity.x = 0
+
+  if (keys.w.pressed && lastKey === 'w') {
+    player.velocity.y = -5
+  } else if (keys.a.pressed && lastKey === 'a') {
+    player.velocity.x = -5 
+  } else if (keys.s.pressed && lastKey === 's') {
+    player.velocity.y = 5
+  } else if (keys.d.pressed && lastKey === 'd') {
+    player.velocity.x = 5
+  }
+
+};
 
 // variables
 
-const map = [
-  ['-', '-', '-', '-', '-', '-'],
-  ['-', ' ', ' ', ' ', ' ', '-'],
-  ['-', ' ', '-', '-', ' ', '-'],
-  ['-', ' ', ' ', ' ', ' ', '-'],
-  ['-', '-', '-', '-', '-', '-']
-];
+const player = new Player({
+  position:{
+  x: Boundary.width + Boundary.width / 2,
+  y: Boundary.height + Boundary.height / 2
+},
+velocity: {
+  x: 0,
+  y: 0
+} 
+});
+
+let lastKey = '';
+
+const keys = {
+  w: {
+    pressed: false
+  },
+  a: {
+    pressed: false
+  },
+  s: {
+    pressed: false
+  },
+  d: {
+    pressed: false
+  }
+};
 
 const bounderies = [];
+const map = [
+  ['-', '-', '-', '-', '-', '-', '-'],
+  ['-', ' ', ' ', ' ', ' ', ' ', '-'],
+  ['-', ' ', '-', ' ', '-', ' ', '-'],
+  ['-', ' ', ' ', ' ', ' ', ' ', '-'],
+  ['-', ' ', ' ', ' ', ' ', ' ', '-'],
+  ['-', '-', '-', '-', '-', '-', '-']
+];
 
 map.forEach((row, i) =>{
   row.forEach((symbol, j) => {
@@ -58,19 +172,8 @@ map.forEach((row, i) =>{
       
     }
   })
-
 })
 
+// Run when parsed 
+animate();
 
-// const boundary = new Boundary({
-//   position:{
-//     x:0, 
-//     y:0
-//   }
-// });
-
-// boundary.draw();
-
-bounderies.forEach((boundary) => {
-  boundary.draw()
-});
