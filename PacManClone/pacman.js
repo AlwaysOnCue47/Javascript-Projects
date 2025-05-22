@@ -89,6 +89,23 @@ class Player {
   }
 }
 
+class Pellet {
+  constructor({position}) {
+    this.position = position;
+    this.radius = 3;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI*2, false);
+    ctx.fillStyle = 'grey';
+    ctx.fill();
+    ctx.closePath();
+  }
+}
+
+const pellets = [];
+
 // Functions
 
 function circleCollidesWithRectangle({
@@ -109,6 +126,7 @@ function animate() {
   run = requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+// player action-controls inside animation loop
   if (keys.w.pressed && lastKey === 'w') {
     for (let i = 0; i < boundaries.length; i++) {
       const boundary = boundaries[i];
@@ -194,6 +212,7 @@ function animate() {
     };
   };
 
+// each boundary checks for collision with player when redrawn
   boundaries.forEach((boundary) => {
     boundary.draw()
     if (circleCollidesWithRectangle({circle: player, rectangle: boundary})) {
@@ -203,6 +222,15 @@ function animate() {
     }
   });
 
+// draw pellets and check for collision with player
+  for (let i = pellets.length - 1; 0 < i; i--) {
+    const pellet = pellets[i]
+    pellet.draw()
+     if (Math.hypot(pellet.position.x - player.position.x, pellet.position.y - player.position.y) < pellet.radius + player.radius) {
+       pellets.splice(i, 1)
+     }
+  }
+  
   player.update();
 
 };
@@ -444,6 +472,14 @@ map.forEach((row, i) =>{
         )
         break
       case '.':
+        pellets.push(
+          new Pellet({
+            position: {
+              x: j * Boundary.width + Boundary.width / 2,
+              y: i * Boundary.height + Boundary.height / 2
+            }
+          })
+        )
         break;
       
     }
