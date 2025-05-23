@@ -89,6 +89,32 @@ class Player {
   }
 }
 
+class Ghost {
+  static speed = 5
+  constructor({position, velocity, color = 'red'}) {
+    this.position = position;
+    this.velocity = velocity;
+    this.radius = 15;
+    this.color = color;
+    this.speed = 5;
+    this.prevCollisionsj = [];
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI*2, false);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  update() {
+    this.draw();
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+  }
+}
+
 class Pellet {
   constructor({position}) {
     this.position = position;
@@ -233,6 +259,69 @@ function animate() {
   
   player.update();
 
+  ghosts.forEach((ghost) => {
+    ghost.update()
+    const collisions = []
+    boundaries.forEach((boundary) => {
+      if (circleCollidesWithRectangle({
+        circle: {
+          ...ghost, 
+          velocity: {
+            x: Ghost.speed,
+            y: 0
+          }
+        },
+        rectangle: boundary
+      })
+    ) {
+      collisions.push('right')
+    }
+
+    if (circleCollidesWithRectangle({
+        circle: {
+          ...ghost, 
+          velocity: {
+            x: -Ghost.speed,
+            y: 0
+          }
+        },
+        rectangle: boundary
+      })
+    ) {
+      collisions.push('left')
+    }
+
+    if (circleCollidesWithRectangle({
+        circle: {
+          ...ghost, 
+          velocity: {
+            x: 0,
+            y: Ghost.speed
+          }
+        },
+        rectangle: boundary
+      })
+    ) {
+      collisions.push('down')
+    }
+
+    if (circleCollidesWithRectangle({
+        circle: {
+          ...ghost, 
+          velocity: {
+            x: 0,
+            y: -Ghost.speed
+          }
+        },
+        rectangle: boundary
+      })
+    ) {
+      collisions.push('up')
+    }
+    })
+    console.log(collisions)
+  } )
+
 };
 
 // variables
@@ -247,6 +336,18 @@ velocity: {
   y: 0
 } 
 });
+
+const ghosts = [];
+ghosts.push(new Ghost({
+  position: {
+    x: Boundary.width * 6 + Boundary.height / 2,
+    y: Boundary.width + Boundary.height / 2
+  }, 
+  velocity: {
+    x: Ghost.speed,
+    y: 0
+  }
+}))
 
 let lastKey = '';
 
