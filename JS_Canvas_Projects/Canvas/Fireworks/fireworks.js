@@ -23,7 +23,7 @@ addEventListener('resize', () => {
   initCanvas();
 });
 
-// the mouse variables and event listeners
+// the mouse variables and event listener
 
 let mouse = {
   x: window.innerWidth / 2,
@@ -35,7 +35,6 @@ window.addEventListener('mousemove', (event)=> {
   mouse.y = event.clientY;
 })
 
-
 // object constructors
 
 class Particle {
@@ -44,28 +43,37 @@ class Particle {
     this.velocity = velocity;
     this.radius = radius;
     this.color = color;
+    this.alpha = 1;
   }
 
   draw(){
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
     ctx.beginPath();
     ctx.arc(this.position.x, this.position.y, this.radius, 0, Math.PI*2, false);
     ctx.fillStyle = this.color;
     ctx.fill();
     ctx.closePath();
+    ctx.restore();
   }
 
   update(){
+    this.velocity.y += gravity;
+    this.velocity.x *= friction;
+    this.velocity.y *= friction;
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
     this.draw();
+    this.alpha -= 0.005;
   }
-
 }
 
-// program functions
+// program functions and variables
 
 let particles = [];
 const particleCount = 350;
+const gravity = 0.01;
+const friction = 0.99;
 
 function initFirework(x, y) {
   const angleIncrement = (Math.PI * 2) / particleCount;
@@ -76,38 +84,38 @@ function initFirework(x, y) {
       y: y 
     },
     velocity:{
-      x: Math.cos(angleIncrement * i) * Math.random(), 
-      y: Math.sin(angleIncrement * i) * Math.random()
+      x: Math.cos(angleIncrement * i) * Math.random() * 4, 
+      y: Math.sin(angleIncrement * i) * Math.random() * 4
     },
-      radius: 4,
-      color: 'blue'}
+      radius: 3,
+      color: `hsl(${Math.random() * 360}, 50%, 50%)`}
     ));
   }
   particles.forEach((particle)=>{
-  particle.draw();
-})
-
+    particle.draw();
+  })
 }
 
 canvas.addEventListener('click', ()=>{
-  initFirework(mouse.x, mouse.y)
+  initFirework(mouse.x, mouse.y);
+  console.log(particles); 
 })
 
 function animate(){
   run = requestAnimationFrame(animate);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'rgba(0,0,0,0.1)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  particles.forEach((particle)=>{
-    particle.update();
+  particles.forEach((particle, i)=>{
+    if (particle.alpha > 0) {
+      particle.update();
+    } else {
+      particles.splice(i, 1);
+    }
   })
 }
 
+// run when parsed
+
 initCanvas()
 animate();
-
-
-
-// initFirework()
-
-
-// run when parsed
