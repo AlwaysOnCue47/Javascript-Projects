@@ -71,21 +71,22 @@ class Particle {
 // program functions and variables
 
 let particles = [];
-const particleCount = 350;
+const particleCount = 330;
+const particleCount2 = 120;
 const gravity = 0.01;
 const friction = 0.99;
 
-function initFirework(x, y) {
-  const angleIncrement = (Math.PI * 2) / particleCount;
-  for (let i = 0; i < particleCount; i++) {
+function initFirework(x, y, count, power) {
+  const angleIncrement = (Math.PI * 2) / count;
+  for (let i = 0; i < count; i++) {
     particles.push(new Particle({
     position:{
       x: x, 
       y: y 
     },
     velocity:{
-      x: Math.cos(angleIncrement * i) * Math.random() * 4, 
-      y: Math.sin(angleIncrement * i) * Math.random() * 4
+      x: Math.cos(angleIncrement * i) * Math.random() * power, 
+      y: Math.sin(angleIncrement * i) * Math.random() * power
     },
       radius: 3,
       color: `hsl(${Math.random() * 360}, 50%, 50%)`}
@@ -96,8 +97,41 @@ function initFirework(x, y) {
   })
 }
 
+function initFirework2(x, y) {
+  const angleIncrement = (Math.PI * 2) / particleCount2;
+  let thisColor = Math.floor(Math.random()*340)
+  for (let i = 0; i < particleCount2; i++) {
+    
+    particles.push(new Particle({
+    position:{
+      x: x, 
+      y: y 
+    },
+    velocity:{
+      x: Math.cos(angleIncrement * i) * Math.random() * 8, 
+      y: Math.sin(angleIncrement * i) * Math.random() * 8
+    },
+      radius: 3,
+      color: `hsl(${Math.random() * 20 + thisColor}, 80%, 50%)`}
+    ));
+  }
+  particles.forEach((particle)=>{
+    particle.draw();
+  })
+}
+
 canvas.addEventListener('click', ()=>{
-  initFirework(mouse.x, mouse.y);
+  randomFirework = Math.floor(Math.random()*2)
+  
+  switch (randomFirework) {
+    case 0:
+      initFirework(mouse.x, mouse.y, particleCount,  4)
+      break
+    case 1:
+      initFirework2(mouse.x, mouse.y)
+      break
+  }
+  
   console.log(particles); 
 })
 
