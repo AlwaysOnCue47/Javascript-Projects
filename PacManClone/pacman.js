@@ -97,7 +97,7 @@ class Ghost {
     this.radius = 15;
     this.color = color;
     this.speed = 5;
-    this.prevCollisionsj = [];
+    this.prevCollisions = [];
   }
 
   draw() {
@@ -263,7 +263,7 @@ function animate() {
     ghost.update()
     const collisions = []
     boundaries.forEach((boundary) => {
-      if (circleCollidesWithRectangle({
+      if (!collisions.includes('right') && circleCollidesWithRectangle({
         circle: {
           ...ghost, 
           velocity: {
@@ -277,7 +277,7 @@ function animate() {
       collisions.push('right')
     }
 
-    if (circleCollidesWithRectangle({
+    if (!collisions.includes('left') && circleCollidesWithRectangle({
         circle: {
           ...ghost, 
           velocity: {
@@ -291,7 +291,7 @@ function animate() {
       collisions.push('left')
     }
 
-    if (circleCollidesWithRectangle({
+    if (!collisions.includes('down') && circleCollidesWithRectangle({
         circle: {
           ...ghost, 
           velocity: {
@@ -305,7 +305,7 @@ function animate() {
       collisions.push('down')
     }
 
-    if (circleCollidesWithRectangle({
+    if (!collisions.includes('up') && circleCollidesWithRectangle({
         circle: {
           ...ghost, 
           velocity: {
@@ -319,8 +319,62 @@ function animate() {
       collisions.push('up')
     }
     })
-    console.log(collisions)
-  } )
+    if (collisions.length > ghost.prevCollisions.length) {
+      ghost.prevCollisions = collisions
+      
+    }
+
+    if (JSON.stringify(collisions) !== JSON.stringify(ghost.prevCollisions)) {
+      // console.log('GO GO')
+      // console.log(collisions)
+      // console.log(ghost.prevCollisions)
+
+      if (ghost.velocity.x > 0) {
+        ghost.prevCollisions.push('right')
+      } else if (ghost.velocity.x < 0) {
+        ghost.prevCollisions.push('left')
+      } else if (ghost.velocity.y > 0) {
+        ghost.prevCollisions.push('down')
+      } else if (ghost.velocity.y < 0) {
+        ghost.prevCollisions.push('up')
+      }
+
+      const pathways = ghost.prevCollisions.filter(collision => {
+        return !collisions.includes(collision)
+      })
+
+      // console.log(pathways)
+      const direction = pathways[Math.floor(Math.random()*pathways.length)];
+      console.log(direction);
+
+      switch (direction ) {
+        case 'down':
+          ghost.velocity.y = 5
+          ghost.velocity.x = 0
+          break
+        
+        case 'up':
+          ghost.velocity.y = -5
+          ghost.velocity.x = 0
+          break
+
+        case 'right':
+          ghost.velocity.y = 0
+          ghost.velocity.x = 5
+          break
+
+        case 'left':
+          ghost.velocity.y = 0
+          ghost.velocity.x = -5
+          break
+      }
+
+      ghost.prevCollisions = [];
+
+
+    }
+   
+  })
 
 };
 
