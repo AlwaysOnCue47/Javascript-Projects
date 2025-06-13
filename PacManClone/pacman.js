@@ -325,9 +325,6 @@ function animate() {
     }
 
     if (JSON.stringify(collisions) !== JSON.stringify(ghost.prevCollisions)) {
-      // console.log('GO GO')
-      // console.log(collisions)
-      // console.log(ghost.prevCollisions)
 
       if (ghost.velocity.x > 0) {
         ghost.prevCollisions.push('right')
@@ -343,11 +340,10 @@ function animate() {
         return !collisions.includes(collision)
       })
 
-      // console.log(pathways)
       const direction = pathways[Math.floor(Math.random()*pathways.length)];
       console.log(direction);
 
-      switch (direction ) {
+      switch (direction) {
         case 'down':
           ghost.velocity.y = 5
           ghost.velocity.x = 0
@@ -368,14 +364,9 @@ function animate() {
           ghost.velocity.x = -5
           break
       }
-
       ghost.prevCollisions = [];
-
-
     }
-   
   })
-
 };
 
 // variables
